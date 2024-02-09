@@ -42,5 +42,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void addSecretMsgToPhoto() {
+
+        EmbedMessage MsgEmbed = new EmbedMessage("My Message");
+        MsgEmbed.execute();
+
     }
 }
