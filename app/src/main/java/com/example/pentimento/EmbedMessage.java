@@ -1,5 +1,7 @@
 package com.example.pentimento;
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.util.Log;
 
 public class EmbedMessage {
@@ -42,6 +44,37 @@ public class EmbedMessage {
         String paddedBinaryString = String.format("%8s", binaryString).replace(' ', '0');
 
         return paddedBinaryString;
+
+    }
+
+
+    //
+    // SAMPLE CODE - NOT COMPLIED !!!
+    //
+    //
+    public Bitmap hideMessageInLSB() {
+
+
+        // loop through every pixel of the image
+        for (int x = 0; x < newBitmap.getWidth(); x++) {
+            for (int y = 0; y < newBitmap.getHeight(); y++) {
+
+                // Get the pixel
+                int pixel = newBitmap.getPixel(x, y);
+
+                // Get each channel of the pixel
+                int red = Color.red(pixel);
+                int green = Color.green(pixel);
+                int blue = Color.blue(pixel);
+
+                int redLSBChanged = 50;
+
+                // replace pixel with the manipulated pixel
+                newBitmap.setPixel(x, y, Color.rgb(redLSBChanged, green, blue));
+            }
+        }
+
+        return newBitmap;
 
     }
 
