@@ -32,7 +32,7 @@ public class EmbedMessage {
 
     }
 
-    private String convertCharToBinary(char ch) {
+    private String convertCharToBinary(char ch) { 
 
         // Casting char to int ascii value
         int intValue = ch;
@@ -49,33 +49,40 @@ public class EmbedMessage {
 
 
     //
-    // SAMPLE CODE - NOT COMPLIED !!!
+    // need to check if working!!!
     //
     //
-    public Bitmap hideMessageInLSB() {
+    public Bitmap hideMessageInLSB(Bitmap bmp, String msg) {
 
+        Bitmap newBmp = bmp;
+        char changeBit = 0;
 
-        // loop through every pixel of the image
-        for (int x = 0; x < newBitmap.getWidth(); x++) {
-            for (int y = 0; y < newBitmap.getHeight(); y++) {
+        // loop through every char of the massage
+        for(int x = 0; x < msg.length(); x++)
+        {
+            //find the char we need to implement in the pixel
+            changeBit = msg.charAt(x);
 
-                // Get the pixel
-                int pixel = newBitmap.getPixel(x, y);
+            //find the pixel place (x, y)
+            int pixelX = x/(newBmp.getHeight());
+            int pixelY = x%(newBmp.getWidth());
 
-                // Get each channel of the pixel
-                int red = Color.red(pixel);
-                int green = Color.green(pixel);
-                int blue = Color.blue(pixel);
+            // Get the pixel
+            int pixel = newBmp.getPixel(pixelX,pixelY);
 
-                int redLSBChanged = 50;
+            // Get each channel of the pixel
+            int red = Color.red(pixel);
+            int green = Color.green(pixel);
+            int blue = Color.blue(pixel);
 
-                // replace pixel with the manipulated pixel
-                newBitmap.setPixel(x, y, Color.rgb(redLSBChanged, green, blue));
-            }
+            int redLSBChanged = red & changeBit;
+
+            // replace pixel with the manipulated pixel
+            newBmp.setPixel(pixelX, pixelY,
+                    Color.rgb(redLSBChanged, green, blue));
         }
 
-        return newBitmap;
-
+        return newBmp;
     }
 
 }
