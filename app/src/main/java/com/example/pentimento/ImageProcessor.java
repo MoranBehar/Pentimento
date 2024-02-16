@@ -11,6 +11,7 @@ public class ImageProcessor {
 
     public Bitmap grayScale(Bitmap bmpImage, int level) {
 
+        //duplicate the bitMap so i could do manipulation on it
         Bitmap newBitmap = bmpImage.copy(Bitmap.Config.ARGB_8888, true);
         double levelPrefix = (100-level)/100.0;
 

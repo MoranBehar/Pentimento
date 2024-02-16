@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     
     ImageView ivPhoto;
     TextView tvMsg;
-    Button btnAddMsg;
+    Button btnAddMsg, btnGetMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,24 +29,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ivPhoto = findViewById(R.id.ivPhoto);
         tvMsg = findViewById(R.id.tvMsg);
         btnAddMsg = findViewById(R.id.btnAddMsg);
+        btnGetMsg = findViewById(R.id.btnGetMsg);
     }
 
     private void setListeners() {
         btnAddMsg.setOnClickListener(this);
+        btnGetMsg.setOnClickListener(this);
+    }
+
+    private Bitmap createBitmapToImage() {
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) ivPhoto.getDrawable();
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+
+        return  bitmap;
     }
 
     @Override
     public void onClick(View v) {
         if(v == btnAddMsg)
         {
-            addSecretMsgToPhoto();
-            grayScale();
+            addSecretMsgToPhoto(createBitmapToImage());
+//            grayScale();
+        }
+        else if(v == btnGetMsg)
+        {
+            getSecretMsgFromPhoto(createBitmapToImage());
         }
     }
 
-    private void addSecretMsgToPhoto() {
-        EmbedMessage MsgEmbed = new EmbedMessage("My Message");
-        MsgEmbed.execute();
+    private void addSecretMsgToPhoto(Bitmap image) {
+        EmbedMessage MsgEmbed = new EmbedMessage("a", image);
+        Bitmap bitmapWithMsg = MsgEmbed.execute();
+        ivPhoto.setImageBitmap(bitmapWithMsg);
+
+    }
+
+    private void getSecretMsgFromPhoto(Bitmap image) {
+        ExtractMessage extractMessage = new ExtractMessage(image);
+        extractMessage.getMassage();
     }
 
     private void grayScale() {

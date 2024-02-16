@@ -36,4 +36,10 @@
         android:layout_height="wrap_content"
         android:text="Click to add massage"/>
 
+    <Button
+        android:id="@+id/btnGetMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click to get massage"/>
+
 </LinearLayout>
