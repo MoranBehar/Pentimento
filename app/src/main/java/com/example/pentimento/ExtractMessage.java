@@ -15,6 +15,7 @@ public class ExtractMessage {
     public String getMassage() {
 
         String message = "";
+        String endingCodeOfMsg ="$$$EOM$$$";
 
         // loop through every pixel of the image
         for (int x = 0; x < 1; x++) {
@@ -32,25 +33,39 @@ public class ExtractMessage {
                 //add the new char to the string msg
                 message += Integer.toString(lsbRed);
 
+                String extractedPartOfMessage = convertBinaryToString(message);
+
+                //if the message includes the ending code - stop looping the image
+                if(checkIfEnd(extractedPartOfMessage, endingCodeOfMsg))
+                {
+                    break;
+                }
+
             }
         }
 
         String extractedMessage = convertBinaryToString(message);
-        Log.d("POC", "TheExtractedMessage: "+message);
+        Log.d("POC", "TheMessage: "+message);
         Log.d("POC", "TheExtractedMessage: "+extractedMessage);
 
+        String extractedMessageWithoutEndingCode = removeEndingCode(extractedMessage, endingCodeOfMsg);
+        Log.d("POC", "TheExtractedMessageWithoutEnding: "+extractedMessageWithoutEndingCode);
 
-        //
-        //
-        //add checkIfEnd function - after every byte
-        //
-        //
-
-        return extractedMessage;
+        return extractedMessageWithoutEndingCode;
     }
 
-    public boolean checkIfEnd(){
-        return false;
+    public boolean checkIfEnd(String partOfMsg, String endingCode){
+
+        return partOfMsg.endsWith(endingCode);
+    }
+
+    public String removeEndingCode(String msgWithEndingCode, String endingCode)
+    {
+        //find the last index of the ending code in the message
+        int lastIndexOfRealMsg = msgWithEndingCode.length() - endingCode.length();
+
+        //extract the sub string from the beginning of the message up to the last index
+        return msgWithEndingCode.substring(0, lastIndexOfRealMsg);
     }
 
 
