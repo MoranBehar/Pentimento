@@ -58,14 +58,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void addSecretMsgToPhoto(Bitmap image) {
-        EmbedMessage MsgEmbed = new EmbedMessage("a", image);
-        Bitmap bitmapWithMsg = MsgEmbed.execute();
+        ImageLsbManipulation MsgEmbed = new ImageLsbManipulation("a", image);
+        Bitmap bitmapWithMsg = MsgEmbed.EmbedMessageAction();
         ivPhoto.setImageBitmap(bitmapWithMsg);
 
     }
 
     private void getSecretMsgFromPhoto(Bitmap image) {
-        ExtractMessage extractMessage = new ExtractMessage(image);
+        ImageLsbManipulation extractMessage = new ImageLsbManipulation(image);
         extractMessage.getMassage();
     }
 
