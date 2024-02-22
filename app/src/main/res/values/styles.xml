@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BottomNavigationStyle" parent="Widget.Design.BottomNavigationView">
+        <item name="android:background">@color/primary_background</item>
+        <item name="itemIconTint">@drawable/elements</item>
+        <item name="itemTextColor">@drawable/elements</item>
+        <item name="itemTextAppearanceActive">@style/BottomNavigationActiveTextAppearance</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavigationInactiveTextAppearance</item>
+        <item name="labelVisibilityMode">labeled</item>
+    </style>
+
+    <style name="BottomNavigationActiveTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="BottomNavigationInactiveTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="LinearLayoutFormItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="LinearLayoutFormItem.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/form_label</item>
+        <item name="android:paddingLeft">5sp</item>
+        <item name="android:layout_marginTop">-5sp</item>
+        <item name="android:layout_marginBottom">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="LinearLayoutFormItem.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:textColor">@color/form_editText</item>
+    </style>
+
+    <style name="linkButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:textColor">@color/form_editText</item>
+        <item name="android:background">@null</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:outlineProvider">@null</item>
+    </style>
+
+</resources>
