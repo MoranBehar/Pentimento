@@ -89,7 +89,6 @@ public class ImageLsbManipulation {
     public String getMassage() {
 
         String message = "";
-        String endingCodeOfMsg ="$$$EOM$$$";
 
         // loop through every pixel of the image
         for (int x = 0; x < 1; x++) {
@@ -110,7 +109,7 @@ public class ImageLsbManipulation {
                 String extractedPartOfMessage = utils.convertBinaryToString(message);
 
                 //if the message includes the ending code - stop looping the image
-                if(checkIfEnd(extractedPartOfMessage, endingCodeOfMsg))
+                if(checkIfEnd(extractedPartOfMessage))
                 {
                     break;
                 }
@@ -122,21 +121,21 @@ public class ImageLsbManipulation {
         Log.d("POC", "TheMessage: "+message);
         Log.d("POC", "TheExtractedMessage: "+extractedMessage);
 
-        String extractedMessageWithoutEndingCode = removeEndingCode(extractedMessage, endingCodeOfMsg);
+        String extractedMessageWithoutEndingCode = removeEndingCode(extractedMessage);
         Log.d("POC", "TheExtractedMessageWithoutEnding: "+extractedMessageWithoutEndingCode);
 
         return extractedMessageWithoutEndingCode;
     }
 
-    public boolean checkIfEnd(String partOfMsg, String endingCode){
+    public boolean checkIfEnd(String partOfMsg){
 
-        return partOfMsg.endsWith(endingCode);
+        return partOfMsg.endsWith(EOM);
     }
 
-    public String removeEndingCode(String msgWithEndingCode, String endingCode)
+    public String removeEndingCode(String msgWithEndingCode)
     {
         //find the last index of the ending code in the message
-        int lastIndexOfRealMsg = msgWithEndingCode.length() - endingCode.length();
+        int lastIndexOfRealMsg = msgWithEndingCode.length() - EOM.length();
 
         //extract the sub string from the beginning of the message up to the last index
         return msgWithEndingCode.substring(0, lastIndexOfRealMsg);
