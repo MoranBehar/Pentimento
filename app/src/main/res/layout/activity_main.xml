@@ -6,40 +6,64 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="#F4E4E4"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/appName"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pentimento"
-        android:textSize="48dp"
-        android:textStyle="bold"/>
+        android:orientation="horizontal"
+        android:gravity="center">
 
-    <ImageView
-        android:id="@+id/ivPhoto"
-        android:layout_width="300dp"
-        android:layout_height="200dp"
-        android:src="@drawable/dogs"
-        android:layout_margin="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pentiment"
+            android:textSize="56dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:id="@+id/txtHeadline"/>
 
-    <TextView
-        android:id="@+id/tvMsg"
-        android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/eye"
+            android:layout_width="64sp"
+            android:layout_height="64sp"
+            android:paddingTop="12sp"
+            android:paddingLeft="-16sp"
+            android:src="@drawable/baseline_remove_red_eye_24"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/mainButtons"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="test"
-        android:textSize="24dp"
-        android:layout_marginBottom="10dp"/>
+        android:padding="40sp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:alpha="0">
 
-    <Button
-        android:id="@+id/btnAddMsg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Click to add massage"/>
+        <Button
+            android:id="@+id/btnMainSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sign Up"
+            android:textSize="24dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/btn_rounded"
+            android:textColor="@color/btn_textColor"/>
 
-    <Button
-        android:id="@+id/btnGetMsg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Click to get massage"/>
+        <Button
+            android:id="@+id/btnMainLogIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log In"
+            android:textSize="24dp"
+            android:background="@drawable/btn_rounded"
+            android:textColor="@color/btn_textColor"/>
+
+    </LinearLayout>
 
 </LinearLayout>
