@@ -6,16 +6,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#F4E4E4"
     tools:context=".SignUpActivity">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Sign up to our community"
-        android:textSize="24dp"
-        android:layout_margin="12dp"
-        android:textColor="@color/black"/>
+        style="@style/pageTitle"/>
+
+    <com.example.pentimento.FormTextEditComponent
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        app:topLabelText="My name"
+        app:customHint="Enter your name"/>
+
+    <com.example.pentimento.FormTextEditComponent
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        app:topLabelText="My email"
+        app:customHint="Enter your email address"/>
 
     <EditText
         android:layout_width="200dp"

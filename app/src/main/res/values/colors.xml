@@ -2,15 +2,26 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="primary_background">#3E3838</color>
+
+    <color name="primary_background">#FFFFFF</color>
+    <color name="primary_foreground">#3C6E71</color>
+    <color name="secondary_foreground">#284B63</color>
+
+    <color name="page_title_text">@color/white</color>
+    <color name="page_title_background">@color/primary_foreground</color>
+
+
     <color name="action_bar_text">#E97272</color>
     <color name="nav_text">#FF5722</color>
     <color name="nav_icon_tint">#3F51B5</color>
     <color name="nav_selected_color">#FA5F53</color>
     <color name="nav_unselected_color">@color/white</color>
     <color name="btn_textColor">@color/white</color>
-    <color name="btn_backgroundTint">#E97272</color>
+    <color name="btn_backgroundTint">#3c6e71</color>
     <color name="btn_backgroundTintDisabled">#939393</color>
+    <color name="text_btn_textColor">@color/black</color>
     <color name="form_label">@color/black</color>
-    <color name="form_editText">#494446</color>
+    <color name="form_editText">#353535</color>
+    <color name="form_editTextTopLabel">#3C6E71</color>
+    <color name="form_editTextBorder">#D9D9D9</color>
 </resources>
