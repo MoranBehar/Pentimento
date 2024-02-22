@@ -21,12 +21,14 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:hint="Email:"
+        android:text="user@gmail.com"
         android:id="@+id/etLogInEmail"/>
 
     <EditText
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:hint="Password:"
+        android:text="123456"
         android:id="@+id/etLogInPassword"/>
 
 
