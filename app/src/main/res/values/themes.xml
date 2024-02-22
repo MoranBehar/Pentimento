@@ -3,6 +3,7 @@
     <style name="Base.Theme.Pentimento" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/primary_background</item>
+        <item name="android:windowBackground">@color/primary_background</item>
     </style>
 
     <!-- Style for this project-->
