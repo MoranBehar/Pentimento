@@ -16,6 +16,7 @@
 
     <style name="BottomNavigationInactiveTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">10sp</item>
+        <item name="itemTextColor">@color/black</item>
     </style>
 
     <style name="LinearLayoutFormItem">

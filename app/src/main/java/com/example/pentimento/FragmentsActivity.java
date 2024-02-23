@@ -11,7 +11,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class FragmentsActivity extends AppCompatActivity {
+public class FragmentsActivity extends SideMenuActivityClass  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
