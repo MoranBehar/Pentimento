@@ -1,26 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Base application theme. -->
-    <style name="Base.Theme.Pentimento" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your light theme here. -->
+    <style name="Base.Theme.Pentimento" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary_background</item>
         <item name="android:windowBackground">@color/primary_background</item>
     </style>
 
-    <!-- Style for this project-->
+    <!-- Style for my Pentimento project-->
     <style name="AppTheme" parent="Base.Theme.Pentimento">
-        <item name="actionBarStyle">@style/ActionBarStyle</item>
+<!--        <item name="actionBarStyle">@style/ActionBarStyle</item>-->
     </style>
 
-    <!-- Style for the action bar -->
-    <style name="ActionBarStyle" parent="@style/Widget.AppCompat.ActionBar.Solid">
-        <item name="background">@color/primary_background</item>
-        <item name="titleTextStyle">@style/MyActionBarTitleText</item>
-    </style>
 
-    <!-- Style for the action bar title text -->
-    <style name="MyActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/action_bar_text</item>
-    </style>
+<!--    &lt;!&ndash; Style for the action bar &ndash;&gt;-->
+<!--    <style name="ActionBarStyle" parent="@style/Widget.AppCompat.ActionBar.Solid">-->
+<!--        <item name="background">@color/primary_background</item>-->
+<!--        <item name="titleTextStyle">@style/MyActionBarTitleText</item>-->
+<!--    </style>-->
+
+<!--    &lt;!&ndash; Style for the action bar title text &ndash;&gt;-->
+<!--    <style name="MyActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">-->
+<!--        <item name="android:textSize">14sp</item>-->
+<!--        <item name="android:textColor">@color/action_bar_text</item>-->
+<!--    </style>-->
 
 </resources>
