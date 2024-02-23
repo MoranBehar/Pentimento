@@ -17,7 +17,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LogInActivity extends AppCompatActivity implements View.OnClickListener {
 
+    FormTextEditComponent cmpLogin, cmpPassword;
     EditText etLogInEmail, etLogInPassword;
+
     Button btnLogIn, btnNeedSignup;
 
     FirebaseAuth fbAuth;
@@ -34,8 +36,15 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void findViews() {
-        etLogInEmail = findViewById(R.id.etLogInEmail);
-        etLogInPassword = findViewById(R.id.etLogInPassword);
+        cmpLogin = findViewById(R.id.etLogInEmail);
+        cmpPassword = findViewById(R.id.etLogInPassword);
+        etLogInEmail = cmpLogin.getEditText();
+        etLogInPassword = cmpPassword.getEditText();
+
+        // TODO - Remove before release
+        etLogInEmail.setText("user@gmail.com");
+        etLogInPassword.setText("123456");
+
         btnLogIn = findViewById(R.id.btnLogIn);
         btnNeedSignup = findViewById(R.id.btnNeedSignup);
     }

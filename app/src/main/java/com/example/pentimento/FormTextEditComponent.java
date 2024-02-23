@@ -56,4 +56,5 @@ public class FormTextEditComponent extends LinearLayout {
     public EditText getEditText() {
         return editText;
     }
+
 }

@@ -24,4 +24,6 @@
     <color name="form_editText">#353535</color>
     <color name="form_editTextTopLabel">#3C6E71</color>
     <color name="form_editTextBorder">#D9D9D9</color>
+    <color name="form_editTextBorderFocused">@color/secondary_foreground</color>
+
 </resources>
