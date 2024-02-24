@@ -15,13 +15,11 @@ public class FormTextEditComponent extends LinearLayout {
     public FormTextEditComponent(Context context) {
         super(context);
         init(context, null);
-
     }
 
     public FormTextEditComponent(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
-
     }
 
     public FormTextEditComponent(Context context, AttributeSet attrs, int defStyleAttr) {

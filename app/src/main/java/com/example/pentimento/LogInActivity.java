@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LogInActivity extends AppCompatActivity implements View.OnClickListener {
 
-    FormTextEditComponent cmpLogin, cmpPassword;
+    FormTextEditComponent cmpEmail, cmpPassword;
     EditText etLogInEmail, etLogInPassword;
 
     Button btnLogIn, btnNeedSignup;
@@ -27,6 +27,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
@@ -36,9 +37,9 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void findViews() {
-        cmpLogin = findViewById(R.id.etLogInEmail);
+        cmpEmail = findViewById(R.id.etLogInEmail);
         cmpPassword = findViewById(R.id.etLogInPassword);
-        etLogInEmail = cmpLogin.getEditText();
+        etLogInEmail = cmpEmail.getEditText();
         etLogInPassword = cmpPassword.getEditText();
 
         // TODO - Remove before release

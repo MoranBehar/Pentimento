@@ -25,18 +25,19 @@ public abstract class MenusActivityClass extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
 
+        // Set the top appbar to our toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_drawer_menu);
 
+        // Set the drawer manager responsible for opening/closing the side menu
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        // Handle navigation view item clicks here.
-        NavigationView sideNavDrawerView = findViewById(R.id.nav_view);
+        // Handle side menu navigation view item clicks
+        NavigationView sideNavDrawerView = findViewById(R.id.nav_side_menu_view);
         setupDrawerListener(sideNavDrawerView);
 
     }
