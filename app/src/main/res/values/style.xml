@@ -67,11 +67,13 @@
     <style name="pageTitle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">60dp</item>
-        <item name="android:padding">5dp</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:gravity">top</item>
         <item name="android:textColor">@color/page_title_text</item>
-        <item name="android:background">@color/page_title_background</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/text_page_title_1</item>
     </style>
 
     <!-- Tool Bar-->
