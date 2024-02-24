@@ -62,17 +62,55 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(v == btnUpdateInfo)
         {
-            updateUserInfo();
+            String newEmail = etUserDetailsEmail.getText().toString();
+            String newName = etUserDetailsName.getText().toString();
+            String newPhone = etUserDetailsPhone.getText().toString();
+            String newAge = etUserDetailsAge.getText().toString();
+
+            //check if new data is valid
+            Boolean validate = validateNewData(newEmail, newName, newPhone, newAge);
+
+            if(!validate)
+            {
+                Toast.makeText(this, "Your data does not valid", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                //creating new user with the new date
+                User newUserInfo = new User(newEmail, newName, newPhone ,Integer.parseInt(newAge));
+
+                //update the current user to the new user with the same id
+                updateUserInfo(newUserInfo);
+            }
         }
     }
 
-    private void updateUserInfo() {
+    private Boolean validateNewData(String newEmail, String newName, String newPhone, String newAge) {
+        ValidateInfo validate = new ValidateInfo();
+
+        return validate.isEmailOK(newEmail) & validate.isNameOK(newName) &
+                validate.isPhoneOK(newPhone) & validate.isAgeOK(newAge);
+    }
+
+    private void updateUserInfo(User user) {
+
+        //get current user id
+        String uid = fbAuth.getUid();
+
+        //chang the current user data with the new user data
+        store.collection("users").document(uid).set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(UserInfoActivity.this, "User updated Successfully ", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
     }
 
 
     private void loadUserData() {
-        String uid= fbAuth.getUid();
+        String uid = fbAuth.getUid();
 
         store.collection("users").document(uid).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
