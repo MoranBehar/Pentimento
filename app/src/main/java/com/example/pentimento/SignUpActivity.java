@@ -75,32 +75,34 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         String age = etSignUpAge.getText().toString();
         String password = etSignUpPassword.getText().toString();
 
-        if(isEmailOK(email) && isPasswordOK(password) && isNameOK(name) &&
-                isAgeOK(age) && isPhoneOK(phone)) {
+        ValidateInfo validate = new ValidateInfo();
+
+        if(validate.isEmailOK(email) && validate.isPasswordOK(password) &&
+                validate.isNameOK(name) && validate.isAgeOK(age) && validate.isPhoneOK(phone)) {
 
             signUpUserToApp(name, email, phone, password, age);
         }
-        else if(!isEmailOK(email))
+        else if(!validate.isEmailOK(email))
         {
             Toast.makeText(SignUpActivity.this, "Email not valid",
                     Toast.LENGTH_LONG).show();
         }
-        else if(!isAgeOK(age))
+        else if(!validate.isAgeOK(age))
         {
             Toast.makeText(SignUpActivity.this, "Age not valid",
                     Toast.LENGTH_LONG).show();
         }
-        else if(!isNameOK(name))
+        else if(!validate.isNameOK(name))
         {
             Toast.makeText(SignUpActivity.this, "Name not valid",
                     Toast.LENGTH_LONG).show();
         }
-        else if(!isPasswordOK(password))
+        else if(!validate.isPasswordOK(password))
         {
             Toast.makeText(SignUpActivity.this, "Password not valid",
                     Toast.LENGTH_LONG).show();
         }
-        else if(!isPhoneOK(phone))
+        else if(!validate.isPhoneOK(phone))
         {
             Toast.makeText(SignUpActivity.this, "Phone not valid",
                     Toast.LENGTH_LONG).show();
@@ -153,47 +155,47 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         });
     }
 
-    private boolean isEmailOK(String email) {
-        if (android.text.TextUtils.isEmpty(email))
-            return false;
-        else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
-            return false;
-
-        return true;
-    }
-    private boolean isPasswordOK(String password) {
-        if (android.text.TextUtils.isEmpty(password))
-            return false;
-        else if (password.length() < 6)
-            return false;
-
-        return true;
-    }
-    private boolean isNameOK(String name) {
-        if (android.text.TextUtils.isEmpty(name))
-            return false;
-        else if (name.length() < 2)
-            return false;
-        else if(!name.chars().allMatch(Character::isLetter))
-            return false;
-
-        return true;
-    }
-    private boolean isAgeOK(String age) {
-        int ageNum=Integer.parseInt(age);
-        if (android.text.TextUtils.isEmpty(age))
-            return false;
-        else if (ageNum < 15)
-            return false;
-
-        return true;
-    }
-    private boolean isPhoneOK(String phone) {
-        if (TextUtils.isEmpty(phone))
-            return false;
-        else if (!phone.substring(0, 2).equals("05") || phone.charAt(3)!='-')
-            return false;
-
-        return true;
-    }
+//    private boolean isEmailOK(String email) {
+//        if (android.text.TextUtils.isEmpty(email))
+//            return false;
+//        else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+//            return false;
+//
+//        return true;
+//    }
+//    private boolean isPasswordOK(String password) {
+//        if (android.text.TextUtils.isEmpty(password))
+//            return false;
+//        else if (password.length() < 6)
+//            return false;
+//
+//        return true;
+//    }
+//    private boolean isNameOK(String name) {
+//        if (android.text.TextUtils.isEmpty(name))
+//            return false;
+//        else if (name.length() < 2)
+//            return false;
+//        else if(!name.chars().allMatch(Character::isLetter))
+//            return false;
+//
+//        return true;
+//    }
+//    private boolean isAgeOK(String age) {
+//        int ageNum=Integer.parseInt(age);
+//        if (android.text.TextUtils.isEmpty(age))
+//            return false;
+//        else if (ageNum < 15)
+//            return false;
+//
+//        return true;
+//    }
+//    private boolean isPhoneOK(String phone) {
+//        if (TextUtils.isEmpty(phone))
+//            return false;
+//        else if (!phone.substring(0, 2).equals("05") || phone.charAt(3)!='-')
+//            return false;
+//
+//        return true;
+//    }
 }
