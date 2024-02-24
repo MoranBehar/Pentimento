@@ -3,8 +3,6 @@ package com.example.pentimento;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -15,7 +13,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 public abstract class MenusActivityClass extends AppCompatActivity {
@@ -39,23 +36,29 @@ public abstract class MenusActivityClass extends AppCompatActivity {
         toggle.syncState();
 
         // Handle navigation view item clicks here.
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(item -> {
-
-            // Handle drawer item clicks
-            onDrawerItemSelected(item);
-
-            // Close drawer
-            drawer.closeDrawer(GravityCompat.START);
-            return true;
-        });
+        NavigationView sideNavDrawerView = findViewById(R.id.nav_view);
+        setupDrawerListener(sideNavDrawerView);
 
     }
 
     protected abstract int getLayoutId();
 
 
-    public boolean onDrawerItemSelected(@NonNull MenuItem item) {
+    private void setupDrawerListener(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                menuItem -> {
+
+                    // Handle the item clicked
+                    onDrawerItemSelected(menuItem);
+
+                    // Close drawer
+                    drawer.closeDrawer(GravityCompat.START);
+                    return true;
+                }
+        );
+    }
+
+    private boolean onDrawerItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
 
         if(id==R.id.itemLogout){
