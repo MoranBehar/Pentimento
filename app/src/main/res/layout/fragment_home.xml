@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#F4E4E4"
     tools:context=".HomeFragment">
 
     <TextView

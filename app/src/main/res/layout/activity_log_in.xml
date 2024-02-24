@@ -26,7 +26,7 @@
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             app:customHint="Enter your email"
-            app:topLabelText="Username" />
+            app:topLabelText="Email" />
 
         <com.example.pentimento.FormTextEditComponent
             android:id="@+id/etLogInPassword"
