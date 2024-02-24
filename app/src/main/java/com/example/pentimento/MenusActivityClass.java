@@ -2,25 +2,60 @@ package com.example.pentimento;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
-public class SideMenuActivityClass extends AppCompatActivity {
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
+
+public abstract class MenusActivityClass extends AppCompatActivity {
+
+    private DrawerLayout drawer;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.side_menu, menu);
-        return true;
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setContentView(getLayoutId());
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_drawer_menu);
+
+        drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        // Handle navigation view item clicks here.
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(item -> {
+
+            // Handle drawer item clicks
+            onDrawerItemSelected(item);
+
+            // Close drawer
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        });
+
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    protected abstract int getLayoutId();
+
+
+    public boolean onDrawerItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();
 
         if(id==R.id.itemLogout){
@@ -42,7 +77,7 @@ public class SideMenuActivityClass extends AppCompatActivity {
 
     private void checkBeforeLoggingOut() {
         AlertDialog.Builder confirmLogOut =
-                new AlertDialog.Builder(SideMenuActivityClass.this);
+                new AlertDialog.Builder(MenusActivityClass.this);
 
         confirmLogOut.setIcon(R.drawable.baseline_logout_24);
         confirmLogOut.setTitle("Confirm Logging Out");
@@ -70,4 +105,5 @@ public class SideMenuActivityClass extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
 }
