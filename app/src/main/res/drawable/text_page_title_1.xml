@@ -9,5 +9,5 @@
         android:pathData="M 0,0 L 400,0 400,100 0 100 z" />
     <path
         android:fillColor="@color/primary_foreground"
-        android:pathData="M 0,100 L 400,100 0,400 z" />
+        android:pathData="M 0,99 L 400,99 0,400 z" />
 </vector>

@@ -1,8 +1,6 @@
 package com.example.pentimento;
 
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -24,7 +22,7 @@ import java.util.List;
 
 
 public class AddSecretFragment extends Fragment
-        implements View.OnClickListener, GalleryFragment.DialogListener {
+        implements View.OnClickListener, GalleryDialogFragment.DialogListener {
 
     private Button btnChoosePhoto, btnAddSecret;
 
@@ -102,9 +100,9 @@ public class AddSecretFragment extends Fragment
     }
 
     private void showGallery() {
-        GalleryFragment myGallery = new GalleryFragment();
+        GalleryDialogFragment myGallery = new GalleryDialogFragment();
         myGallery.setListener(this);
-        myGallery.show(getChildFragmentManager(), GalleryFragment.TAG);
+        myGallery.show(getChildFragmentManager(), GalleryDialogFragment.TAG);
     }
 
     public void onPhotoSelected(Photo imageSelected) {

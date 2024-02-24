@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +16,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 
-public class GalleryFragment extends DialogFragment {
+public class GalleryDialogFragment extends DialogFragment {
 
     private GridView gvGallery;
     private PhotoAdapter adapter;
@@ -39,7 +38,7 @@ public class GalleryFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         // Inflate the dialog layout for this fragment
-        View dialogView = getActivity().getLayoutInflater().inflate(R.layout.fragment_gallery, null);
+        View dialogView = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialog_gallery, null);
         builder.setView(dialogView);
 
         builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -84,7 +83,7 @@ public class GalleryFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_gallery, container, false);
+        View view = inflater.inflate(R.layout.fragment_dialog_gallery, container, false);
 
         return view;
     }
