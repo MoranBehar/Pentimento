@@ -75,7 +75,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         String age = etSignUpAge.getText().toString();
         String password = etSignUpPassword.getText().toString();
 
-        ValidateInfo validate = new ValidateInfo();
+        ValidationUtils validate = new ValidationUtils();
 
         if(validate.isEmailOK(email) && validate.isPasswordOK(password) &&
                 validate.isNameOK(name) && validate.isAgeOK(age) && validate.isPhoneOK(phone)) {

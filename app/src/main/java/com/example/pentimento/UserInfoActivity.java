@@ -86,7 +86,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private Boolean validateNewData(String newEmail, String newName, String newPhone, String newAge) {
-        ValidateInfo validate = new ValidateInfo();
+        ValidationUtils validate = new ValidationUtils();
 
         return validate.isEmailOK(newEmail) & validate.isNameOK(newName) &
                 validate.isPhoneOK(newPhone) & validate.isAgeOK(newAge);

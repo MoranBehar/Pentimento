@@ -3,9 +3,9 @@ package com.example.pentimento;
 import android.text.TextUtils;
 import android.util.Patterns;
 
-public class ValidateInfo {
+public class ValidationUtils {
 
-    public ValidateInfo(){}
+    public ValidationUtils(){}
 
     public boolean isEmailOK(String email) {
         if (android.text.TextUtils.isEmpty(email))
