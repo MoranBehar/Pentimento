@@ -87,10 +87,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
             signUpUserToApp(name, email, phone, password, age);
         } else if (!validate.isEmailOK(email)) {
+            cmpSignUpEmail.setError("Email is invalid");
             Toast.makeText(SignUpActivity.this, "Email not valid", Toast.LENGTH_LONG).show();
         } else if (!validate.isAgeOK(age)) {
+            cmpSignUpAge.setError("Age is invalid");
             Toast.makeText(SignUpActivity.this, "Age not valid", Toast.LENGTH_LONG).show();
         } else if (!validate.isNameOK(name)) {
+            cmpSignUpName.setError("Name is invalid, only allow a-z A-Z");
             Toast.makeText(SignUpActivity.this, "Name not valid", Toast.LENGTH_LONG).show();
         } else if (!validate.isPasswordOK(password)) {
             Toast.makeText(SignUpActivity.this, "Password not valid", Toast.LENGTH_LONG).show();

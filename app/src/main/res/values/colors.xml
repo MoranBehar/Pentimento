@@ -37,5 +37,6 @@
     <color name="form_editTextTopLabel">@color/primary_foreground</color>
     <color name="form_editTextBorder">@color/borders</color>
     <color name="form_editTextBorderFocused">@color/secondary_foreground</color>
+    <color name="form_errorMessage">@color/error</color>
 
 </resources>
