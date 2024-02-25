@@ -5,25 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F4E4E4"
         android:gravity="center"
         android:orientation="vertical"
         tools:context=".FragmentsActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/primary_background"
-            app:titleTextColor="@color/primary_foreground"
-            android:minHeight="?attr/actionBarSize"
             android:theme="@style/ToolbarThemeOverlay"
-            style="@style/ToolBarStyle"/>
+            style="@style/ToolBarStyle">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="105dp"
+                android:layout_height="20dp"
+                android:visibility="visible"
+                android:layout_gravity="start|center_vertical"
+                android:src="@drawable/logo_white" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <FrameLayout
             android:id="@+id/fragment_container"

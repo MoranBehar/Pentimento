@@ -81,9 +81,13 @@
         <item name="colorControlNormal">@color/primary_foreground</item>
         <item name="homeAsUpIndicator">@drawable/ic_drawer_menu</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_drawer_menu</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:background">@color/primary_foreground</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
     </style>
 
-    <style name="ToolbarThemeOverlay" parent="">
+    <style name="ToolbarThemeOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorOnPrimary">@color/primary_foreground</item>  <!-- icon color -->
         <item name="android:textColorSecondary">@color/primary_foreground</item>
     </style>

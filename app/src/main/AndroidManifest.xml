@@ -23,7 +23,8 @@
             android:exported="false" />
         <activity
             android:name=".FragmentsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label=""/>
         <activity
             android:name=".SignUpActivity"
             android:exported="false" />
