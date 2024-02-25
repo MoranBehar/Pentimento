@@ -5,9 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:background="#F4E4E4"
+    android:gravity="top"
     tools:context=".UserInfoActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="top"
+        android:text="Your profile "
+        style="@style/pageTitle" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,15 +21,6 @@
         android:orientation="vertical"
         android:layout_margin="30sp"
         android:gravity="center">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Your Details"
-            android:textStyle="bold"
-            android:textSize="30dp"
-            android:gravity="center"
-            android:layout_marginBottom="50dp"/>
 
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
