@@ -56,36 +56,6 @@
             app:customHint="Password"
             app:topLabelText="Password" />
 
-        <!--        <EditText-->
-<!--            android:id="@+id/etSignUpName"-->
-<!--            android:layout_width="200dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:hint="Name:" />-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/etSignUpEmail"-->
-<!--            android:layout_width="200dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:hint="Email:" />-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/etSignUpPhoneNumber"-->
-<!--            android:layout_width="200dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:hint="Phone number:" />-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/etSignUpAge"-->
-<!--            android:layout_width="200dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:hint="Age:" />-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/etSignUpPassword"-->
-<!--            android:layout_width="200dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:hint="Password:" />-->
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
