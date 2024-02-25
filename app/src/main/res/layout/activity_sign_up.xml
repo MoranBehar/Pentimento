@@ -4,74 +4,107 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="top"
     android:orientation="vertical"
-    android:gravity="center"
     tools:context=".SignUpActivity">
 
     <TextView
-        android:text="Sign up to our community"
-        style="@style/pageTitle"/>
-
-    <com.example.pentimento.FormTextEditComponent
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        app:topLabelText="My name"
-        app:customHint="Enter your name"/>
-
-    <com.example.pentimento.FormTextEditComponent
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        app:topLabelText="My email"
-        app:customHint="Enter your email address"/>
-
-    <EditText
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:hint="Name:"
-        android:id="@+id/etSignUpName"/>
-
-    <EditText
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:hint="Email:"
-        android:id="@+id/etSignUpEmail"/>
-
-    <EditText
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:hint="Phone number:"
-        android:id="@+id/etSignUpPhoneNumber"/>
-
-    <EditText
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:hint="Age:"
-        android:id="@+id/etSignUpAge"/>
-
-    <EditText
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:hint="Password:"
-        android:id="@+id/etSignUpPassword"/>
+        style="@style/pageTitle"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="top"
+        android:text="Join our community" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:padding="40dp">
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnSignUp"
-            android:text="Sign Up"
-            android:layout_marginBottom="10dp"
-            style="@style/normalButton"/>
+        <com.example.pentimento.FormTextEditComponent
+            android:id="@+id/etSignUpName"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            app:customHint="Name"
+            app:topLabelText="Name" />
 
-        <Button
-            android:id="@+id/btnNeedLogin"
-            android:text="Already have account? log in here"
-            style="@style/linkButton"/>
+        <com.example.pentimento.FormTextEditComponent
+            android:id="@+id/etSignUpEmail"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            app:customHint="Email"
+            app:topLabelText="Email" />
 
+        <com.example.pentimento.FormTextEditComponent
+            android:id="@+id/etSignUpPhoneNumber"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            app:customHint="Mobile"
+            app:topLabelText="Mobile phone" />
+
+        <com.example.pentimento.FormTextEditComponent
+            android:id="@+id/etSignUpAge"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            app:customHint="Age"
+            app:topLabelText="Age" />
+
+        <com.example.pentimento.FormTextEditComponent
+            android:id="@+id/etSignUpPassword"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            app:customHint="Password"
+            app:topLabelText="Password" />
+
+        <!--        <EditText-->
+<!--            android:id="@+id/etSignUpName"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Name:" />-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/etSignUpEmail"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Email:" />-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/etSignUpPhoneNumber"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Phone number:" />-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/etSignUpAge"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Age:" />-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/etSignUpPassword"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Password:" />-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="40dp">
+
+            <Button
+                android:id="@+id/btnSignUp"
+                style="@style/normalButton"
+                android:layout_marginBottom="10dp"
+                android:text="Sign Up" />
+
+            <Button
+                android:id="@+id/btnNeedLogin"
+                style="@style/linkButton"
+                android:text="Already have an account? click here to login" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

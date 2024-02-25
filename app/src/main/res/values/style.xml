@@ -73,7 +73,7 @@
         <item name="android:textColor">@color/page_title_text</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:background">@drawable/text_page_title_1</item>
+        <item name="android:background">@drawable/haeder_page_title</item>
     </style>
 
     <!-- Tool Bar-->

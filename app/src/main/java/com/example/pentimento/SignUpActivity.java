@@ -24,6 +24,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
+    FormTextEditComponent cmpSignUpName, cmpSignUpEmail, cmpSignUpPhoneNumber, cmpSignUpAge, cmpSignUpPassword;
+
     EditText etSignUpName, etSignUpEmail, etSignUpPhoneNumber, etSignUpAge, etSignUpPassword;
     Button btnSignUp, btnNeedLogin;
 
@@ -41,11 +43,18 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void findViews() {
-        etSignUpName = findViewById(R.id.etSignUpName);
-        etSignUpEmail = findViewById(R.id.etSignUpEmail);
-        etSignUpPhoneNumber = findViewById(R.id.etSignUpPhoneNumber);
-        etSignUpAge = findViewById(R.id.etSignUpAge);
-        etSignUpPassword = findViewById(R.id.etSignUpPassword);
+        cmpSignUpName = findViewById(R.id.etSignUpName);
+        cmpSignUpEmail = findViewById(R.id.etSignUpEmail);
+        cmpSignUpPhoneNumber = findViewById(R.id.etSignUpPhoneNumber);
+        cmpSignUpAge = findViewById(R.id.etSignUpAge);
+        cmpSignUpPassword = findViewById(R.id.etSignUpPassword);
+
+        etSignUpName = cmpSignUpName.getEditText();
+        etSignUpEmail = cmpSignUpEmail.getEditText();
+        etSignUpPhoneNumber = cmpSignUpPhoneNumber.getEditText();
+        etSignUpAge = cmpSignUpAge.getEditText();
+        etSignUpPassword = cmpSignUpPassword.getEditText();
+
         btnSignUp = findViewById(R.id.btnSignUp);
         btnNeedLogin = findViewById(R.id.btnNeedLogin);
     }
@@ -57,18 +66,15 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        if(v == btnSignUp)
-        {
+        if (v == btnSignUp) {
             startSignUpProses();
-        }
-        else if(v == btnNeedLogin)
-        {
+        } else if (v == btnNeedLogin) {
             Intent intent = new Intent(SignUpActivity.this, LogInActivity.class);
             startActivity(intent);
         }
     }
 
-    private void startSignUpProses(){
+    private void startSignUpProses() {
         String name = etSignUpName.getText().toString();
         String email = etSignUpEmail.getText().toString();
         String phone = etSignUpPhoneNumber.getText().toString();
@@ -77,82 +83,51 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         ValidationUtils validate = new ValidationUtils();
 
-        if(validate.isEmailOK(email) && validate.isPasswordOK(password) &&
-                validate.isNameOK(name) && validate.isAgeOK(age) && validate.isPhoneOK(phone)) {
+        if (validate.isEmailOK(email) && validate.isPasswordOK(password) && validate.isNameOK(name) && validate.isAgeOK(age) && validate.isPhoneOK(phone)) {
 
             signUpUserToApp(name, email, phone, password, age);
-        }
-        else if(!validate.isEmailOK(email))
-        {
-            Toast.makeText(SignUpActivity.this, "Email not valid",
-                    Toast.LENGTH_LONG).show();
-        }
-        else if(!validate.isAgeOK(age))
-        {
-            Toast.makeText(SignUpActivity.this, "Age not valid",
-                    Toast.LENGTH_LONG).show();
-        }
-        else if(!validate.isNameOK(name))
-        {
-            Toast.makeText(SignUpActivity.this, "Name not valid",
-                    Toast.LENGTH_LONG).show();
-        }
-        else if(!validate.isPasswordOK(password))
-        {
-            Toast.makeText(SignUpActivity.this, "Password not valid",
-                    Toast.LENGTH_LONG).show();
-        }
-        else if(!validate.isPhoneOK(phone))
-        {
-            Toast.makeText(SignUpActivity.this, "Phone not valid",
-                    Toast.LENGTH_LONG).show();
+        } else if (!validate.isEmailOK(email)) {
+            Toast.makeText(SignUpActivity.this, "Email not valid", Toast.LENGTH_LONG).show();
+        } else if (!validate.isAgeOK(age)) {
+            Toast.makeText(SignUpActivity.this, "Age not valid", Toast.LENGTH_LONG).show();
+        } else if (!validate.isNameOK(name)) {
+            Toast.makeText(SignUpActivity.this, "Name not valid", Toast.LENGTH_LONG).show();
+        } else if (!validate.isPasswordOK(password)) {
+            Toast.makeText(SignUpActivity.this, "Password not valid", Toast.LENGTH_LONG).show();
+        } else if (!validate.isPhoneOK(phone)) {
+            Toast.makeText(SignUpActivity.this, "Phone not valid", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void signUpUserToApp(String name, String email, String phone,
-                                 String password, String age) {
+    private void signUpUserToApp(String name, String email, String phone, String password, String age) {
 
-        fbAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(SignUpActivity.this,
-                        new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful())
-                                {
-                                    FirebaseFirestore store = FirebaseFirestore.getInstance();
-                                    User user = new User(email, name, phone, Integer.parseInt(age));
+        fbAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseFirestore store = FirebaseFirestore.getInstance();
+                    User user = new User(email, name, phone, Integer.parseInt(age));
 
-                                    store.collection("users").document(fbAuth.getUid())
-                                            .set(user)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-                                                    Intent intent = new Intent(SignUpActivity.this,
-                                                            FragmentsActivity.class);
-                                                    startActivity(intent);
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(SignUpActivity.this,
-                                                            "Failed to register",
-                                                            Toast.LENGTH_LONG).show();
-                                                }
-                                            });
+                    store.collection("users").document(fbAuth.getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Intent intent = new Intent(SignUpActivity.this, FragmentsActivity.class);
+                            startActivity(intent);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(SignUpActivity.this, "Failed to register", Toast.LENGTH_LONG).show();
+                        }
+                    });
 
-                                    Toast.makeText(SignUpActivity.this,
-                                            "Wait...",
-                                            Toast.LENGTH_LONG).show();
-                                }
-                                else
-                                {
-                                    Toast.makeText(SignUpActivity.this,
-                                            "Failed to register",
-                                            Toast.LENGTH_LONG).show();
-                                    Log.d("error", task.getException().toString());
-                                }
-                            }
-                        });
+                    Toast.makeText(SignUpActivity.this, "Wait...", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(SignUpActivity.this, "Failed to register", Toast.LENGTH_LONG).show();
+                    Log.d("error", task.getException().toString());
+                }
+            }
+        });
     }
 
 //    private boolean isEmailOK(String email) {
