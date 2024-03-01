@@ -2,16 +2,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@color/menu_bottom_background"
     android:padding="16dp">
 
     <Button
         android:id="@+id/btn_option_1"
-        android:text="Option 1"
+        android:text="Photo from camera"
+        android:drawableLeft="@drawable/baseline_photo_camera_24"
         style="@style/bottomMenuButton"/>
 
     <Button
         android:id="@+id/btn_option_2"
-        android:text="Option 2"
+        android:text="Photo from phone gallery"
+        android:drawableLeft="@drawable/baseline_photo_library_24"
         style="@style/bottomMenuButton"/>
 
     <Button
