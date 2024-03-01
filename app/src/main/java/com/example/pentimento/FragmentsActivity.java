@@ -19,7 +19,7 @@ public class FragmentsActivity extends MenusActivityClass {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(navListener);
 
-        createFragment(new HomeFragment());
+        createFragment(new GalleryFragment());
     }
 
     @Override
@@ -41,8 +41,8 @@ public class FragmentsActivity extends MenusActivityClass {
                     Fragment selectedFragment = null;
                     int itemId = item.getItemId();
 
-                    if (itemId == R.id.nav_home_fragment) {
-                        selectedFragment = new HomeFragment();
+                    if (itemId == R.id.nav_gallery_fragment) {
+                        selectedFragment = new GalleryFragment();
                     } else if (itemId == R.id.nav_add_secret_fragment) {
                         selectedFragment = new AddSecretFragment();
                     } else if (itemId == R.id.nav_view_fragment) {
@@ -57,7 +57,6 @@ public class FragmentsActivity extends MenusActivityClass {
                     return true;
                 }
             };
-
 
 
 }
