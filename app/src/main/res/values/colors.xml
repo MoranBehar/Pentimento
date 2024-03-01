@@ -11,11 +11,14 @@
     <color name="palette_color_5">#D9D9D9</color>
     <color name="palette_color_6">#353535</color>
     <color name="palette_color_7">#e5383b</color>
+    <color name="palette_color_8">#7B999C</color>
+
 
     <!-- Map app colors to palette    -->
     <color name="primary_background">@color/palette_color_1</color>
     <color name="primary_foreground">@color/palette_color_2</color>
     <color name="secondary_foreground">@color/palette_color_3</color>
+    <color name="primary_foreground_light">@color/palette_color_8</color>
     <color name="emphasized">@color/palette_color_4</color>
     <color name="borders">@color/palette_color_5</color>
     <color name="error">@color/palette_color_7</color>
@@ -38,5 +41,6 @@
     <color name="form_editTextBorder">@color/borders</color>
     <color name="form_editTextBorderFocused">@color/secondary_foreground</color>
     <color name="form_errorMessage">@color/error</color>
+    <color name="btn_bottom_sheet">@color/primary_foreground_light</color>
 
 </resources>

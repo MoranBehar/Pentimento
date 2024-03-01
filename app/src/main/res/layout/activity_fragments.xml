@@ -26,6 +26,15 @@
                 android:layout_gravity="start|center_vertical"
                 android:src="@drawable/logo_white" />
 
+            <ImageButton
+                android:id="@+id/btn_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:paddingRight="10dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_add_dark" />
+
         </com.google.android.material.appbar.MaterialToolbar>
 
         <FrameLayout

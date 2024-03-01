@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Button
+        android:id="@+id/btn_option_1"
+        android:text="Option 1"
+        style="@style/bottomMenuButton"/>
+
+    <Button
+        android:id="@+id/btn_option_2"
+        android:text="Option 2"
+        style="@style/bottomMenuButton"/>
+
+    <Button
+        android:id="@+id/btn_option_3"
+        android:text="Option 3"
+        style="@style/bottomMenuButton"/>
+
+    <Button
+        android:id="@+id/btn_option_4"
+        android:text="Option 4"
+        style="@style/bottomMenuButton"/>
+
+</LinearLayout>
