@@ -38,7 +38,7 @@ public class GalleryFragment extends Fragment {
 
     private void initGallery(View view) {
 
-        GalleryManager gm = new GalleryManager();
+        GalleryManager gm = GalleryManager.getInstance();
         gm.setErrorCallBack(this::errorHandler);
 
         adapter = new PhotoAdapter(getContext(), gm.getGalleryList(), R.layout.photo_item_grid);

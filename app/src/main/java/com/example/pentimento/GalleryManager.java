@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 
 public class GalleryManager {
 
+
     private FirebaseAuth fbAuth;
     private StorageReference storageRef;
     private FirebaseStorage fbStorage;
@@ -37,7 +38,27 @@ public class GalleryManager {
 
     private static String TAG = "GalleryManager";
 
-    public GalleryManager() {
+
+    // Implement as Singleton
+    private static GalleryManager instance;
+
+    private GalleryManager() {
+        initGalleryManager();
+    }
+
+    public static GalleryManager getInstance() {
+        if (instance == null) {
+            synchronized (GalleryManager.class) {
+                if(instance == null) {
+                    instance = new GalleryManager();
+                }
+            }
+        }
+        return instance;
+    }
+
+
+    private void initGalleryManager() {
         fbAuth = FirebaseAuth.getInstance();
         fbDB = FirebaseFirestore.getInstance();
         fbStorage = FirebaseStorage.getInstance();
