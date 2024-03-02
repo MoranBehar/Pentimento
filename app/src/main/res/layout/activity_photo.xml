@@ -9,7 +9,7 @@
     tools:context=".PhotoActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/photoToolbar"
             android:theme="@style/ToolbarThemeOverlay"
             style="@style/ToolBarStyle">
 
@@ -29,6 +29,15 @@
                 android:paddingRight="10dp"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/baseline_add_circle_24" />
+
+            <ImageButton
+                android:id="@+id/btn_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:paddingRight="10dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/baseline_mode_edit_outline_24" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
