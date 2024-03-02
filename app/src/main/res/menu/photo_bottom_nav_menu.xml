@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_share_fragment"
+        android:icon="@drawable/baseline_ios_share_24"
+        android:title="Share" />
+    <item
+        android:id="@+id/nav_secret_fragment"
+        android:icon="@drawable/baseline_remove_red_eye_24"
+        android:title="Secret" />
+    <item
+        android:id="@+id/nav_favorite_fragment"
+        android:icon="@drawable/baseline_favorite_border_24"
+        android:title="Favorite" />
+    <item
+        android:id="@+id/nav_delete_fragment"
+        android:icon="@drawable/baseline_delete_24"
+        android:title="Delete" />
+
+</menu>

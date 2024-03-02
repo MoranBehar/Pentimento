@@ -4,11 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".PhotoActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Helllllo"/>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:theme="@style/ToolbarThemeOverlay"
+            style="@style/ToolBarStyle">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="105dp"
+                android:layout_height="20dp"
+                android:visibility="visible"
+                android:layout_gravity="start|center_vertical"
+                android:src="@drawable/logo_white" />
+
+            <ImageButton
+                android:id="@+id/btn_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:paddingRight="10dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/baseline_add_circle_24" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <FrameLayout
+            android:id="@+id/photo_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+
+        </FrameLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            style="@style/BottomNavigationStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:menu="@menu/photo_bottom_nav_menu" />
 
 </LinearLayout>

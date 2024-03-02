@@ -1,6 +1,5 @@
 package com.example.pentimento;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +21,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 
-public abstract class MenusActivityClass extends AppCompatActivity {
+public abstract class HomeActivityMenusClass extends AppCompatActivity {
 
     private DrawerLayout drawer;
 
@@ -131,7 +130,7 @@ public abstract class MenusActivityClass extends AppCompatActivity {
 
     private void checkBeforeLoggingOut() {
         AlertDialog.Builder confirmLogOut =
-                new AlertDialog.Builder(MenusActivityClass.this);
+                new AlertDialog.Builder(HomeActivityMenusClass.this);
 
         confirmLogOut.setIcon(R.drawable.baseline_logout_24);
         confirmLogOut.setTitle("Confirm Logging Out");

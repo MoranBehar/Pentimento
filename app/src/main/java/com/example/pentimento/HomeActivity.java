@@ -10,7 +10,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class FragmentsActivity extends MenusActivityClass {
+public class HomeActivity extends HomeActivityMenusClass {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class FragmentsActivity extends MenusActivityClass {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_fragments;
+        return R.layout.activity_home;
     }
 
     private void createFragment(Fragment fragment) {

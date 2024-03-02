@@ -15,6 +15,9 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".PhotoActivityMenusClass"
+            android:exported="false" />
+        <activity
             android:name=".PhoneGalleryActivity"
             android:exported="false" />
         <activity
@@ -30,7 +33,7 @@
             android:name=".TestActivity"
             android:exported="false" />
         <activity
-            android:name=".FragmentsActivity"
+            android:name=".HomeActivity"
             android:exported="false"
             android:label="" />
         <activity

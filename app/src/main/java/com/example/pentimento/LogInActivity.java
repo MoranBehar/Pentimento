@@ -79,7 +79,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                         if(task.isSuccessful())
                         {
                             Intent intent = new Intent(LogInActivity.this,
-                                    FragmentsActivity.class);
+                                    HomeActivity.class);
                             startActivity(intent);
                         }
                         else if(email != fbAuth.getCurrentUser().getEmail())
