@@ -4,4 +4,8 @@
         <attr name="customHint" format="string"/>
         <attr name="topLabelText" format="string"/>
     </declare-styleable>
+
+    <declare-styleable name="CustomImageViewSrc">
+        <attr name="imageSrc" format="reference" />
+    </declare-styleable>
 </resources>

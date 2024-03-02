@@ -134,4 +134,8 @@ public class GalleryManager {
             errorCallBack.accept(errorMessage);
         }
     }
+
+    public Photo getImageByPosition(int position) {
+        return gallery.get(position);
+    }
 }

@@ -23,6 +23,8 @@ public class GalleryFragment extends Fragment {
 
     public static String TAG = "Gallery";
 
+    GalleryManager gm;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
@@ -38,7 +40,7 @@ public class GalleryFragment extends Fragment {
 
     private void initGallery(View view) {
 
-        GalleryManager gm = GalleryManager.getInstance();
+        gm = GalleryManager.getInstance();
         gm.setErrorCallBack(this::errorHandler);
 
         adapter = new PhotoAdapter(getContext(), gm.getGalleryList(), R.layout.photo_item_grid);
@@ -66,20 +68,8 @@ public class GalleryFragment extends Fragment {
     private void photoClicked(int position) {
 
         Intent intent = new Intent(this.getContext(), PhotoActivity.class);
+        intent.putExtra("imagePosition", position);
         startActivity(intent);
-
-//        // Create a photo fragment
-//        Fragment newFragment = new PhotoFragment();
-//
-//        // Get the fragments manager of my parent activity (FragmentsActivity) and start a transaction
-//        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//        FragmentTransaction transaction = fragmentManager.beginTransaction();
-//
-//        // Perform a switch - replace current fragment with the photo fragment
-//        // also keep the current fragment to the back stack to support the back button
-//        transaction.replace(R.id.fragment_container, newFragment);
-//        transaction.addToBackStack(null);
-//        transaction.commit();
     }
 
 
