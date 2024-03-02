@@ -1,5 +1,6 @@
 package com.example.pentimento;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -53,7 +54,6 @@ public abstract class MenusActivityClass extends AppCompatActivity {
         // Handle side menu navigation view item clicks
         NavigationView sideNavDrawerView = findViewById(R.id.nav_side_menu_view);
         setupDrawerListener(sideNavDrawerView);
-
     }
 
     private void showBottomSheetDialog() {
@@ -79,6 +79,7 @@ public abstract class MenusActivityClass extends AppCompatActivity {
                         if (v1.getId() == R.id.btn_option_1) {
                             Toast.makeText(viewGroup.getContext(), "1 Clicked", Toast.LENGTH_SHORT).show();
                         } else if (v1.getId() == R.id.btn_option_2) {
+                            getPhoneGallery();
                             Toast.makeText(viewGroup.getContext(), "2 Clicked", Toast.LENGTH_SHORT).show();
                         }
 
@@ -91,6 +92,11 @@ public abstract class MenusActivityClass extends AppCompatActivity {
     }
 
     protected abstract int getLayoutId();
+
+     private void getPhoneGallery(){
+        Intent intent = new Intent(getBaseContext(), PhoneGalleryActivity.class);
+        startActivity(intent);
+    }
 
 
     private void setupDrawerListener(NavigationView navigationView) {
