@@ -24,7 +24,7 @@ import com.google.android.material.navigation.NavigationView;
 public abstract class HomeActivityMenusClass extends AppCompatActivity {
 
     private DrawerLayout drawer;
-
+    private BottomSheetDialog bottomSheetDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -42,6 +42,9 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
+        initBottomSheetDialog();
+
         // Set add button to open bottom menu
         ImageButton addButton = findViewById(R.id.btn_add);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -56,15 +59,16 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         setupDrawerListener(sideNavDrawerView);
     }
 
-    private void showBottomSheetDialog() {
-
+    private void initBottomSheetDialog() {
         View bottomSheetView = getLayoutInflater().inflate(R.layout.menu_bottom_sheet, null);
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog = new BottomSheetDialog(this);
         bottomSheetDialog.setContentView(bottomSheetView);
 
         ViewGroup viewGroup = (ViewGroup) bottomSheetView;
         setupBottomSheetDialogButtonsListener(viewGroup, bottomSheetDialog);
+    }
 
+    private void showBottomSheetDialog() {
         bottomSheetDialog.show();
     }
 
@@ -73,19 +77,18 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
 
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
             View child = viewGroup.getChildAt(i);
+
+            // Only set listeners to Buttons
             if (child instanceof Button) {
                 child.setOnClickListener(v -> {
-                    child.setOnClickListener(v1 -> {
-                        if (v1.getId() == R.id.btn_option_1) {
-                            Toast.makeText(viewGroup.getContext(), "1 Clicked", Toast.LENGTH_SHORT).show();
-                        } else if (v1.getId() == R.id.btn_option_2) {
-                            getPhoneGallery();
-                            Toast.makeText(viewGroup.getContext(), "2 Clicked", Toast.LENGTH_SHORT).show();
-                        }
+                    if (v.getId() == R.id.btn_take_picture) {
+                        Toast.makeText(viewGroup.getContext(), "1 Clicked", Toast.LENGTH_SHORT).show();
+                    } else if (v.getId() == R.id.btn_from_phone_gallery) {
+                        getPhoneGallery();
+                    }
 
-                        bottomSheetDialog.dismiss();
-                    });
-
+                    // Dismiss the BottomSheetDialog
+                    bottomSheetDialog.dismiss();
                 });
             }
         }
