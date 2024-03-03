@@ -42,6 +42,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        // Set add button to open bottom menu
         ImageButton addButton = findViewById(R.id.btn_add);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override

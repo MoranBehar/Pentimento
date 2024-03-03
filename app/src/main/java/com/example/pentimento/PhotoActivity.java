@@ -6,13 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class PhotoActivity extends AppCompatActivity {
+public class PhotoActivity extends PhotoActivityMenusClass {
+
+    private static final String TAG = PhotoActivity.class.getSimpleName();
 
     ImageView ivPhoto;
     GalleryManager gm;
@@ -20,7 +25,6 @@ public class PhotoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(navListener);
@@ -40,6 +44,11 @@ public class PhotoActivity extends AppCompatActivity {
         }
 
     }
+
+    protected int getLayoutId() {
+        return R.layout.activity_photo;
+    }
+
 
 
     private BottomNavigationView.OnItemSelectedListener navListener =
@@ -71,17 +80,14 @@ public class PhotoActivity extends AppCompatActivity {
 
     private void favToggle() {
         Toast.makeText(this, "favorite", Toast.LENGTH_SHORT).show();
-
     }
 
     private void secretManger() {
         Toast.makeText(this, "secret", Toast.LENGTH_SHORT).show();
-
     }
 
     private void sharePhoto() {
         Toast.makeText(this, "share", Toast.LENGTH_SHORT).show();
-
     }
 
 
