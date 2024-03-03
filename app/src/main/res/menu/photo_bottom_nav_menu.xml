@@ -7,7 +7,7 @@
         android:title="Share" />
     <item
         android:id="@+id/nav_secret_fragment"
-        android:icon="@drawable/baseline_remove_red_eye_24"
+        android:icon="@drawable/baseline_eye_24_black"
         android:title="Secret" />
     <item
         android:id="@+id/nav_favorite_fragment"

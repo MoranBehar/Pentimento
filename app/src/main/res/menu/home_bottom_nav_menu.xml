@@ -11,7 +11,7 @@
         android:title="Add Secret" />
     <item
         android:id="@+id/nav_view_fragment"
-        android:icon="@drawable/baseline_remove_red_eye_24"
+        android:icon="@drawable/baseline_eye_24_black"
         android:title="View" />
 
 </menu>

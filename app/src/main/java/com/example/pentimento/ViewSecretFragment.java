@@ -1,8 +1,6 @@
 package com.example.pentimento;
 
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -92,7 +90,7 @@ public class ViewSecretFragment extends Fragment {
         AlertDialog.Builder confirmLogOut =
                 new AlertDialog.Builder(getContext());
 
-        confirmLogOut.setIcon(R.drawable.baseline_remove_red_eye_24);
+        confirmLogOut.setIcon(R.drawable.baseline_eye_24_black);
         confirmLogOut.setTitle("Coming Soon");
         confirmLogOut.setMessage("We are working on this option these days. " +
                 "You will receive a notification when it is ready");

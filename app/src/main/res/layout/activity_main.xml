@@ -30,7 +30,7 @@
             android:layout_height="64sp"
             android:paddingTop="12sp"
             android:paddingLeft="-16sp"
-            android:src="@drawable/baseline_remove_red_eye_24"/>
+            android:src="@drawable/baseline_eye_24_black"/>
 
     </LinearLayout>
 
