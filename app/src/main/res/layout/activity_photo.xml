@@ -127,7 +127,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Congratulations!! you have discovered the secret message of this photo"
+                    android:text="Secret Message Placeholder"
                     android:textColor="@color/black"
                     android:textStyle="bold|italic"
                     android:gravity="center"

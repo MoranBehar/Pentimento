@@ -2,19 +2,16 @@ package com.example.pentimento;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +26,7 @@ public class PhotoActivity extends PhotoActivityMenusClass {
     TextView secretMsg;
     Boolean isSecretHidden;
     GalleryManager gm;
+    String secretMessageText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +52,10 @@ public class PhotoActivity extends PhotoActivityMenusClass {
         // Init photo area
         initPhotoArea();
 
+    }
+
+    private void extractSecretMessage() {
+        secretMessageText = "Moran, this message is for your eyes only. Please do not share this with the enemy.";
     }
 
     protected int getLayoutId() {
@@ -86,6 +88,14 @@ public class PhotoActivity extends PhotoActivityMenusClass {
             }
         });
 
+
+
+        // Get secret
+        extractSecretMessage();
+
+        // Show scrambled text
+        secretMsg.setText(incrementChars(secretMessageText, 1));
+
     }
 
     private void toggleSecretMessage() {
@@ -105,12 +115,9 @@ public class PhotoActivity extends PhotoActivityMenusClass {
 
         isSecretHidden = !isSecretHidden;
 
+        // Fade in/out photo
         ValueAnimator photoAnimator = ValueAnimator.ofFloat(startFade, endFade);
-        ValueAnimator secretAnimator = ValueAnimator.ofFloat(startTextSize, endTextSize);
-
         photoAnimator.setDuration(600);
-        secretAnimator.setDuration(600);
-
         photoAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -118,7 +125,9 @@ public class PhotoActivity extends PhotoActivityMenusClass {
             }
         });
 
-
+        // Zoom in/out message
+        ValueAnimator secretAnimator = ValueAnimator.ofFloat(startTextSize, endTextSize);
+        secretAnimator.setDuration(600);
         secretAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -129,7 +138,53 @@ public class PhotoActivity extends PhotoActivityMenusClass {
 
         photoAnimator.start();
         secretAnimator.start();
+        scrambleSecretText();
+    }
 
+    private void scrambleSecretText() {
+
+        final Handler handler = new Handler();
+        final Runnable updateTask = new Runnable() {
+            int count = 0;
+
+            @Override
+            public void run() {
+                if (count < 25) {
+                    int randomInt = (int)(Math.random() * 32) - 16;
+                    secretMsg.setText(incrementChars(secretMessageText, randomInt));
+                    count++;
+                    // Schedule the next run
+                    handler.postDelayed(this, 50); // Adjust the delay as needed
+                } else {
+                    secretMsg.setText(secretMessageText);
+                }
+            }
+        };
+
+        handler.post(updateTask); // Start the updates
+    }
+
+    private String incrementChars(String input, int offset) {
+
+        StringBuilder result = new StringBuilder();
+
+        // Iterate through each character in the input string
+        for (int i = 0; i < input.length(); i++) {
+            // Get the current character
+            char currentChar = input.charAt(i);
+            char nextChar = currentChar;
+
+            // Convert the current character to its ASCII value and increment by 1
+            if (!Character.isSpaceChar(currentChar)) {
+                nextChar = (char)(currentChar + offset);
+            }
+
+            // Append the next character to the result
+            result.append(nextChar);
+        }
+
+        // Convert the StringBuilder back to a string and return it
+        return result.toString();
     }
 
     private BottomNavigationView.OnItemSelectedListener navListener =
