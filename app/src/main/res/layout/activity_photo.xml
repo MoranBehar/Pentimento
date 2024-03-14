@@ -111,15 +111,29 @@
                     android:layout_gravity="center_vertical"
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/dogs" />
+                    android:src="@drawable/dogs"
+                    android:alpha="1"/>
 
                 <ImageView
-                    android:id="@+id/iconView"
+                    android:id="@+id/ivHasSecretIcon"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_gravity="top|end"
                     android:padding="8dp"
                     android:src="@drawable/baseline_eye_24_white" />
+
+                <TextView
+                    android:id="@+id/tvSecretMsg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Congratulations!! you have discovered the secret message of this photo"
+                    android:textColor="@color/black"
+                    android:textStyle="bold|italic"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:textSize="0sp"
+                    android:visibility="visible"/>
 
 
             </FrameLayout>

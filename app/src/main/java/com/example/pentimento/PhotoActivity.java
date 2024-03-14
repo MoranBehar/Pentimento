@@ -4,13 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -19,7 +25,9 @@ public class PhotoActivity extends PhotoActivityMenusClass {
 
     private static final String TAG = PhotoActivity.class.getSimpleName();
 
-    ImageView ivPhoto;
+    ImageView ivPhoto, secretIcon;
+    TextView secretMsg;
+    Boolean isSecretHidden;
     GalleryManager gm;
 
     @Override
@@ -43,13 +51,86 @@ public class PhotoActivity extends PhotoActivityMenusClass {
             ivPhoto.setImageBitmap(image.getPhoto());
         }
 
+        // Init photo area
+        initPhotoArea();
+
     }
 
     protected int getLayoutId() {
         return R.layout.activity_photo;
     }
 
+    private void initPhotoArea() {
+        secretIcon = (ImageView) findViewById(R.id.ivHasSecretIcon);
+        secretMsg = (TextView) findViewById(R.id.tvSecretMsg);
+        isSecretHidden = true;
 
+        secretIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleSecretMessage();
+            }
+        });
+
+        secretMsg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleSecretMessage();
+            }
+        });
+
+        ivPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isSecretHidden) toggleSecretMessage();
+            }
+        });
+
+    }
+
+    private void toggleSecretMessage() {
+
+        float startFade = 1f;
+        float endFade = 0.4f;
+        float startTextSize = 0f;
+        float endTextSize = 24f;
+
+
+        if (!isSecretHidden) {
+            startFade = 0.4f;
+            endFade = 1f;
+            startTextSize = 24f;
+            endTextSize = 0f;
+        }
+
+        isSecretHidden = !isSecretHidden;
+
+        ValueAnimator photoAnimator = ValueAnimator.ofFloat(startFade, endFade);
+        ValueAnimator secretAnimator = ValueAnimator.ofFloat(startTextSize, endTextSize);
+
+        photoAnimator.setDuration(600);
+        secretAnimator.setDuration(600);
+
+        photoAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                ivPhoto.setAlpha((float) animation.getAnimatedValue());
+            }
+        });
+
+
+        secretAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float animatedValue = (float) animation.getAnimatedValue();
+                secretMsg.setTextSize(TypedValue.COMPLEX_UNIT_SP, animatedValue);
+            }
+        });
+
+        photoAnimator.start();
+        secretAnimator.start();
+
+    }
 
     private BottomNavigationView.OnItemSelectedListener navListener =
             new BottomNavigationView.OnItemSelectedListener() {
