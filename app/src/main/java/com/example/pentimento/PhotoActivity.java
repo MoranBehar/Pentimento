@@ -12,13 +12,14 @@ import android.os.Handler;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class PhotoActivity extends PhotoActivityMenusClass {
+public class PhotoActivity extends PhotoActivityMenusClass implements View.OnClickListener {
 
     private static final String TAG = PhotoActivity.class.getSimpleName();
 
@@ -27,6 +28,8 @@ public class PhotoActivity extends PhotoActivityMenusClass {
     Boolean isSecretHidden;
     GalleryManager gm;
     String secretMessageText;
+
+    ImageButton btn_photoToolbar_add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,12 @@ public class PhotoActivity extends PhotoActivityMenusClass {
         // Init photo area
         initPhotoArea();
 
+        addToAlbumBtn();
+    }
+
+    private void addToAlbumBtn() {
+        btn_photoToolbar_add = findViewById(R.id.btn_photoToolbar_add);
+        btn_photoToolbar_add.setOnClickListener(this);
     }
 
     private void extractSecretMessage() {
@@ -253,5 +262,16 @@ public class PhotoActivity extends PhotoActivityMenusClass {
     }
 
     private void startDeletingProcess() {
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == btn_photoToolbar_add){
+
+        }
+    }
+
+    private void addPhotoToAlbum(){
+
     }
 }

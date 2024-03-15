@@ -43,8 +43,8 @@ public class HomeActivity extends HomeActivityMenusClass {
 
                     if (itemId == R.id.nav_gallery_fragment) {
                         selectedFragment = new GalleryFragment();
-                    } else if (itemId == R.id.nav_add_secret_fragment) {
-                        selectedFragment = new AddSecretFragment();
+                    } else if (itemId == R.id.nav_albums_fragment) {
+                        selectedFragment = new AlbumsFragment();
                     } else if (itemId == R.id.nav_view_fragment) {
                         selectedFragment = new ViewSecretFragment();
                     }

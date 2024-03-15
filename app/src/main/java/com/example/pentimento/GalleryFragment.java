@@ -25,6 +25,8 @@ public class GalleryFragment extends Fragment {
 
     GalleryManager gm;
 
+    private int albumNum;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
@@ -49,6 +51,8 @@ public class GalleryFragment extends Fragment {
         gvGallery.setAdapter(adapter);
         gvGallery.setOnItemClickListener(photoSelectedEvent());
 
+        // album 0 is all photo, album 1 and up are the user's album
+        albumNum = 0;
     }
 
     public void errorHandler(String errorMessage) {

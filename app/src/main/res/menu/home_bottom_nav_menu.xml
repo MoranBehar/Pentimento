@@ -6,9 +6,9 @@
         android:icon="@drawable/baseline_home_24"
         android:title="Gallery" />
     <item
-        android:id="@+id/nav_add_secret_fragment"
-        android:icon="@drawable/baseline_lock_24"
-        android:title="Add Secret" />
+        android:id="@+id/nav_albums_fragment"
+        android:icon="@drawable/baseline_photo_album_24"
+        android:title="Albums" />
     <item
         android:id="@+id/nav_view_fragment"
         android:icon="@drawable/baseline_eye_24_black"
