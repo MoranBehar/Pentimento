@@ -18,8 +18,9 @@
         style="@style/bottomMenuButton"/>
 
     <Button
-        android:id="@+id/btn_option_3"
-        android:text="Option 3"
+        android:id="@+id/btn_create_new_album"
+        android:text="Create new album"
+        android:drawableLeft="@drawable/baseline_create_new_folder_24"
         style="@style/bottomMenuButton"/>
 
     <Button

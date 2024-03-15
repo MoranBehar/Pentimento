@@ -33,6 +33,9 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
 
     ImageButton btn_photoToolbar_add;
 
+    private DBManager dbManager;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
 
         ivPhoto = findViewById(R.id.ivPhoto);
         gm = GalleryManager.getInstance();
+        dbManager = DBManager.getInstance();
 
 
         // Get the image resource position from the intent
@@ -98,6 +102,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
                 if (!isSecretHidden) toggleSecretMessage();
             }
         });
+
 
 
         // Get secret
@@ -160,7 +165,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
             @Override
             public void run() {
                 if (count < 25) {
-                    int randomInt = (int) (Math.random() * 32) - 16;
+                    int randomInt = (int)(Math.random() * 32) - 16;
                     secretMsg.setText(incrementChars(secretMessageText, randomInt));
                     count++;
                     // Schedule the next run
@@ -186,7 +191,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
 
             // Convert the current character to its ASCII value and increment by 1
             if (!Character.isSpaceChar(currentChar)) {
-                nextChar = (char) (currentChar + offset);
+                nextChar = (char)(currentChar + offset);
             }
 
             // Append the next character to the result
@@ -205,11 +210,14 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
 
                     if (itemId == R.id.nav_share_fragment) {
                         sharePhoto();
-                    } else if (itemId == R.id.nav_secret_fragment) {
+                    }
+                    else if (itemId == R.id.nav_secret_fragment) {
                         secretManger();
-                    } else if (itemId == R.id.nav_favorite_fragment) {
+                    }
+                    else if (itemId == R.id.nav_favorite_fragment) {
                         favToggle();
-                    } else if (itemId == R.id.nav_delete_fragment) {
+                    }
+                    else if (itemId == R.id.nav_delete_fragment) {
                         deletePhoto();
                     }
 
@@ -230,7 +238,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
     }
 
     private void sharePhoto() {
-        new SharePhoto(this);
+        Toast.makeText(this, "share", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -264,12 +272,17 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        if (v == btn_photoToolbar_add) {
+        if(v == btn_photoToolbar_add){
 
+            //TODO - get album + photo id
+            String albumId = "";
+            String photoId = "";
+
+            addPhotoToAlbum(albumId, photoId);
         }
     }
 
-    private void addPhotoToAlbum() {
-
+    private void addPhotoToAlbum(String albumId, String photoId){
+        dbManager.addPhotoToAlbum(albumId, photoId);
     }
 }

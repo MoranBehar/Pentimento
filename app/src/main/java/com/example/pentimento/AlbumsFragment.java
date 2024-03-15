@@ -39,6 +39,8 @@ public class AlbumsFragment extends Fragment {
     }
 
     private void albumClicked(int position) {
+        //TODO - set album as position in an array and set the all album as defalt,
+        // others will be opened by a click
 
         Intent intent = new Intent(this.getContext(), GalleryFragment.class);
         intent.putExtra("albumPosition", position);
