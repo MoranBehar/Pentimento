@@ -188,7 +188,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Bundle bundle = result.getData().getExtras();
                         Bitmap bitmap = (Bitmap) bundle.get("data");
-                        dbManager.saveImageToDB(bitmap);
+                        dbManager.uploadImageToStorage(bitmap);
                     }
                     else
                     {

@@ -1,8 +1,6 @@
 package com.example.pentimento;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -26,7 +24,6 @@ public class DBManager {
 
     private FirebaseAuth fbAuth;
     private FirebaseFirestore fbDB;
-
     private FirebaseStorage storage;
     private StorageReference storageRef;
 
@@ -55,7 +52,7 @@ public class DBManager {
     }
 
 
-    public void saveImageToDB(Bitmap bitmap) {
+    public void uploadImageToStorage(Bitmap bitmap) {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
