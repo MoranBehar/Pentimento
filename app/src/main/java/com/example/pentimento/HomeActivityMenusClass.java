@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -27,12 +28,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public abstract class HomeActivityMenusClass extends AppCompatActivity {
 
     private DrawerLayout drawer;
     private BottomSheetDialog bottomSheetDialog;
 
+    FirebaseAuth fbAuth;
     private DBManager dbManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         setupDrawerListener(sideNavDrawerView);
 
         dbManager = DBManager.getInstance();
+        fbAuth = FirebaseAuth.getInstance();
     }
 
     private void initBottomSheetDialog() {
@@ -96,6 +100,10 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
                     }
                     else if (v.getId() == R.id.btn_from_phone_gallery) {
                         getPhoneGallery();
+                    }
+                    else if (v.getId() == R.id.btn_create_new_album)
+                    {
+                        setAlbumName();
                     }
 
                     // Dismiss the BottomSheetDialog
@@ -196,4 +204,39 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
                     }
                 }
             });
+
+
+    private void createNewAlbum() {
+        dbManager.createAlbum(setAlbumName(), fbAuth.getUid());
+    }
+
+    private String setAlbumName() {
+        AlertDialog.Builder createNewAlbum =
+                new AlertDialog.Builder(HomeActivityMenusClass.this);
+
+        createNewAlbum.setIcon(R.drawable.baseline_create_new_folder_24_black);
+        createNewAlbum.setTitle("create new album");
+        createNewAlbum.setMessage("Enter the album's name:");
+        //TODO - edit text to add the album name
+        String title = "new Album";
+        createNewAlbum.setCancelable(false);
+
+        createNewAlbum.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                createNewAlbum();
+            }
+        });
+
+        createNewAlbum.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        createNewAlbum.create().show();
+
+        return title;
+    }
 }

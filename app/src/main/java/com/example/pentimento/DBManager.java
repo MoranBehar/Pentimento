@@ -93,4 +93,39 @@ public class DBManager {
                     }
                 });
     }
+
+    public void createAlbum(String albumName, String userId) {
+
+        Album newAlbum = new Album(userId, albumName);
+        fbDB.collection("Albums").document().set(newAlbum)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+
+    public void addPhotoToAlbum(String albumId, String photoId) {
+
+        AlbumPhotos albumPhotos = new AlbumPhotos(albumId, photoId);
+
+        fbDB.collection("AlbumPhotos").document().set(albumPhotos)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
 }
