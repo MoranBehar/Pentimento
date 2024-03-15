@@ -1,7 +1,9 @@
 package com.example.pentimento;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.MenuItem;
@@ -11,6 +13,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -26,6 +32,8 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
 
     private DrawerLayout drawer;
     private BottomSheetDialog bottomSheetDialog;
+
+    private DBManager dbManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -43,7 +51,6 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
         initBottomSheetDialog();
 
         // Set add button to open bottom menu
@@ -58,6 +65,8 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         // Handle side menu navigation view item clicks
         NavigationView sideNavDrawerView = findViewById(R.id.nav_side_menu_view);
         setupDrawerListener(sideNavDrawerView);
+
+        dbManager = DBManager.getInstance();
     }
 
     private void initBottomSheetDialog() {
@@ -84,8 +93,6 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
                 child.setOnClickListener(v -> {
                     if (v.getId() == R.id.btn_take_picture) {
                         TakePhotoToApp();
-                        Toast.makeText(viewGroup.getContext(), "1 Clicked", Toast.LENGTH_SHORT).show();
-
                     }
                     else if (v.getId() == R.id.btn_from_phone_gallery) {
                         getPhoneGallery();
@@ -168,11 +175,25 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
     }
 
     private void TakePhotoToApp(){
-         CameraUtils cameraUtils = new CameraUtils(this);
-         cameraUtils.takePhoto();
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePhoto.launch(intent);
     }
 
+
+    private ActivityResultLauncher takePhoto = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Bundle bundle = result.getData().getExtras();
+                        Bitmap bitmap = (Bitmap) bundle.get("data");
+                        dbManager.saveImageToDB(bitmap);
+                    }
+                    else
+                    {
+                        Toast.makeText(getBaseContext(), "Could not take photo", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
 }
