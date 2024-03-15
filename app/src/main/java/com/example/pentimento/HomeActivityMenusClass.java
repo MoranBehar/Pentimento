@@ -119,12 +119,6 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
 
     protected abstract int getLayoutId();
 
-     private void getPhoneGallery(){
-        Intent intent = new Intent(getBaseContext(), PhoneGalleryActivity.class);
-        startActivity(intent);
-    }
-
-
     private void setupDrawerListener(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 menuItem -> {
