@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -28,12 +31,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.IOException;
+
 public abstract class HomeActivityMenusClass extends AppCompatActivity {
 
     private DrawerLayout drawer;
     private BottomSheetDialog bottomSheetDialog;
 
     private DBManager dbManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -93,8 +99,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
                 child.setOnClickListener(v -> {
                     if (v.getId() == R.id.btn_take_picture) {
                         TakePhotoToApp();
-                    }
-                    else if (v.getId() == R.id.btn_from_phone_gallery) {
+                    } else if (v.getId() == R.id.btn_from_phone_gallery) {
                         getPhoneGallery();
                     }
 
@@ -106,12 +111,6 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
     }
 
     protected abstract int getLayoutId();
-
-     private void getPhoneGallery(){
-        Intent intent = new Intent(getBaseContext(), PhoneGalleryActivity.class);
-        startActivity(intent);
-    }
-
 
     private void setupDrawerListener(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
@@ -174,9 +173,9 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void TakePhotoToApp(){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePhoto.launch(intent);
+    private void TakePhotoToApp() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePhoto.launch(cameraIntent);
     }
 
 
@@ -189,11 +188,36 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
                         Bundle bundle = result.getData().getExtras();
                         Bitmap bitmap = (Bitmap) bundle.get("data");
                         dbManager.uploadImageToStorage(bitmap);
-                    }
-                    else
-                    {
+                    } else {
                         Toast.makeText(getBaseContext(), "Could not take photo", Toast.LENGTH_LONG).show();
                     }
                 }
             });
+
+    private void getPhoneGallery() {
+        pickPhoto.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build());
+
+    }
+
+    private ActivityResultLauncher<PickVisualMediaRequest> pickPhoto =
+            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(),
+                    FilePathUri -> {
+
+                        // This call back is called after the user has chosen a photo from the phone's gallery
+                        if (FilePathUri != null) {
+                            try {
+                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), FilePathUri);
+                                dbManager.uploadImageToStorage(bitmap);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                        } else {
+                            Log.d("PhotoPicker", "No photo selected");
+                        }
+                    });
+
+
 }
