@@ -1,22 +1,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="@color/menu_bottom_background"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friendsListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="400dp" />
 
-    <Button
-        android:id="@+id/btn_take_picture"
-        android:text="Photo from camera"
-        android:drawableLeft="@drawable/baseline_photo_camera_24"
-        style="@style/bottomMenuButton"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/darker_gray" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/btn_email"
+            android:drawableLeft="@drawable/baseline_email_24"
+            android:text="Email"
+            style="@style/iconButton"
+            />
+
+        <Button
+            android:id="@+id/btn_whatsapp"
+            android:drawableLeft="@drawable/baseline_message_24"
+            android:text="WhatsApp"
+            style="@style/iconButton"/>
+    </LinearLayout>
 
 
 </LinearLayout>

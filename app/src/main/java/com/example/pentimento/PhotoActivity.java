@@ -238,7 +238,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
     }
 
     private void sharePhoto() {
-        Toast.makeText(this, "share", Toast.LENGTH_SHORT).show();
+        new SharePhoto(this);
     }
 
 

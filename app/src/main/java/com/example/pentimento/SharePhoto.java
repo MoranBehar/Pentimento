@@ -27,8 +27,8 @@ public class SharePhoto {
         bottomSheetShare.setContentView(bottomSheetView);
         bottomSheetShare.show();
 
-        friendsListView = myActivity.findViewById(R.id.friendsListView);
-        friendsListView.setLayoutManager(new LinearLayoutManager(myActivity));
+        friendsListView = bottomSheetShare.findViewById(R.id.friendsListView);
+        friendsListView.setLayoutManager(new LinearLayoutManager(bottomSheetShare.getContext()));
         friendsList =  new ArrayList<>();
         adapter = new UsersAdapter(myActivity, friendsList);
         friendsListView.setAdapter(adapter);
@@ -38,10 +38,14 @@ public class SharePhoto {
     }
 
     private void createFriendsList() {
-        User user1 = new User("a@a.com", "user1", "050-12345456", 50);
-        User user2 = new User("b@b.com", "user2", "050-12345456", 20);
+        User user1 = new User("a@a.com", "Gil Behar", "050-12345456", 50);
+        User user2 = new User("b@b.com", "Moran Behar", "050-12345456", 20);
+        User user3 = new User("a@a.com", "Princess234", "050-12345456", 50);
+        User user4 = new User("a@a.com", "TheKing", "050-12345456", 50);
+
         friendsList.add(user1);
         friendsList.add(user2);
-
+        friendsList.add(user3);
+        friendsList.add(user4);
     }
 }
