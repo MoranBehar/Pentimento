@@ -8,14 +8,4 @@
     android:gravity="center"
     tools:context=".PhoneGalleryActivity">
 
-    <Button
-        android:id="@+id/btnPhoneGallery"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Image from Gallery"
-        android:textSize="24dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/btn_rounded"
-        android:textColor="@color/btn_textColor" />
-
 </LinearLayout>

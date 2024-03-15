@@ -3,6 +3,7 @@ package com.example.pentimento;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,8 +83,11 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
             if (child instanceof Button) {
                 child.setOnClickListener(v -> {
                     if (v.getId() == R.id.btn_take_picture) {
+                        TakePhotoToApp();
                         Toast.makeText(viewGroup.getContext(), "1 Clicked", Toast.LENGTH_SHORT).show();
-                    } else if (v.getId() == R.id.btn_from_phone_gallery) {
+
+                    }
+                    else if (v.getId() == R.id.btn_from_phone_gallery) {
                         getPhoneGallery();
                     }
 
@@ -161,6 +165,14 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
     private void backToStart() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    private void TakePhotoToApp(){
+         CameraUtils cameraUtils = new CameraUtils(this);
+         cameraUtils.takePhoto();
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+
     }
 
 }

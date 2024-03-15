@@ -18,30 +18,13 @@ import com.google.android.material.badge.BadgeUtils;
 
 public class PhoneGalleryActivity extends AppCompatActivity  {
 
-    Button btnPhoneGallery;
-
-    private static final int PICK_IMAGE_REQUEST = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_gallery);
 
-
         openPhoneGallery();
-//
-//        btnPhoneGallery = findViewById(R.id.btnPhoneGallery);
-//        btnPhoneGallery.setOnClickListener(this);
-
     }
-
-//    @Override
-//    public void onClick(View v) {
-//        if(v == btnPhoneGallery)
-//        {
-//            openPhoneGallery();
-//        }
-//    }
 
     private void openPhoneGallery() {
 //        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
