@@ -27,6 +27,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
@@ -107,7 +110,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
                     }
                     else if (v.getId() == R.id.btn_create_new_album)
                     {
-                        setAlbumName();
+                        openCreateAlbumDialogFragment();
                     }
 
                     // Dismiss the BottomSheetDialog
@@ -241,39 +244,8 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         });
     }
 
-
-
-    private void createNewAlbum() {
-        dbManager.createAlbum(setAlbumName(), fbAuth.getUid());
-    }
-
-    private String setAlbumName() {
-        AlertDialog.Builder createNewAlbum =
-                new AlertDialog.Builder(HomeActivityMenusClass.this);
-
-        createNewAlbum.setIcon(R.drawable.baseline_create_new_folder_24_black);
-        createNewAlbum.setTitle("create new album");
-        createNewAlbum.setMessage("Enter the album's name:");
-        //TODO - edit text to add the album name
-        String title = "new Album";
-        createNewAlbum.setCancelable(false);
-
-        createNewAlbum.setPositiveButton("Create", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                createNewAlbum();
-            }
-        });
-
-        createNewAlbum.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-        createNewAlbum.create().show();
-
-        return title;
+    private void openCreateAlbumDialogFragment() {
+        CreateAlbumFragment dialogFragment = new CreateAlbumFragment();
+        dialogFragment.show(getSupportFragmentManager(), "YourDialogFragment");
     }
 }

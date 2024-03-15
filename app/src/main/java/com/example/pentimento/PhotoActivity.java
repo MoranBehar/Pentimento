@@ -31,6 +31,9 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
 
     ImageButton btn_photoToolbar_add;
 
+    private DBManager dbManager;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
 
         ivPhoto = findViewById(R.id.ivPhoto);
         gm = GalleryManager.getInstance();
+        dbManager = DBManager.getInstance();
 
 
         // Get the image resource position from the intent
@@ -268,10 +272,15 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
     public void onClick(View v) {
         if(v == btn_photoToolbar_add){
 
+            //TODO - get album + photo id
+            String albumId = "";
+            String photoId = "";
+
+            addPhotoToAlbum(albumId, photoId);
         }
     }
 
-    private void addPhotoToAlbum(){
-
+    private void addPhotoToAlbum(String albumId, String photoId){
+        dbManager.addPhotoToAlbum(albumId, photoId);
     }
 }
