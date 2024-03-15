@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -187,7 +186,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Bundle bundle = result.getData().getExtras();
                         Bitmap bitmap = (Bitmap) bundle.get("data");
-                        dbManager.uploadImageToStorage(bitmap);
+                        addNewPhoto(bitmap);
                     } else {
                         Toast.makeText(getBaseContext(), "Could not take photo", Toast.LENGTH_LONG).show();
                     }
@@ -209,7 +208,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
                         if (FilePathUri != null) {
                             try {
                                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), FilePathUri);
-                                dbManager.uploadImageToStorage(bitmap);
+                                addNewPhoto(bitmap);
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
@@ -219,5 +218,19 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
                         }
                     });
 
+
+    private void addNewPhoto(Bitmap bp) {
+        dbManager.uploadImageToStorage(bp, new iDBActionResult() {
+            @Override
+            public void onSuccess(String data) {
+                GalleryManager.getInstance().addToGallery(bp);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+    }
 
 }

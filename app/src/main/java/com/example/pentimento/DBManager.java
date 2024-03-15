@@ -52,7 +52,7 @@ public class DBManager {
     }
 
 
-    public void uploadImageToStorage(Bitmap bitmap) {
+    public void uploadImageToStorage(Bitmap bitmap, iDBActionResult callback) {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -65,6 +65,7 @@ public class DBManager {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 connectImageToUser(imageId, fbAuth.getUid());
+                callback.onSuccess(imageId);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
