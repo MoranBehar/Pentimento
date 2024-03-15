@@ -122,7 +122,7 @@ public class GalleryManager {
                 });
     }
 
-    private void addToGallery(Bitmap newImageBitMap) {
+    public void addToGallery(Bitmap newImageBitMap) {
         Photo photoToAdd = new Photo(newImageBitMap);
         gallery.add(photoToAdd);
         viewAdapter.notifyDataSetChanged();
@@ -138,4 +138,6 @@ public class GalleryManager {
     public Photo getImageByPosition(int position) {
         return gallery.get(position);
     }
+
+
 }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -30,6 +32,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
+
 public abstract class HomeActivityMenusClass extends AppCompatActivity {
 
     private DrawerLayout drawer;
@@ -37,6 +41,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
 
     FirebaseAuth fbAuth;
     private DBManager dbManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -97,8 +102,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
                 child.setOnClickListener(v -> {
                     if (v.getId() == R.id.btn_take_picture) {
                         TakePhotoToApp();
-                    }
-                    else if (v.getId() == R.id.btn_from_phone_gallery) {
+                    } else if (v.getId() == R.id.btn_from_phone_gallery) {
                         getPhoneGallery();
                     }
                     else if (v.getId() == R.id.btn_create_new_album)
@@ -182,9 +186,9 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void TakePhotoToApp(){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePhoto.launch(intent);
+    private void TakePhotoToApp() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePhoto.launch(cameraIntent);
     }
 
 
@@ -196,14 +200,53 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Bundle bundle = result.getData().getExtras();
                         Bitmap bitmap = (Bitmap) bundle.get("data");
-                        dbManager.saveImageToDB(bitmap);
-                    }
-                    else
-                    {
+                        addNewPhoto(bitmap);
+                    } else {
                         Toast.makeText(getBaseContext(), "Could not take photo", Toast.LENGTH_LONG).show();
                     }
                 }
             });
+
+    private void getPhoneGallery() {
+        pickPhoto.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build());
+
+    }
+
+    private ActivityResultLauncher<PickVisualMediaRequest> pickPhoto =
+            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(),
+                    FilePathUri -> {
+
+                        // This call back is called after the user has chosen a photo from the phone's gallery
+                        if (FilePathUri != null) {
+                            try {
+                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), FilePathUri);
+                                addNewPhoto(bitmap);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                        } else {
+                            Log.d("PhotoPicker", "No photo selected");
+                        }
+                    });
+
+
+    private void addNewPhoto(Bitmap bp) {
+        dbManager.uploadImageToStorage(bp, new iDBActionResult() {
+            @Override
+            public void onSuccess(String data) {
+                GalleryManager.getInstance().addToGallery(bp);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+    }
+
 
 
     private void createNewAlbum() {
