@@ -12,12 +12,14 @@ import android.os.Handler;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class PhotoActivity extends PhotoActivityMenusClass implements View.OnClickListener {
 
@@ -98,7 +100,6 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
         });
 
 
-
         // Get secret
         extractSecretMessage();
 
@@ -159,7 +160,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
             @Override
             public void run() {
                 if (count < 25) {
-                    int randomInt = (int)(Math.random() * 32) - 16;
+                    int randomInt = (int) (Math.random() * 32) - 16;
                     secretMsg.setText(incrementChars(secretMessageText, randomInt));
                     count++;
                     // Schedule the next run
@@ -185,7 +186,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
 
             // Convert the current character to its ASCII value and increment by 1
             if (!Character.isSpaceChar(currentChar)) {
-                nextChar = (char)(currentChar + offset);
+                nextChar = (char) (currentChar + offset);
             }
 
             // Append the next character to the result
@@ -204,14 +205,11 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
 
                     if (itemId == R.id.nav_share_fragment) {
                         sharePhoto();
-                    }
-                    else if (itemId == R.id.nav_secret_fragment) {
+                    } else if (itemId == R.id.nav_secret_fragment) {
                         secretManger();
-                    }
-                    else if (itemId == R.id.nav_favorite_fragment) {
+                    } else if (itemId == R.id.nav_favorite_fragment) {
                         favToggle();
-                    }
-                    else if (itemId == R.id.nav_delete_fragment) {
+                    } else if (itemId == R.id.nav_delete_fragment) {
                         deletePhoto();
                     }
 
@@ -232,7 +230,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
     }
 
     private void sharePhoto() {
-        Toast.makeText(this, "share", Toast.LENGTH_SHORT).show();
+        new SharePhoto(this);
     }
 
 
@@ -266,12 +264,12 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        if(v == btn_photoToolbar_add){
+        if (v == btn_photoToolbar_add) {
 
         }
     }
 
-    private void addPhotoToAlbum(){
+    private void addPhotoToAlbum() {
 
     }
 }
