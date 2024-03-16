@@ -21,12 +21,14 @@ import java.util.ArrayList;
 public class SharePhoto {
 
     private Activity myActivity;
+    private Photo photoToShare;
     private BottomSheetDialog bottomSheetShare;
     private RecyclerView friendsListView;
     private UsersAdapter adapter;
     private ArrayList<User> friendsList;
-    public SharePhoto(Activity activity) {
+    public SharePhoto(Activity activity, Photo photo) {
         this.myActivity = activity;
+        this.photoToShare = photo;
 
         createBottomSheet();
         loadFriendsList();
@@ -90,10 +92,10 @@ public class SharePhoto {
     }
 
     private void loadFriendsList() {
-        User user1 = new User("a@a.com", "Gil Behar", "050-12345456", 50);
-        User user2 = new User("b@b.com", "Moran Behar", "050-12345456", 20);
-        User user3 = new User("a@a.com", "Princess234", "050-12345456", 50);
-        User user4 = new User("a@a.com", "TheKing", "050-12345456", 50);
+        User user1 = new User("dlkfjhdskjfghdfkjhgljkdfgh","a@a.com", "Gil Behar", "050-12345456", 50);
+        User user2 = new User("dlkfjhdskjfghdfkjhgljkdfgh","b@b.com", "Moran Behar", "050-12345456", 20);
+        User user3 = new User("dlkfjhdskjfghdfkjhgljkdfgh","a@a.com", "Princess234", "050-12345456", 50);
+        User user4 = new User("dlkfjhdskjfghdfkjhgljkdfgh","a@a.com", "TheKing", "050-12345456", 50);
 
         friendsList.add(user1);
         friendsList.add(user2);
@@ -118,7 +120,7 @@ public class SharePhoto {
         builder.setPositiveButton("Share", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                shareToPentimentoUser("temp-photo-id", "temp-user-id");
+                shareToPentimentoUser(photoToShare.getId(), sharedTo.getId());
             }
         });
 

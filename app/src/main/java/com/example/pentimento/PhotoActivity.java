@@ -24,6 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 public class PhotoActivity extends PhotoActivityMenusClass implements View.OnClickListener {
 
     private static final String TAG = PhotoActivity.class.getSimpleName();
+    private Photo photo;
 
     ImageView ivPhoto, secretIcon;
     TextView secretMsg;
@@ -51,11 +52,12 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
         // Get the image resource position from the intent
         int imageSrcPosition = getIntent().getIntExtra("imagePosition", -1);
         if (imageSrcPosition != -1) {
+
             //get the image src
-            Photo image = gm.getImageByPosition(imageSrcPosition);
+            photo = gm.getImageByPosition(imageSrcPosition);
 
             // Set the image resource to the ImageView
-            ivPhoto.setImageBitmap(image.getPhoto());
+            ivPhoto.setImageBitmap(photo.getPhoto());
         }
 
         // Init photo area
@@ -238,7 +240,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
     }
 
     private void sharePhoto() {
-        new SharePhoto(this);
+        new SharePhoto(this, photo);
     }
 
 

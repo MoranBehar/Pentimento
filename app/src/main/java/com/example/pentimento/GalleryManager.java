@@ -126,7 +126,7 @@ public class GalleryManager {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
-                        addToGallery(bitmap);
+                        addToGallery(imageId, bitmap);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -137,8 +137,8 @@ public class GalleryManager {
                 });
     }
 
-    public void addToGallery(Bitmap newImageBitMap) {
-        Photo photoToAdd = new Photo(newImageBitMap);
+    public void addToGallery(String imageId, Bitmap newImageBitMap) {
+        Photo photoToAdd = new Photo(imageId, newImageBitMap);
         gallery.add(photoToAdd);
         viewAdapter.notifyDataSetChanged();
     }

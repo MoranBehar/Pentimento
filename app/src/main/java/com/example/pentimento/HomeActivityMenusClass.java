@@ -236,7 +236,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         stManager.uploadImageToStorage(bp, new StorageActionResult() {
             @Override
             public void onSuccess(String data) {
-                GalleryManager.getInstance().addToGallery(bp);
+                GalleryManager.getInstance().addToGallery("temp-id-addNewPhoto", bp);
             }
 
             @Override

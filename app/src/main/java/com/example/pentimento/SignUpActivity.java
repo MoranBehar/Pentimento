@@ -107,7 +107,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseFirestore store = FirebaseFirestore.getInstance();
-                    User user = new User(email, name, phone, Integer.parseInt(age));
+                    User user = new User(fbAuth.getUid(), email, name, phone, Integer.parseInt(age));
 
                     store.collection("users").document(fbAuth.getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

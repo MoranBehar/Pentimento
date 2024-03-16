@@ -10,11 +10,12 @@ public class User {
 
     public User () {}
 
-    public User(String email, String name, String phone, int age) {
+    public User(String id, String email, String name, String phone, int age) {
         this.email = email;
         this.name = name;
         this.phone = phone;
         this.age = age;
+        this.id = id;
     }
 
     public String getEmail() {
@@ -25,7 +26,8 @@ public class User {
         this.email = email;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
@@ -47,5 +49,13 @@ public class User {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

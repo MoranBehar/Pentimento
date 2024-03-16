@@ -77,7 +77,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
             else
             {
                 //creating new user with the new date
-                User newUserInfo = new User(newEmail, newName, newPhone ,Integer.parseInt(newAge));
+                User newUserInfo = new User(fbAuth.getUid(),newEmail, newName, newPhone ,Integer.parseInt(newAge));
 
                 //update the current user to the new user with the same id
                 updateUserInfo(newUserInfo);

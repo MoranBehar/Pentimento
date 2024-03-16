@@ -7,8 +7,9 @@ public class Photo {
     private Bitmap photo;
     private String id;
 
-    public Photo(Bitmap photo) {
+    public Photo(String id, Bitmap photo) {
         this.photo = photo;
+        this.id = id;
     }
 
     public Bitmap getPhoto() {
@@ -16,7 +17,6 @@ public class Photo {
     }
 
     public void setPhoto(Bitmap photo) {
-
         this.photo = photo;
     }
 
