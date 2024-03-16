@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -110,7 +111,10 @@ public class DBManager {
     public void createAlbum(String albumName, String userId) {
 
         Album newAlbum = new Album(userId, albumName);
-        fbDB.collection("Albums").document().set(newAlbum)
+
+        DocumentReference newAlbumRef = fbDB.collection("Albums").document();
+        newAlbum.setId(newAlbumRef.getId());
+        newAlbumRef.set(newAlbum)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
