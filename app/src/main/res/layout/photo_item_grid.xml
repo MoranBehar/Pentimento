@@ -4,9 +4,10 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/newImage"
+        android:id="@+id/ivNewImage"
         android:layout_width="140dp"
         android:layout_height="140dp"
+        android:background="@drawable/border_thin"
         android:scaleType="centerCrop"/>
 
 </LinearLayout>

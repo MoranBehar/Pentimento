@@ -7,13 +7,14 @@
     <TextView
         android:id="@+id/tvSharedBy"
         android:layout_width="140dp"
-        android:layout_height="20dp"/>
+        android:layout_height="20dp"
+        android:textSize="12sp"/>
 
     <ImageView
-        android:id="@+id/newImage"
+        android:id="@+id/ivNewImage"
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:scaleType="centerCrop"/>
-
+        android:background="@drawable/border_thin"
+        android:scaleType="centerCrop" />
 
 </LinearLayout>
