@@ -32,7 +32,7 @@ public class AlbumsFragment extends Fragment {
         gvAlbums = view.findViewById(R.id.gvAlbums);
         gvAlbums.setOnItemClickListener(albumSelectedEvent());
 
-        dbm.setMyContext(getContext());
+        dbm = DBManager.getInstance();
         dbm.getUserAlbums();
     }
 

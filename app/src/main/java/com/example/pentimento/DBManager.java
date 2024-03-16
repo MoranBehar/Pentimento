@@ -3,6 +3,7 @@ package com.example.pentimento;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,8 +24,10 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -39,8 +42,6 @@ public class DBManager {
     private FirebaseStorage storage;
     private StorageReference storageRef;
 
-
-    private Context myContext;
 
 
     private DBManager() {
@@ -64,11 +65,6 @@ public class DBManager {
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
     }
-
-    public void setMyContext(Context context){
-        this.myContext = context;
-    }
-
 
     public void uploadImageToStorage(Bitmap bitmap, iDBActionResult callback) {
 
@@ -181,18 +177,26 @@ public class DBManager {
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        Toast.makeText(myContext,
-                                "your albums", Toast.LENGTH_LONG).show();
+
+                        // Create a list of Album objects
+                        List<Album> albumList = new ArrayList<>();
+
+                        //get the albums
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Map<String, Object> row = document.getData();
-//                            getAlbumById(row.get("id").toString());
+                            Log.d(TAG, "onComplete: ");
+
+                            String ownerId = row.get("ownerId").toString();
+                            String title = row.get("title").toString();
+
+                            Album newAlbum = new Album(ownerId, title);
+                            albumList.add(newAlbum);
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(myContext,
-                                "Could not get your albums", Toast.LENGTH_LONG).show();
+
                     }
                 });
     }
