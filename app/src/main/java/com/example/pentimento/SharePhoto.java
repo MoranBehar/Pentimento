@@ -24,11 +24,14 @@ public class SharePhoto {
     private Photo photoToShare;
     private BottomSheetDialog bottomSheetShare;
     private RecyclerView friendsListView;
-    private UsersAdapter adapter;
+    private UsersAdapter friendListAdapter;
     private ArrayList<User> friendsList;
+    private DBManager dbManager;
     public SharePhoto(Activity activity, Photo photo) {
         this.myActivity = activity;
         this.photoToShare = photo;
+
+        dbManager = DBManager.getInstance();
 
         createBottomSheet();
         loadFriendsList();
@@ -47,8 +50,8 @@ public class SharePhoto {
         friendsListView = bottomSheetShare.findViewById(R.id.friendsListView);
         friendsListView.setLayoutManager(new LinearLayoutManager(bottomSheetShare.getContext()));
         friendsList =  new ArrayList<>();
-        adapter = new UsersAdapter(myActivity, friendsList, userClickListener);
-        friendsListView.setAdapter(adapter);
+        friendListAdapter = new UsersAdapter(myActivity, friendsList, userClickListener);
+        friendsListView.setAdapter(friendListAdapter);
         friendsListView.addItemDecoration(new DividerItemDecoration(myActivity, LinearLayoutManager.VERTICAL));
 
         MaterialButton emailBtn = bottomSheetShare.findViewById(R.id.btn_email);
@@ -87,28 +90,24 @@ public class SharePhoto {
     }
 
     private void shareToPentimentoUser(String photoId, String toUserId) {
-        DBManager.getInstance().sharePhotoToUser(photoId,toUserId);
+        dbManager.sharePhotoToUser(photoId,toUserId);
         Toast.makeText(bottomSheetShare.getContext(), "Shared", Toast.LENGTH_SHORT).show();
     }
 
     private void loadFriendsList() {
-        User user1 = new User("dlkfjhdskjfghdfkjhgljkdfgh","a@a.com", "Gil Behar", "050-12345456", 50);
-        User user2 = new User("dlkfjhdskjfghdfkjhgljkdfgh","b@b.com", "Moran Behar", "050-12345456", 20);
-        User user3 = new User("dlkfjhdskjfghdfkjhgljkdfgh","a@a.com", "Princess234", "050-12345456", 50);
-        User user4 = new User("dlkfjhdskjfghdfkjhgljkdfgh","a@a.com", "TheKing", "050-12345456", 50);
 
-        friendsList.add(user1);
-        friendsList.add(user2);
-        friendsList.add(user3);
-        friendsList.add(user4);
-        friendsList.add(user1);
-        friendsList.add(user2);
-        friendsList.add(user3);
-        friendsList.add(user4);
-        friendsList.add(user1);
-        friendsList.add(user2);
-        friendsList.add(user3);
-        friendsList.add(user4);
+        dbManager.getFriends(new DBActionResult<ArrayList>() {
+            @Override
+            public void onSuccess(ArrayList data) {
+                friendsList.addAll(data);
+                friendListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
     }
 
     private void showShareApprovalDialog(User sharedTo) {

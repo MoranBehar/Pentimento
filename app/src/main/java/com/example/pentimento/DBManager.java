@@ -181,4 +181,34 @@ public class DBManager {
                     }
                 });
     }
+
+
+    public void getFriends(DBActionResult callback) {
+
+        String uid = fbAuth.getUid();
+
+        CollectionReference colRef = fbDB.collection("users");
+        colRef.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        // Create a list of Album objects
+                        ArrayList<User> usersList = new ArrayList<User>();
+
+                        // extract the users
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            User friend = document.toObject(User.class);
+                            usersList.add(friend);
+                        }
+
+                        callback.onSuccess(usersList);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
 }
