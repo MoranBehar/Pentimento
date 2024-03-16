@@ -71,7 +71,7 @@ public class SharePhoto {
         @Override
         public void onItemClick(int position) {
             User selectedFriend = friendsList.get(position);
-            showShareApprovalDialog(selectedFriend.getName());
+            showShareApprovalDialog(selectedFriend);
             bottomSheetShare.cancel();
         }
     };
@@ -84,7 +84,8 @@ public class SharePhoto {
         Toast.makeText(bottomSheetShare.getContext(), "COMING SOON - Share to Email", Toast.LENGTH_SHORT).show();
     }
 
-    private void shareToPentimentoUser() {
+    private void shareToPentimentoUser(String photoId, String toUserId) {
+        DBManager.getInstance().sharePhotoToUser(photoId,toUserId);
         Toast.makeText(bottomSheetShare.getContext(), "Shared", Toast.LENGTH_SHORT).show();
     }
 
@@ -108,16 +109,16 @@ public class SharePhoto {
         friendsList.add(user4);
     }
 
-    private void showShareApprovalDialog(String username) {
+    private void showShareApprovalDialog(User sharedTo) {
         AlertDialog.Builder builder = new AlertDialog.Builder(myActivity);
         builder.setTitle("Sharing to a Pentimento user");
-        builder.setMessage("You are about to share this picture with " + username);
+        builder.setMessage("You are about to share this picture with " + sharedTo.getName());
 
         // Share button
         builder.setPositiveButton("Share", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                shareToPentimentoUser();
+                shareToPentimentoUser("temp-photo-id", "temp-user-id");
             }
         });
 
