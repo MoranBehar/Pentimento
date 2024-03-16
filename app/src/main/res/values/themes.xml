@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="Base.Theme.Pentimento" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Base.Theme.Pentimento" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/primary_background</item>
         <item name="android:windowBackground">@color/primary_background</item>
     </style>
