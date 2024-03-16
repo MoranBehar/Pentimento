@@ -46,7 +46,6 @@ public class SharedWithMeFragment extends Fragment {
         gvGallery = view.findViewById(R.id.gvSharedWithMeGallery);
         gvGallery.setAdapter(adapter);
         gvGallery.setOnItemClickListener(photoSelectedEvent());
-
     }
 
     public void errorHandler(String errorMessage) {

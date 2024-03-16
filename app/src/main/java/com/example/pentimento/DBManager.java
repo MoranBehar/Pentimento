@@ -1,9 +1,9 @@
 package com.example.pentimento;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -11,9 +11,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -232,6 +235,33 @@ public class DBManager {
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+
+    }
+
+    public void photoSharingRealTimeUpdates(DBActionResult<QueryDocumentSnapshot> callback) {
+        fbDB.collection("PhotoSharing")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listener failed.", e);
+                            return;
+                        }
+
+                        for (DocumentChange dc : value.getDocumentChanges()) {
+                            switch (dc.getType()) {
+                                case ADDED:
+                                    Log.d(TAG, "New photo shared: " + dc.getDocument().getData());
+                                    callback.onSuccess(dc.getDocument());
+                                    break;
+                                case REMOVED:
+                                    Log.d(TAG, "Share Removed: " + dc.getDocument().getData());
+                                    break;
+                            }
                         }
                     }
                 });

@@ -37,27 +37,46 @@ public class SharedPhotosManager extends BasePhotoManager {
 
     protected void loadPhotos() {
 
-        CollectionReference colRef = fbDB.collection("PhotoSharing");
-        colRef.whereEqualTo("sharedTo", fbAuth.getUid())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Map<String, Object> row = document.getData();
+//        CollectionReference colRef = fbDB.collection("PhotoSharing");
+//        colRef.whereEqualTo("sharedTo", fbAuth.getUid())
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Map<String, Object> row = document.getData();
+//
+//                                createItem(
+//                                        row.get("photoId").toString(),
+//                                        row.get("sharedBy").toString(),
+//                                        row.get("sharedOn").toString());
+//                            }
+//
+//                        } else {
+//                            Log.d(TAG, "get failed with ", task.getException());
+//                        }
+//                    }
+//                });
 
-                                createItem(
-                                        row.get("photoId").toString(),
-                                        row.get("sharedBy").toString(),
-                                        row.get("sharedOn").toString());
-                            }
+        // Register to get future realtime updates on new sharing
+        DBManager.getInstance().photoSharingRealTimeUpdates(new DBActionResult<QueryDocumentSnapshot>() {
 
-                        } else {
-                            Log.d(TAG, "get failed with ", task.getException());
-                        }
-                    }
-                });
+            @Override
+            public void onSuccess(QueryDocumentSnapshot document) {
+                Map<String, Object> row = document.getData();
+
+                createItem(
+                        row.get("photoId").toString(),
+                        row.get("sharedBy").toString(),
+                        row.get("sharedOn").toString());
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
 
     }
 
