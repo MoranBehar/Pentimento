@@ -24,13 +24,6 @@
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_pentimento"
-            app:icon="@drawable/baseline_eye_24_white"
-            android:text="Pentimento"
-            style="@style/iconMaterialButton"/>
-
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_email"
             app:icon="@drawable/baseline_email_24"
             android:text="Email"

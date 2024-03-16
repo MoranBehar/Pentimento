@@ -4,25 +4,24 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class UsersAdapter extends  RecyclerView.Adapter<UsersAdapter.UserHolder> {
 
     private Context context;
     private ArrayList<User> users;
+    private OnItemClickListener listener;
 
-    public UsersAdapter(Context context, ArrayList<User> users) {
+    public UsersAdapter(Context context, ArrayList<User> users, OnItemClickListener listener) {
         this.context = context;
         this.users = users;
+        this.listener = listener;
     }
 
 
@@ -30,7 +29,7 @@ public class UsersAdapter extends  RecyclerView.Adapter<UsersAdapter.UserHolder>
     @Override
     public UserHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.friend_item_list, parent, false);
-        return new UserHolder(view);
+        return new UserHolder(view, listener);
     }
 
     @Override
@@ -48,13 +47,24 @@ public class UsersAdapter extends  RecyclerView.Adapter<UsersAdapter.UserHolder>
     class UserHolder extends RecyclerView.ViewHolder {
         private TextView userName;
 
-        public UserHolder(@NonNull View itemView) {
+        public UserHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             userName = itemView.findViewById(R.id.userName);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) { // Check if position is valid
+                        listener.onItemClick(position);
+                    }
+                }
+            });
         }
 
         void setDetails(User user) {
             userName.setText(user.getName());
         }
+
     }
 }
