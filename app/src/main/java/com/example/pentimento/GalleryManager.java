@@ -66,7 +66,7 @@ public class GalleryManager {
 
         gallery = new ArrayList<Photo>();
 
-        getUserGallery();
+        getGallery(null);
     }
 
     public void setErrorCallBack(Consumer<String> callBack) {
@@ -79,6 +79,20 @@ public class GalleryManager {
 
     public void setPhotoAdapter(PhotoAdapter adapter) {
         viewAdapter = adapter;
+    }
+
+    private void getGallery(String albumId) {
+
+        if (albumId == null) {
+            getUserGallery();
+        } else {
+            getUserAlbum(albumId);
+        }
+
+    }
+
+    private void getUserAlbum(String albumId) {
+
     }
 
     private void getUserGallery() {
