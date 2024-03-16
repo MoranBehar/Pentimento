@@ -1,13 +1,22 @@
 package com.example.pentimento;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -27,6 +36,8 @@ public class DBManager {
     private FirebaseStorage storage;
     private StorageReference storageRef;
 
+
+    private Context myContext;
 
 
     private DBManager() {
@@ -49,6 +60,10 @@ public class DBManager {
         fbDB = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
+    }
+
+    public void setMyContext(Context context){
+        this.myContext = context;
     }
 
 
@@ -123,6 +138,31 @@ public class DBManager {
                     @Override
                     public void onFailure(@NonNull Exception e) {
 
+                    }
+                });
+    }
+
+
+    public void getUserAlbums() {
+        String uid = fbAuth.getUid();
+
+        CollectionReference colRef = fbDB.collection("Albums");
+        colRef.whereEqualTo("ownerId", uid)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Toast.makeText(myContext,
+                                "your albums", Toast.LENGTH_LONG).show();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Map<String, Object> row = document.getData();
+//                            getAlbumById(row.get("id").toString());
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(myContext,
+                                "Could not get your albums", Toast.LENGTH_LONG).show();
                     }
                 });
     }

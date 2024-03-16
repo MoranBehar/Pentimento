@@ -4,23 +4,15 @@ import java.util.Date;
 
 public class Album {
 
-    private String userId;
+    private String id;
+    private String ownerId;
     private String title;
+    private Date createDate;
 
-    //TODO - organize the album by date
-    private Date creatingDate;
-
-    public Album(String userId, String title) {
-        this.userId = userId;
+    public Album(String ownerId, String title) {
+        this.ownerId = ownerId;
         this.title = title;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
+        this.createDate = new Date();
     }
 
     public String getTitle() {
@@ -29,5 +21,29 @@ public class Album {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }

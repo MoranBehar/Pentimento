@@ -278,7 +278,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
             String albumId = "";
             String photoId = "";
 
-            addPhotoToAlbum(albumId, photoId);
+            //addPhotoToAlbum(albumId, photoId);
         }
     }
 

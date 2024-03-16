@@ -45,7 +45,7 @@ public class CreateAlbumFragment extends DialogFragment {
                 DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dbManager.createAlbum(etAlbumName.getText().toString(), fbAuth.getUid());
+                        dbManager.createAlbum (etAlbumName.getText().toString(), fbAuth.getUid());
                         Toast.makeText(getContext(), "Create album", Toast.LENGTH_SHORT).show();
                     }
                 });

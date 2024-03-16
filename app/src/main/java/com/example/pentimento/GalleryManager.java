@@ -85,7 +85,8 @@ public class GalleryManager {
 
         if (albumId == null) {
             getUserGallery();
-        } else {
+        }
+        else {
             getUserAlbum(albumId);
         }
 
