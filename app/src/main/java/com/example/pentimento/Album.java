@@ -1,26 +1,25 @@
 package com.example.pentimento;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Album {
 
-    private String userId;
+    private String id;
+    private String ownerId;
     private String title;
+    private String createDate;
 
-    //TODO - organize the album by date
-    private Date creatingDate;
+    private String getCurrentDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return sdf.format(new Date());
+    }
 
-    public Album(String userId, String title) {
-        this.userId = userId;
+    public Album(String ownerId, String title) {
+        this.ownerId = ownerId;
         this.title = title;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
+        this.createDate = getCurrentDate();
     }
 
     public String getTitle() {
@@ -29,5 +28,29 @@ public class Album {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 }

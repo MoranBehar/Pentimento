@@ -1,21 +1,33 @@
 package com.example.pentimento;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -58,7 +70,7 @@ public class DBManager {
         connectImageToUser(imageId, fbAuth.getUid());
     }
 
-    private void connectImageToUser(String imageId, String userId) {
+    public void connectImageToUser(String imageId, String userId) {
         Map<String, Object> image = new HashMap<>();
         image.put("id", imageId);
         image.put("Creator", userId);
@@ -129,6 +141,39 @@ public class DBManager {
                     @Override
                     public void onSuccess(Void unused) {
 
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
+
+
+    public void getUserAlbums() {
+        String uid = fbAuth.getUid();
+
+        CollectionReference colRef = fbDB.collection("Albums");
+        colRef.whereEqualTo("ownerId", uid)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        // Create a list of Album objects
+                        List<Album> albumList = new ArrayList<>();
+
+                        //get the albums
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Map<String, Object> row = document.getData();
+                            Log.d(TAG, "onComplete: ");
+
+                            String ownerId = row.get("ownerId").toString();
+                            String title = row.get("title").toString();
+
+                            Album newAlbum = new Album(ownerId, title);
+                            albumList.add(newAlbum);
+                        }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

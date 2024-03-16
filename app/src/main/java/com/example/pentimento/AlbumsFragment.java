@@ -15,6 +15,7 @@ import android.widget.GridView;
 public class AlbumsFragment extends Fragment {
 
     private GridView gvAlbums;
+    DBManager dbm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -22,10 +23,17 @@ public class AlbumsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_albums, container, false);
 
+        initAlbums(view);
+
+        return view;
+    }
+
+    private void initAlbums(View view){
         gvAlbums = view.findViewById(R.id.gvAlbums);
         gvAlbums.setOnItemClickListener(albumSelectedEvent());
 
-        return view;
+        dbm = DBManager.getInstance();
+        dbm.getUserAlbums();
     }
 
 
