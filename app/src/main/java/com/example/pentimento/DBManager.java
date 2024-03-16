@@ -1,6 +1,7 @@
 package com.example.pentimento;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -11,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -36,7 +38,6 @@ public class DBManager {
     private StorageReference storageRef;
 
 
-
     private DBManager() {
         initDBManager();
     }
@@ -44,7 +45,7 @@ public class DBManager {
     public static DBManager getInstance() {
         if (instance == null) {
             synchronized (DBManager.class) {
-                if(instance == null) {
+                if (instance == null) {
                     instance = new DBManager();
                 }
             }
@@ -116,16 +117,16 @@ public class DBManager {
         newAlbum.setId(newAlbumRef.getId());
         newAlbumRef.set(newAlbum)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
+                    @Override
+                    public void onSuccess(Void unused) {
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
 
-            }
-        });
+                    }
+                });
     }
 
     public void addPhotoToAlbum(String albumId, String photoId) {
@@ -210,5 +211,30 @@ public class DBManager {
 
                     }
                 });
+    }
+
+    public void getUserById(String userId, DBActionResult callback) {
+
+        CollectionReference colRef = fbDB.collection("users");
+
+        colRef.document(userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                User user = document.toObject(User.class);
+                                callback.onSuccess(user);
+                            } else {
+                                Log.d(TAG, "No such user");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+
     }
 }

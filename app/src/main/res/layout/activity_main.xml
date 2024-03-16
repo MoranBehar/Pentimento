@@ -8,6 +8,16 @@
     android:gravity="center"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/tvSlogan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pentimento - Discover what your photos hide"
+        android:textSize="16dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:alpha="0"/>
+
     <LinearLayout
         android:id="@+id/appName"
         android:layout_width="match_parent"
@@ -31,8 +41,8 @@
             android:paddingTop="12sp"
             android:paddingLeft="-16sp"
             android:src="@drawable/baseline_eye_24_black"/>
-
     </LinearLayout>
+
 
 
     <LinearLayout

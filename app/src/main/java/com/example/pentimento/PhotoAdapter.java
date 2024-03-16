@@ -37,7 +37,7 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
         }
 
         Photo currentPhotoPosition = getItem(position);
-        ImageView newImage = currentItemView.findViewById(R.id.newImage);
+        ImageView newImage = currentItemView.findViewById(R.id.ivNewImage);
         newImage.setImageBitmap(currentPhotoPosition.getPhoto());
 
         if (currentPhotoPosition instanceof SharedPhoto) {

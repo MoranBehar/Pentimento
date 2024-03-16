@@ -62,9 +62,20 @@ public class SharedPhotosManager extends BasePhotoManager {
     }
 
     protected void createItem(String imageId, String sharedById, String sharedOn) {
-        User sharedBy = new User(sharedById, "email", "Temp user", "05050505050", 12);
-        Photo photoToAdd = new SharedPhoto(imageId, sharedBy, sharedOn);
-        getImageById(photoToAdd);
+
+        DBManager.getInstance().getUserById(sharedById, new DBActionResult<User>() {
+            @Override
+            public void onSuccess(User sharedBy) {
+                Photo photoToAdd = new SharedPhoto(imageId, sharedBy, sharedOn);
+                getImageById(photoToAdd);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+
     }
 
 }

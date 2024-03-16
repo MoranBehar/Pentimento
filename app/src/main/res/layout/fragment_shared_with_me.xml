@@ -13,7 +13,7 @@
         android:padding="3dp"
         android:gravity="center"
         android:numColumns="3"
-        android:verticalSpacing="3dp"
+        android:verticalSpacing="10dp"
         android:horizontalSpacing="3dp"/>
 
 </FrameLayout>
