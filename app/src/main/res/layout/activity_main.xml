@@ -12,7 +12,7 @@
         android:id="@+id/tvSlogan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pentimento - Discover what your photos hides"
+        android:text="Pentimento - Discover what your photos hide"
         android:textSize="16dp"
         android:textColor="@color/black"
         android:textStyle="bold"
