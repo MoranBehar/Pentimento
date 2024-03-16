@@ -44,6 +44,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
 
     FirebaseAuth fbAuth;
     private DBManager dbManager;
+    private StorageManager stManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         setupDrawerListener(sideNavDrawerView);
 
         dbManager = DBManager.getInstance();
+        stManager = StorageManager.getInstance();
         fbAuth = FirebaseAuth.getInstance();
     }
 
@@ -231,7 +233,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
 
 
     private void addNewPhoto(Bitmap bp) {
-        dbManager.uploadImageToStorage(bp, new iDBActionResult() {
+        stManager.uploadImageToStorage(bp, new StorageActionResult() {
             @Override
             public void onSuccess(String data) {
                 GalleryManager.getInstance().addToGallery(bp);

@@ -54,30 +54,11 @@ public class DBManager {
         storageRef = storage.getReference();
     }
 
-
-    public void uploadImageToStorage(Bitmap bitmap, iDBActionResult callback) {
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] arr = stream.toByteArray();
-        UUID imageUUID = UUID.randomUUID();
-        String imageId = imageUUID.toString();
-
-        UploadTask task = storageRef.child("images/").child(imageId).putBytes(arr);
-        task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                connectImageToUser(imageId, fbAuth.getUid());
-                callback.onSuccess(imageId);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-            }
-        });
+    public void connectImageToCurrentUser(String imageId) {
+        connectImageToUser(imageId, fbAuth.getUid());
     }
 
-    public void connectImageToUser(String imageId, String userId) {
+    private void connectImageToUser(String imageId, String userId) {
         Map<String, Object> image = new HashMap<>();
         image.put("id", imageId);
         image.put("Creator", userId);
