@@ -13,7 +13,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -90,6 +93,33 @@ public class DBManager {
                     public void onFailure(@NonNull Exception e) {
                     }
                 });
+    }
+
+    public void sharePhotoToUser(String photoId, String toUserId) {
+
+        Map<String, Object> shareObject = new HashMap<>();
+        shareObject.put("photoId", photoId);
+        shareObject.put("sharedBy", fbAuth.getUid());
+        shareObject.put("sharedTo", toUserId);
+        shareObject.put("sharedOn", getCurrentDate());
+
+
+        fbDB.collection("PhotoSharing").document().set(shareObject)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
+    }
+
+    private String getCurrentDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return sdf.format(new Date());
     }
 
     public void createAlbum(String albumName, String userId) {
