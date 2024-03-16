@@ -158,7 +158,7 @@ public class DBManager {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                         // Create a list of Album objects
-                        List<Album> albumList = new ArrayList<>();
+                        ArrayList<Album> albumList = new ArrayList<>();
 
                         //get the albums
                         for (QueryDocumentSnapshot document : task.getResult()) {

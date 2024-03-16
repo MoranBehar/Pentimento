@@ -19,8 +19,10 @@ import java.util.List;
 public class AlbumsFragment extends Fragment {
 
     private GridView gvAlbums;
-    private List<Album> albums;
-    DBManager dbm;
+    private AlbumAdapter adapter;
+    private ArrayList<Album> albums;
+
+   private DBManager dbManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,14 +36,16 @@ public class AlbumsFragment extends Fragment {
     }
 
     private void initAlbums(View view){
-        gvAlbums = view.findViewById(R.id.gvAlbums);
-        gvAlbums.setOnItemClickListener(albumSelectedEvent());
 
-        dbm = DBManager.getInstance();
-        dbm.getUserAlbums(new DBActionResult<List>() {
+        albums = new ArrayList<Album>();
+        dbManager = DBManager.getInstance();
+        adapter = new AlbumAdapter(getContext(), albums);
+
+        dbManager.getUserAlbums(new DBActionResult<ArrayList>() {
             @Override
-            public void onSuccess(List data) {
-                albums = data;
+            public void onSuccess(ArrayList data) {
+                albums.addAll(data);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -49,6 +53,11 @@ public class AlbumsFragment extends Fragment {
 
             }
         });
+
+
+        gvAlbums = view.findViewById(R.id.gvAlbums);
+        gvAlbums.setAdapter(adapter);
+        gvAlbums.setOnItemClickListener(albumSelectedEvent());
     }
 
 

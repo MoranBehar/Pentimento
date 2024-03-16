@@ -17,4 +17,10 @@
         android:layout_height="wrap_content"
         android:text="New Album"/>
 
+    <TextView
+        android:id="@+id/tvAlbumCreateDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="date"/>
+
 </LinearLayout>

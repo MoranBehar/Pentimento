@@ -278,7 +278,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
 
             //TODO - get album + photo id
             String albumId = "";
-            String photoId = "";
+            String photoId = photo.getId();
 
             //addPhotoToAlbum(albumId, photoId);
         }
