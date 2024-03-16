@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     LinearLayout mainButtons;
     ImageView eye;
 
+    TextView tvSlogan;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         appName = findViewById(R.id.appName);
         mainButtons = findViewById(R.id.mainButtons);
         eye = findViewById(R.id.eye);
+        tvSlogan = findViewById(R.id.tvSlogan);
     }
 
     private void setListeners() {
@@ -95,11 +98,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ObjectAnimator buttonsFadeIn = ObjectAnimator.ofFloat(mainButtons, "alpha", 0.0f, 1.0f);
         buttonsFadeIn.setDuration(1000); // Duration of the animation (1 second in this case)
 
+        ObjectAnimator sloganFadeIn = ObjectAnimator.ofFloat(tvSlogan, "alpha", 0.0f, 1.0f);
+        buttonsFadeIn.setDuration(700); // Duration of the animation (1 second in this case)
+
         moveY.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 buttonsFadeIn.start();
+                sloganFadeIn.start();
             }
         });
 
