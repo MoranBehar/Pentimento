@@ -143,12 +143,13 @@ public class DBManager {
     }
 
 
-    public void getUserAlbums() {
+    public void getUserAlbums(DBActionResult callback) {
         String uid = fbAuth.getUid();
 
         CollectionReference colRef = fbDB.collection("Albums");
         colRef.whereEqualTo("ownerId", uid)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
@@ -166,6 +167,8 @@ public class DBManager {
                             Album newAlbum = new Album(ownerId, title);
                             albumList.add(newAlbum);
                         }
+
+                        callback.onSuccess(albumList);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

@@ -11,10 +11,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 
 public class AlbumsFragment extends Fragment {
 
     private GridView gvAlbums;
+    private List<Album> albums;
     DBManager dbm;
 
     @Override
@@ -33,7 +38,17 @@ public class AlbumsFragment extends Fragment {
         gvAlbums.setOnItemClickListener(albumSelectedEvent());
 
         dbm = DBManager.getInstance();
-        dbm.getUserAlbums();
+        dbm.getUserAlbums(new DBActionResult<List>() {
+            @Override
+            public void onSuccess(List data) {
+                albums = data;
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
     }
 
 
