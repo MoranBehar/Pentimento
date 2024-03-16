@@ -1,6 +1,5 @@
 package com.example.pentimento;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,25 +10,25 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Map;
 
-public class GalleryManager extends BasePhotoManager {
+public class SharedPhotosManager extends BasePhotoManager {
 
-    private static String TAG = "GalleryManager";
+    private static String TAG = "SharedPhotosManager";
+    private static SharedPhotosManager instance;
+    private static ArrayList<SharedPhoto> photoArrayList;
 
-
-    // Implement as Singleton
-    private static GalleryManager instance;
-
-    private GalleryManager() {
+    // Implement Singleton
+    private SharedPhotosManager() {
         super();
     }
 
-    public static GalleryManager getInstance() {
+    public static SharedPhotosManager getInstance() {
         if (instance == null) {
             synchronized (GalleryManager.class) {
                 if (instance == null) {
-                    instance = new GalleryManager();
+                    instance = new SharedPhotosManager();
                 }
             }
         }
@@ -37,8 +36,9 @@ public class GalleryManager extends BasePhotoManager {
     }
 
     protected void loadPhotos() {
-        CollectionReference colRef = fbDB.collection("UserPhotos");
-        colRef.whereEqualTo("Creator", fbAuth.getUid())
+
+        CollectionReference colRef = fbDB.collection("PhotoSharing");
+        colRef.whereEqualTo("sharedTo", fbAuth.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -46,8 +46,13 @@ public class GalleryManager extends BasePhotoManager {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map<String, Object> row = document.getData();
-                                createItem(row.get("id").toString());
+
+                                createItem(
+                                        row.get("photoId").toString(),
+                                        row.get("sharedBy").toString(),
+                                        row.get("sharedOn").toString());
                             }
+
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
                         }
@@ -56,10 +61,10 @@ public class GalleryManager extends BasePhotoManager {
 
     }
 
-    protected void createItem(String imageId) {
-        Photo photoToAdd = new Photo(imageId);
+    protected void createItem(String imageId, String sharedById, String sharedOn) {
+        User sharedBy = new User(sharedById, "email", "Temp user", "05050505050", 12);
+        Photo photoToAdd = new SharedPhoto(imageId, sharedBy, sharedOn);
         getImageById(photoToAdd);
     }
-
 
 }

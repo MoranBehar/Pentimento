@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -38,6 +39,12 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
         Photo currentPhotoPosition = getItem(position);
         ImageView newImage = currentItemView.findViewById(R.id.newImage);
         newImage.setImageBitmap(currentPhotoPosition.getPhoto());
+
+        if (currentPhotoPosition instanceof SharedPhoto) {
+            TextView sharedBy = currentItemView.findViewById(R.id.tvSharedBy);
+            sharedBy.setText(((SharedPhoto) currentPhotoPosition).getSharedBy().getName());
+
+        }
 
         // then return the recyclable view
         return currentItemView;

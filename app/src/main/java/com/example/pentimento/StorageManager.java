@@ -1,6 +1,7 @@
 package com.example.pentimento;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import androidx.annotation.NonNull;
 
@@ -62,6 +63,22 @@ public class StorageManager {
             public void onFailure(@NonNull Exception e) {
             }
         });
+    }
+
+    public void getImageById(String imageId,  StorageActionResult callback) {
+        StorageReference photoRef = storageRef.child("images/" +imageId);
+        photoRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        callback.onSuccess(bytes);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onError(e);
+                    }
+                });
     }
 
 

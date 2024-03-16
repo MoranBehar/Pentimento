@@ -1,6 +1,6 @@
 package com.example.pentimento;
 
-public interface StorageActionResult {
-    void onSuccess(String data);
+public interface StorageActionResult<T> {
+    void onSuccess(T data);
     void onError(Exception e);
 }

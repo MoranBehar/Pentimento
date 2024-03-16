@@ -7,6 +7,12 @@ public class Photo {
     private Bitmap photo;
     private String id;
 
+    public Photo() {}
+
+    public Photo(String id) {
+        this.id = id;
+    }
+
     public Photo(String id, Bitmap photo) {
         this.photo = photo;
         this.id = id;
