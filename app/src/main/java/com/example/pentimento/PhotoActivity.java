@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
@@ -366,14 +367,6 @@ public class PhotoActivity extends PhotoActivityMenusClass
     }
 
     // Text-To-Speech
-    private void ttsStartStop() {
-        if (ttsEngine != null && ttsEngine.isSpeaking()) {
-            ttsStop();
-        } else {
-            ttsSpeak();
-        }
-    }
-
     private void configureTTS() {
         ttsEngine = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
@@ -382,36 +375,41 @@ public class PhotoActivity extends PhotoActivityMenusClass
                     ttsEngine.setLanguage(Locale.US);
 
                     ttsEngine.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+
                         @Override
                         public void onStart(String utteranceId) {
-                            // Called when the TTS starts speaking.
+                             speakIcon.setImageResource(R.drawable.baseline_stop_circle_24);
                         }
 
                         @Override
                         public void onDone(String utteranceId) {
-                            // Called when the TTS has finished speaking.
                             speakIcon.setImageResource(R.drawable.baseline_play_circle_24);
                         }
 
                         @Override
                         public void onError(String utteranceId) {
-                            // Called on an error during TTS.
+                            Log.d(TAG, "Failed reading text");
+                        }
+
+                        @Override
+                        public void onStop(String utteranceId, boolean interrupted) {
+                            speakIcon.setImageResource(R.drawable.baseline_play_circle_24);
                         }
 
                     });
+                } else {
+                      Log.d(TAG, "Failed creating Text-To-Speech engine");
                 }
             }
         });
     }
 
-    public void ttsStop() {
-        speakIcon.setImageResource(R.drawable.baseline_play_circle_24);
-        ttsEngine.stop();
-    }
-
-    public void ttsSpeak() {
-        speakIcon.setImageResource(R.drawable.baseline_stop_circle_24);
-        ttsEngine.speak(secretMessageText, TextToSpeech.QUEUE_FLUSH, null, "UniqueId");
+    private void ttsStartStop() {
+        if (ttsEngine != null && ttsEngine.isSpeaking()) {
+            ttsEngine.stop();
+        } else {
+            ttsEngine.speak(secretMessageText, TextToSpeech.QUEUE_FLUSH, null, "UniqueId");
+        }
     }
 
     @Override
