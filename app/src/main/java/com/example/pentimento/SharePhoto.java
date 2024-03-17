@@ -47,13 +47,16 @@ public class SharePhoto {
         bottomSheetShare.setContentView(bottomSheetView);
 
         // Manage friends list
+        friendsList =  new ArrayList<>();
+
+        // Configure friends list view (RecyclerView)
         friendsListView = bottomSheetShare.findViewById(R.id.friendsListView);
         friendsListView.setLayoutManager(new LinearLayoutManager(bottomSheetShare.getContext()));
-        friendsList =  new ArrayList<>();
         friendListAdapter = new UsersAdapter(myActivity, friendsList, userClickListener);
         friendsListView.setAdapter(friendListAdapter);
         friendsListView.addItemDecoration(new DividerItemDecoration(myActivity, LinearLayoutManager.VERTICAL));
 
+        // Configure share buttons listeners
         MaterialButton emailBtn = bottomSheetShare.findViewById(R.id.btn_email);
         emailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +137,7 @@ public class SharePhoto {
         AlertDialog dialog = builder.create();
         dialog.show();
 
+        // TODO move style to general dialog style
         Button shareButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
         shareButton.setTextColor(ContextCompat.getColor(myActivity, R.color.black));
         Button cancelButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);

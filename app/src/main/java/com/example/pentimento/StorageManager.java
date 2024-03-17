@@ -44,7 +44,6 @@ public class StorageManager {
     }
 
     public void uploadImageToStorage(Bitmap bitmap, StorageActionResult callback) {
-
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] arr = stream.toByteArray();

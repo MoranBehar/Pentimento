@@ -265,7 +265,10 @@ public class DBManager {
     }
 
     public void photoSharingRealTimeUpdates(DBActionResult<QueryDocumentSnapshot> callback) {
-        fbDB.collection("PhotoSharing")
+
+        CollectionReference colRef = fbDB.collection("PhotoSharing");
+
+        colRef.whereEqualTo("sharedTo", fbAuth.getUid())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,

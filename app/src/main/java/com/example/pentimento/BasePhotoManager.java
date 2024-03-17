@@ -2,20 +2,11 @@ package com.example.pentimento;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.function.Consumer;
 
 public abstract class BasePhotoManager {
@@ -29,7 +20,7 @@ public abstract class BasePhotoManager {
 
     private Consumer<String> errorCallBack;
 
-    protected static String TAG = "GalleryManager";
+    protected static String TAG = "BasePhotoManager";
 
 
     BasePhotoManager() {
@@ -38,7 +29,6 @@ public abstract class BasePhotoManager {
 
     private void initGalleryManager() {
         stManager = StorageManager.getInstance();
-
         fbAuth = FirebaseAuth.getInstance();
         fbDB = FirebaseFirestore.getInstance();
 
@@ -47,19 +37,19 @@ public abstract class BasePhotoManager {
         loadPhotos();
     }
 
+    protected abstract void loadPhotos();
+
     public void setErrorCallBack(Consumer<String> callBack) {
         errorCallBack = callBack;
     }
 
-    public ArrayList<Photo> getGalleryList() {
+    public ArrayList<Photo> getPhotosList() {
         return gallery;
     }
 
     public void setPhotoAdapter(PhotoAdapter adapter) {
         viewAdapter = adapter;
     }
-
-    protected abstract void loadPhotos();
 
     protected void getImageById(Photo newPhoto) {
         stManager.getImageById(newPhoto.getId(), new StorageActionResult<byte[]>() {
@@ -88,7 +78,7 @@ public abstract class BasePhotoManager {
         }
     }
 
-    public Photo getImageByPosition(int position) {
+    public Photo getPhotoByPosition(int position) {
         return gallery.get(position);
     }
 
