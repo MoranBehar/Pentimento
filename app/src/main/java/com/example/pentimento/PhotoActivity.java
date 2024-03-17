@@ -195,8 +195,8 @@ public class PhotoActivity extends PhotoActivityMenusClass
                     int randomInt = (int) (Math.random() * 32) - 16;
                     secretMsg.setText(incrementChars(secretMessageText, randomInt));
                     count++;
-                    // Schedule the next run
-                    handler.postDelayed(this, 50); // Adjust the delay as needed
+                    // Set the delay to the next text scramble
+                    handler.postDelayed(this, 50);
                 } else {
                     secretMsg.setText(secretMessageText);
                     if (!isSecretHidden) {
@@ -206,7 +206,8 @@ public class PhotoActivity extends PhotoActivityMenusClass
             }
         };
 
-        handler.post(updateTask); // Start the updates
+        // Start the updates
+        handler.post(updateTask);
     }
 
     private String incrementChars(String input, int offset) {
@@ -404,6 +405,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
         });
     }
 
+    // Start or stop the TTS engine
     private void ttsStartStop() {
         if (ttsEngine != null && ttsEngine.isSpeaking()) {
             ttsEngine.stop();
@@ -415,7 +417,6 @@ public class PhotoActivity extends PhotoActivityMenusClass
     @Override
     // When killing the activity we must stop the TTS engine from speaking
     public void onDestroy() {
-        // Don't forget to shutdown tts!
         if (ttsEngine != null) {
             ttsEngine.stop();
             ttsEngine.shutdown();
