@@ -58,7 +58,7 @@ public class GalleryDialogFragment extends DialogFragment {
         GalleryManager gm = GalleryManager.getInstance();
         gm.setErrorCallBack(this::errorHandler);
 
-        adapter = new PhotoAdapter(getContext(), gm.getGalleryList(), R.layout.photo_item_grid);
+        adapter = new PhotoAdapter(getContext(), gm.getPhotosList(), R.layout.photo_item_grid);
         gm.setPhotoAdapter(adapter);
         gvGallery = dialogView.findViewById(R.id.gvGallery);
         gvGallery.setAdapter(adapter);

@@ -41,7 +41,7 @@ public class SharedWithMeFragment extends Fragment {
         gm = SharedPhotosManager.getInstance();
         gm.setErrorCallBack(this::errorHandler);
 
-        adapter = new PhotoAdapter(getContext(), gm.getGalleryList(), R.layout.shared_photo_item_grid);
+        adapter = new PhotoAdapter(getContext(), gm.getPhotosList(), R.layout.shared_photo_item_grid);
         gm.setPhotoAdapter(adapter);
         gvGallery = view.findViewById(R.id.gvSharedWithMeGallery);
         gvGallery.setAdapter(adapter);

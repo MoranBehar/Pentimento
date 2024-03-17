@@ -1,6 +1,5 @@
 package com.example.pentimento;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.annotation.NonNull;

@@ -3,8 +3,6 @@ package com.example.pentimento;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -12,14 +10,12 @@ import android.os.Handler;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class PhotoActivity extends PhotoActivityMenusClass implements View.OnClickListener {
 
@@ -54,7 +50,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
         if (imageSrcPosition != -1) {
 
             //get the image src
-            photo = gm.getImageByPosition(imageSrcPosition);
+            photo = gm.getPhotoByPosition(imageSrcPosition);
 
             // Set the image resource to the ImageView
             ivPhoto.setImageBitmap(photo.getPhoto());

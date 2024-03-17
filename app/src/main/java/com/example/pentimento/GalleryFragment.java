@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,7 +43,7 @@ public class GalleryFragment extends Fragment {
         gm = GalleryManager.getInstance();
         gm.setErrorCallBack(this::errorHandler);
 
-        adapter = new PhotoAdapter(getContext(), gm.getGalleryList(), R.layout.photo_item_grid);
+        adapter = new PhotoAdapter(getContext(), gm.getPhotosList(), R.layout.photo_item_grid);
         gm.setPhotoAdapter(adapter);
         gvGallery = view.findViewById(R.id.gvGallery);
         gvGallery.setAdapter(adapter);

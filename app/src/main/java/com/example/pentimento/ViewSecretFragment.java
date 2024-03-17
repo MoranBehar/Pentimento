@@ -55,7 +55,7 @@ public class ViewSecretFragment extends Fragment {
         GalleryManager gm = GalleryManager.getInstance();
         gm.setErrorCallBack(this::errorHandler);
 
-        adapter = new PhotoAdapter(getContext(), gm.getGalleryList(), R.layout.photo_item_list);
+        adapter = new PhotoAdapter(getContext(), gm.getPhotosList(), R.layout.photo_item_list);
         gm.setPhotoAdapter(adapter);
 
         fbAuth = FirebaseAuth.getInstance();
