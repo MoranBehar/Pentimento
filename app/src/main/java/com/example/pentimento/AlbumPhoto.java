@@ -1,10 +1,10 @@
 package com.example.pentimento;
 
-public class AlbumPhotos {
+public class AlbumPhoto {
     private String albumId;
     private String photoId;
 
-    public AlbumPhotos(String albumId, String photoId) {
+    public AlbumPhoto(String albumId, String photoId) {
         this.albumId = albumId;
         this.photoId = photoId;
     }

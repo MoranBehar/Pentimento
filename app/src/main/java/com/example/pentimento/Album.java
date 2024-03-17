@@ -16,6 +16,8 @@ public class Album {
         return sdf.format(new Date());
     }
 
+    public Album () {}
+
     public Album(String ownerId, String title) {
         this.ownerId = ownerId;
         this.title = title;

@@ -2,14 +2,8 @@ package com.example.pentimento;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +11,6 @@ import android.speech.tts.TextToSpeech;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,7 +20,6 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
@@ -50,7 +42,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
     private DBManager dbManager;
 
-    private BottomSheetDialog bottomSheetShare;
+    private BottomSheetDialog bottomSheetAlbum;
     private ListView lvAlbumsListView;
     private ArrayList<Album> albums;
 
@@ -312,7 +304,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
             createBottomSheet();
             loadAlbumsList();
-            bottomSheetShare.show();
+            bottomSheetAlbum.show();
         }
     }
 
@@ -324,19 +316,20 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
         // Create bottom sheet
         View bottomSheetView = this.getLayoutInflater().inflate(R.layout.bottom_sheet_albums, null);
-        bottomSheetShare = new BottomSheetDialog(this);
-        bottomSheetShare.setContentView(bottomSheetView);
+        bottomSheetAlbum = new BottomSheetDialog(this);
+        bottomSheetAlbum.setContentView(bottomSheetView);
 
         // Manage albums list
-        lvAlbumsListView = bottomSheetShare.findViewById(R.id.lvAlbumsListView);
+        lvAlbumsListView = bottomSheetAlbum.findViewById(R.id.lvAlbumsListView);
 
         albums =  new ArrayList<>();
         adapter = new AlbumAdapter(this, albums);
 
         lvAlbumsListView.setAdapter(adapter);
+        lvAlbumsListView.setOnItemClickListener(albumClickListener());
     }
 
-    private AdapterView.OnItemClickListener userClickListener() {
+    private AdapterView.OnItemClickListener albumClickListener() {
 
         return new AdapterView.OnItemClickListener() {
             @Override
@@ -345,7 +338,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
                 dbManager.getAlbumById(selectedAlbum.getId(), new DBActionResult() {
                     @Override
                     public void onSuccess(Object data) {
-                        //TODO
+                        addPhotoToAlbum(selectedAlbum.getId(), photo.getId());
                     }
 
                     @Override
@@ -353,7 +346,8 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
                     }
                 });
-                bottomSheetShare.cancel();
+
+                bottomSheetAlbum.cancel();
             }
         };
 

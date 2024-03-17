@@ -26,7 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -134,9 +133,9 @@ public class DBManager {
 
     public void addPhotoToAlbum(String albumId, String photoId) {
 
-        AlbumPhotos albumPhotos = new AlbumPhotos(albumId, photoId);
+        AlbumPhoto albumPhoto = new AlbumPhoto(albumId, photoId);
 
-        fbDB.collection("AlbumPhotos").document().set(albumPhotos)
+        fbDB.collection("AlbumPhotos").document().set(albumPhoto)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -169,10 +168,7 @@ public class DBManager {
                             Map<String, Object> row = document.getData();
                             Log.d(TAG, "onComplete: ");
 
-                            String ownerId = row.get("ownerId").toString();
-                            String title = row.get("title").toString();
-
-                            Album newAlbum = new Album(ownerId, title);
+                            Album newAlbum = document.toObject(Album.class);;
                             albumList.add(newAlbum);
                         }
 
