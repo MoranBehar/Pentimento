@@ -7,8 +7,15 @@
     <TextView
         android:id="@+id/tvSharedBy"
         android:layout_width="140dp"
-        android:layout_height="20dp"
+        android:layout_height="16dp"
+        android:textStyle="bold"
         android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/tvSharedOn"
+        android:layout_width="140dp"
+        android:layout_height="12dp"
+        android:textSize="9sp"/>
 
     <ImageView
         android:id="@+id/ivNewImage"

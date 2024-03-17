@@ -44,6 +44,8 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
             TextView sharedBy = currentItemView.findViewById(R.id.tvSharedBy);
             sharedBy.setText(((SharedPhoto) currentPhotoPosition).getSharedBy().getName());
 
+            TextView sharedOn = currentItemView.findViewById(R.id.tvSharedOn);
+            sharedOn.setText(((SharedPhoto) currentPhotoPosition).getSharedOn());
         }
 
         // then return the recyclable view
