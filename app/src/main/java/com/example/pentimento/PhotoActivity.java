@@ -7,6 +7,7 @@ import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.tts.TextToSpeech;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,18 +18,22 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class PhotoActivity extends PhotoActivityMenusClass implements View.OnClickListener {
+import java.util.Locale;
+
+public class PhotoActivity extends PhotoActivityMenusClass
+        implements View.OnClickListener {
 
     private static final String TAG = PhotoActivity.class.getSimpleName();
     private Photo photo;
 
-    ImageView ivPhoto, secretIcon;
+    ImageView ivPhoto, secretIcon, speakIcon;
     TextView secretMsg;
     Boolean isSecretHidden;
     GalleryManager gm;
     String secretMessageText;
 
     ImageButton btn_photoToolbar_add;
+    TextToSpeech ttsEngine;
 
     private DBManager dbManager;
 
@@ -60,6 +65,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
         initPhotoArea();
 
         addToAlbumBtn();
+
     }
 
     private void addToAlbumBtn() {
@@ -78,12 +84,21 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
     private void initPhotoArea() {
         secretIcon = (ImageView) findViewById(R.id.ivHasSecretIcon);
         secretMsg = (TextView) findViewById(R.id.tvSecretMsg);
+        speakIcon = (ImageView) findViewById(R.id.ivPlayMessage);
+
         isSecretHidden = true;
 
         secretIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 toggleSecretMessage();
+            }
+        });
+
+        speakIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                speakMessage();
             }
         });
 
@@ -126,6 +141,7 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
             endTextSize = 0f;
         }
 
+        speakIcon.setVisibility(View.INVISIBLE);
         isSecretHidden = !isSecretHidden;
 
         // Fade in/out photo
@@ -170,6 +186,9 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
                     handler.postDelayed(this, 50); // Adjust the delay as needed
                 } else {
                     secretMsg.setText(secretMessageText);
+                    if (!isSecretHidden) {
+                        speakIcon.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         };
@@ -283,4 +302,19 @@ public class PhotoActivity extends PhotoActivityMenusClass implements View.OnCli
     private void addPhotoToAlbum(String albumId, String photoId){
         dbManager.addPhotoToAlbum(albumId, photoId);
     }
+
+    private void speakMessage() {
+        ttsEngine = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    ttsEngine.setLanguage(Locale.US);
+                    ttsEngine.speak(secretMessageText, TextToSpeech.QUEUE_FLUSH, null, null);
+                }
+            }
+        });
+    }
+
+
+
 }
