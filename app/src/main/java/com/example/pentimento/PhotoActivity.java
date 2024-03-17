@@ -62,12 +62,11 @@ public class PhotoActivity extends PhotoActivityMenusClass
         gm = GalleryManager.getInstance();
         dbManager = DBManager.getInstance();
 
-
         // Get the image resource position from the intent
         int imageSrcPosition = getIntent().getIntExtra("imagePosition", -1);
         if (imageSrcPosition != -1) {
 
-            //get the image src
+            // Get the photo src
             photo = gm.getPhotoByPosition(imageSrcPosition);
 
             // Set the image resource to the ImageView

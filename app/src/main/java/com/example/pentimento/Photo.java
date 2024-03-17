@@ -2,10 +2,16 @@ package com.example.pentimento;
 
 import android.graphics.Bitmap;
 
+import java.util.Date;
+
 public class Photo {
 
     private Bitmap photo;
     private String id;
+
+    private String title;
+    private Date createDate;
+
 
     public Photo() {}
 
@@ -32,5 +38,21 @@ public class Photo {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }
