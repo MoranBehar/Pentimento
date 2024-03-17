@@ -37,9 +37,29 @@ public class AlbumPhotosManager extends BasePhotoManager {
     }
 
     protected void loadPhotos() {
-        // TODO - Get the photos of a specific album
+        CollectionReference colRef = fbDB.collection("UserPhotos");
+        colRef.whereEqualTo("Creator", fbAuth.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> row = document.getData();
+                                createItem(row.get("id").toString());
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+
     }
-    protected void createItem(String imageId) {}
+
+    protected void createItem(String imageId) {
+        Photo photoToAdd = new Photo(imageId);
+        getImageById(photoToAdd);
+    }
 
 
 }
