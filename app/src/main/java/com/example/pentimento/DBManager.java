@@ -215,7 +215,8 @@ public class DBManager {
         String uid = fbAuth.getUid();
 
         CollectionReference colRef = fbDB.collection("users");
-        colRef.get()
+        colRef.whereNotEqualTo("id", uid)
+                .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
