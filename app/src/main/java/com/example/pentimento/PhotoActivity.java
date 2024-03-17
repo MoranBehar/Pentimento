@@ -315,6 +315,17 @@ public class PhotoActivity extends PhotoActivityMenusClass
         });
     }
 
+    @Override
+    // When killing the activity we must stop the TTS engine from speaking
+    public void onDestroy() {
+        // Don't forget to shutdown tts!
+        if (ttsEngine != null) {
+            ttsEngine.stop();
+            ttsEngine.shutdown();
+        }
+        super.onDestroy();
+    }
+
 
 
 }
