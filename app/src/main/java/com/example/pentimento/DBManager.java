@@ -186,6 +186,29 @@ public class DBManager {
                 });
     }
 
+    public void getAlbumById(String albumId, DBActionResult callback) {
+        CollectionReference colRef = fbDB.collection("Albums");
+
+        colRef.document(albumId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Album album = document.toObject(Album.class);
+                                callback.onSuccess(album);
+                            } else {
+                                Log.d(TAG, "No such album");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+    }
+
 
     public void getFriends(DBActionResult callback) {
 
