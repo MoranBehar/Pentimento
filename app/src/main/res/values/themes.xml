@@ -8,6 +8,7 @@
 
     <!-- Style for my Pentimento project-->
     <style name="AppTheme" parent="Base.Theme.Pentimento">
+        <item name="android:alertDialogTheme">@style/DefaultDialogStyle</item>
     </style>
 
 </resources>
