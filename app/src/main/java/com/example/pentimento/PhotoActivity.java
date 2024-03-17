@@ -2,22 +2,16 @@ package com.example.pentimento;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,7 +21,6 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
@@ -80,9 +73,9 @@ public class PhotoActivity extends PhotoActivityMenusClass
             ivPhoto.setImageBitmap(photo.getPhoto());
         }
 
-        // Init photo area
+        // Init
         initPhotoArea();
-
+        configureTTS();
         addToAlbumBtn();
 
     }
@@ -117,7 +110,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
         speakIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                speakMessage();
+                ttsStartStop();
             }
         });
 
@@ -134,7 +127,6 @@ public class PhotoActivity extends PhotoActivityMenusClass
                 if (!isSecretHidden) toggleSecretMessage();
             }
         });
-
 
 
         // Get secret
@@ -161,6 +153,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
         }
 
         speakIcon.setVisibility(View.INVISIBLE);
+
         isSecretHidden = !isSecretHidden;
 
         // Fade in/out photo
@@ -198,7 +191,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
             @Override
             public void run() {
                 if (count < 25) {
-                    int randomInt = (int)(Math.random() * 32) - 16;
+                    int randomInt = (int) (Math.random() * 32) - 16;
                     secretMsg.setText(incrementChars(secretMessageText, randomInt));
                     count++;
                     // Schedule the next run
@@ -227,7 +220,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
             // Convert the current character to its ASCII value and increment by 1
             if (!Character.isSpaceChar(currentChar)) {
-                nextChar = (char)(currentChar + offset);
+                nextChar = (char) (currentChar + offset);
             }
 
             // Append the next character to the result
@@ -246,14 +239,11 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
                     if (itemId == R.id.nav_share_fragment) {
                         sharePhoto();
-                    }
-                    else if (itemId == R.id.nav_secret_fragment) {
+                    } else if (itemId == R.id.nav_secret_fragment) {
                         secretManger();
-                    }
-                    else if (itemId == R.id.nav_favorite_fragment) {
+                    } else if (itemId == R.id.nav_favorite_fragment) {
                         favToggle();
-                    }
-                    else if (itemId == R.id.nav_delete_fragment) {
+                    } else if (itemId == R.id.nav_delete_fragment) {
                         deletePhoto();
                     }
 
@@ -308,7 +298,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
     @Override
     public void onClick(View v) {
-        if(v == btn_photoToolbar_add){
+        if (v == btn_photoToolbar_add) {
 
             createBottomSheet();
             loadAlbumsList();
@@ -316,7 +306,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
         }
     }
 
-    private void addPhotoToAlbum(String albumId, String photoId){
+    private void addPhotoToAlbum(String albumId, String photoId) {
         dbManager.addPhotoToAlbum(albumId, photoId);
     }
 
@@ -330,7 +320,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
         // Manage albums list
         lvAlbumsListView = bottomSheetShare.findViewById(R.id.lvAlbumsListView);
 
-        albums =  new ArrayList<>();
+        albums = new ArrayList<>();
         adapter = new AlbumAdapter(this, albums);
 
         lvAlbumsListView.setAdapter(adapter);
@@ -375,17 +365,53 @@ public class PhotoActivity extends PhotoActivityMenusClass
         });
     }
 
+    // Text-To-Speech
+    private void ttsStartStop() {
+        if (ttsEngine != null && ttsEngine.isSpeaking()) {
+            ttsStop();
+        } else {
+            ttsSpeak();
+        }
+    }
 
-    private void speakMessage() {
+    private void configureTTS() {
         ttsEngine = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                if(status != TextToSpeech.ERROR) {
+                if (status != TextToSpeech.ERROR) {
                     ttsEngine.setLanguage(Locale.US);
-                    ttsEngine.speak(secretMessageText, TextToSpeech.QUEUE_FLUSH, null, null);
+
+                    ttsEngine.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                        @Override
+                        public void onStart(String utteranceId) {
+                            // Called when the TTS starts speaking.
+                        }
+
+                        @Override
+                        public void onDone(String utteranceId) {
+                            // Called when the TTS has finished speaking.
+                            speakIcon.setImageResource(R.drawable.baseline_play_circle_24);
+                        }
+
+                        @Override
+                        public void onError(String utteranceId) {
+                            // Called on an error during TTS.
+                        }
+
+                    });
                 }
             }
         });
+    }
+
+    public void ttsStop() {
+        speakIcon.setImageResource(R.drawable.baseline_play_circle_24);
+        ttsEngine.stop();
+    }
+
+    public void ttsSpeak() {
+        speakIcon.setImageResource(R.drawable.baseline_stop_circle_24);
+        ttsEngine.speak(secretMessageText, TextToSpeech.QUEUE_FLUSH, null, "UniqueId");
     }
 
     @Override
@@ -398,7 +424,6 @@ public class PhotoActivity extends PhotoActivityMenusClass
         }
         super.onDestroy();
     }
-
 
 
 }
