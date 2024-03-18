@@ -241,7 +241,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
                     if (itemId == R.id.nav_share_fragment) {
                         sharePhoto();
                     } else if (itemId == R.id.nav_secret_fragment) {
-                        secretManger();
+                        secretManager();
                     } else if (itemId == R.id.nav_favorite_fragment) {
                         favToggle();
                     } else if (itemId == R.id.nav_delete_fragment) {
@@ -260,8 +260,8 @@ public class PhotoActivity extends PhotoActivityMenusClass
         Toast.makeText(this, "favorite", Toast.LENGTH_SHORT).show();
     }
 
-    private void secretManger() {
-        SecretManger secretManger = new SecretManger();
+    private void secretManager() {
+        SecretManger secretManger = new SecretManger(this);
         secretManger.showBottomSheetDialog();
     }
 

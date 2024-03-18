@@ -17,8 +17,8 @@ public class AlbumPhotosManager extends BasePhotoManager {
 
     private static String TAG = "AlbumPhotosManager";
     private static AlbumPhotosManager instance;
-
-    private String albumId;
+    private ArrayList<Photo> photos;
+    private Album currentAlbum, newAlbum;
 
     // Implement Singleton
     private AlbumPhotosManager() {
@@ -37,29 +37,38 @@ public class AlbumPhotosManager extends BasePhotoManager {
     }
 
     protected void loadPhotos() {
-        CollectionReference colRef = fbDB.collection("UserPhotos");
-        colRef.whereEqualTo("Creator", fbAuth.getUid())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Map<String, Object> row = document.getData();
-                                createItem(row.get("id").toString());
+
+        if (reloadNeeded()) {
+            CollectionReference colRef = fbDB.collection("AlbumPhotos");
+            colRef.whereEqualTo("albumId", newAlbum.getId())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Photo photoToAdd = document.toObject(Photo.class);
+                                    photos.add(photoToAdd);
+                                }
+                            } else {
+                                Log.d(TAG, "get failed with ", task.getException());
                             }
-                        } else {
-                            Log.d(TAG, "get failed with ", task.getException());
                         }
-                    }
-                });
+                    });
+        }
 
     }
 
-    protected void createItem(String imageId) {
-        Photo photoToAdd = new Photo(imageId);
-        getImageById(photoToAdd);
+    private boolean reloadNeeded() {
+        if (newAlbum != null) {
+            return true;
+        }
+
+        return false;
     }
 
-
+    public void setAlbum(int albumPosition) {
+        newAlbum = AlbumsManager.getInstance().getAlbumByPosition(albumPosition);
+        loadPhotos();
+    }
 }

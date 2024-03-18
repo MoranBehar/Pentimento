@@ -1,5 +1,6 @@
 package com.example.pentimento;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +11,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-public class SecretManger extends AppCompatActivity {
+public class SecretManger  {
+    private Activity myActivity;
     private BottomSheetDialog bottomSheetSecret;
-    public SecretManger() {
+    public SecretManger(Activity activity) {
+        this.myActivity = activity;
         initBottomSheetDialog();
     }
 
     public void initBottomSheetDialog() {
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_secret, null);
-        bottomSheetSecret = new BottomSheetDialog(this);
+        View bottomSheetView = myActivity.getLayoutInflater().inflate(R.layout.bottom_sheet_secret, null);
+        bottomSheetSecret = new BottomSheetDialog(myActivity);
         bottomSheetSecret.setContentView(bottomSheetView);
 
         ViewGroup viewGroup = (ViewGroup) bottomSheetView;
@@ -39,15 +42,15 @@ public class SecretManger extends AppCompatActivity {
             if (child instanceof Button) {
                 child.setOnClickListener(v -> {
                     if (v.getId() == R.id.btn_add_secret) {
-                        Toast.makeText(this, "add", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(myActivity, "add", Toast.LENGTH_SHORT).show();
 
                     } else if (v.getId() == R.id.btn_edit_secret) {
-                        Toast.makeText(this, "edit", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(myActivity, "edit", Toast.LENGTH_SHORT).show();
 
                     }
                     else if (v.getId() == R.id.btn_delete_secret)
                     {
-                        Toast.makeText(this, "delete", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(myActivity, "delete", Toast.LENGTH_SHORT).show();
 
                     }
 

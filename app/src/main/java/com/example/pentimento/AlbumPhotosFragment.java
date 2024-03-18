@@ -48,6 +48,7 @@ public class AlbumPhotosFragment extends Fragment {
 
         apManager = AlbumPhotosManager.getInstance();
         apManager.setErrorCallBack(this::errorHandler);
+        apManager.setAlbum(albumPosition);
 
         adapter = new PhotoAdapter(getContext(), apManager.getPhotosList(), R.layout.photo_item_grid);
         apManager.setPhotoAdapter(adapter);

@@ -20,6 +20,8 @@ public class AlbumsFragment extends Fragment {
     private AlbumAdapter adapter;
     private ArrayList<Album> albums;
 
+    private AlbumsManager alManager;
+
    private DBManager dbManager;
 
     @Override
@@ -36,6 +38,8 @@ public class AlbumsFragment extends Fragment {
     private void initAlbums(View view){
 
         albums = new ArrayList<Album>();
+        alManager = AlbumsManager.getInstance();
+
         dbManager = DBManager.getInstance();
         adapter = new AlbumAdapter(getContext(), albums);
 
@@ -51,7 +55,6 @@ public class AlbumsFragment extends Fragment {
 
             }
         });
-
 
         gvAlbums = view.findViewById(R.id.gvAlbums);
         gvAlbums.setAdapter(adapter);
