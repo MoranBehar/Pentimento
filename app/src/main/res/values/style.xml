@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Custom Dialog Style -->
+    <style name="DefaultDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/primary_foreground</item>
+        <item name="android:textColorPrimary">@color/primary_foreground</item>
+        <item name="android:background">@color/secondary_background</item>
+        <item name="android:buttonBarButtonStyle">@style/DefaultDialogButtonStyle</item>
+        <item name="android:borderlessButtonStyle">@style/DefaultDialogButtonStyle</item>
+
+    </style>
+
+    <style name="DefaultDialogButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/primary_foreground</item>
+    </style>
+
+
     <style name="BottomNavigationStyle" parent="Widget.Design.BottomNavigationView">
         <item name="android:background">@color/primary_background</item>
         <item name="itemIconTint">@drawable/elements</item>

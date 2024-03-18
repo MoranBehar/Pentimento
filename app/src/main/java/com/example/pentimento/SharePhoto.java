@@ -136,12 +136,6 @@ public class SharePhoto {
 
         AlertDialog dialog = builder.create();
         dialog.show();
-
-        // TODO move style to general dialog style
-        Button shareButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        shareButton.setTextColor(ContextCompat.getColor(myActivity, R.color.black));
-        Button cancelButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        cancelButton.setTextColor(ContextCompat.getColor(myActivity, R.color.black));
     }
 
 

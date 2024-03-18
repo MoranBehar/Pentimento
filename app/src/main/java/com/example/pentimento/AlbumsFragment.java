@@ -1,9 +1,9 @@
 package com.example.pentimento;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +12,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 
 public class AlbumsFragment extends Fragment {
@@ -71,11 +69,21 @@ public class AlbumsFragment extends Fragment {
     }
 
     private void albumClicked(int position) {
-        //TODO - set album as position in an array and set the all album as defalt,
-        // others will be opened by a click
 
-        Intent intent = new Intent(this.getContext(), GalleryFragment.class);
-        intent.putExtra("albumPosition", position);
-        startActivity(intent);
+        AlbumPhotosFragment albumPhotosFragment = new AlbumPhotosFragment();
+
+        // Create a Bundle object to pass the album position
+        Bundle args = new Bundle();
+        args.putString("albumPosition", String.valueOf(position));
+        albumPhotosFragment.setArguments(args);
+
+        // Transition to the album photos
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, albumPhotosFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+
     }
 }
