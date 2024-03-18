@@ -27,7 +27,6 @@ public class CreateAlbumFragment extends DialogFragment {
     FirebaseAuth fbAuth;
 
 
-    @SuppressLint("MissingInflatedId")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
