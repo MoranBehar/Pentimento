@@ -1,30 +1,26 @@
 package com.example.pentimento;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-public class SecretManger {
+public class SecretManger implements editSecretMessageDialogFragment.DialogListener{
     private Activity myActivity;
     private BottomSheetDialog bottomSheetSecret;
 
     private String myMessage;
     private Photo myPhoto;
-    public SecretManger(Activity activity, Photo photo, String msg) {
+    public SecretManger(Activity activity, Photo photo) {
         this.myActivity = activity;
         this.myPhoto = photo;
-        myMessage = msg;
         initBottomSheetDialog();
     }
 
@@ -51,13 +47,14 @@ public class SecretManger {
             if (child instanceof Button) {
                 child.setOnClickListener(v -> {
                     if (v.getId() == R.id.btn_add_secret) {
+                        openEditSecretMessageDialogFragment();
                         addSecretMsgToPhoto(createBitmapToImage(myPhoto), myPhoto, myMessage);
-
-                        Toast.makeText(myActivity, "add", Toast.LENGTH_SHORT).show();
-
-                    } else if (v.getId() == R.id.btn_edit_secret) {
-                        getSecretMsgFromPhoto(createBitmapToImage(myPhoto));
-                        //TODO - edit function
+                    }
+                    else if (v.getId() == R.id.btn_edit_secret) {
+                        openEditSecretMessageDialogFragment();
+                        addSecretMsgToPhoto(createBitmapToImage(myPhoto), myPhoto, myMessage);
+                        //TODO - edit function (the prev name will be written,
+                        // the uer will need to change it)
 
                         Toast.makeText(myActivity, "edit", Toast.LENGTH_SHORT).show();
 
@@ -92,5 +89,21 @@ public class SecretManger {
     private void getSecretMsgFromPhoto(Bitmap image) {
         ImageLsbManipulation extractMessage = new ImageLsbManipulation(image);
         extractMessage.getMassage();
+    }
+
+
+    private void openEditSecretMessageDialogFragment() {
+        editSecretMessageDialogFragment dialogFragment = new editSecretMessageDialogFragment();
+
+        FragmentActivity fragmentActivity = (FragmentActivity) myActivity;
+
+        // Set the listener
+        dialogFragment.setDialogListener(this);
+        dialogFragment.show(fragmentActivity.getSupportFragmentManager(), "YourDialogFragment");
+    }
+
+    @Override
+    public void onDialogDataReturn(String msg) {
+        this.myMessage = msg;
     }
 }
