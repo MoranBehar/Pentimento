@@ -9,7 +9,7 @@
     tools:context=".PhotoActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/photoToolbar"
+        android:id="@+id/albumPhotosToolbar"
         style="@style/ToolBarStyle"
         android:theme="@style/ToolbarThemeOverlay">
 

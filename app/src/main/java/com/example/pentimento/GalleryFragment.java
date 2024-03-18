@@ -63,7 +63,6 @@ public class GalleryFragment extends Fragment {
     }
 
     private void photoClicked(int position) {
-
         Intent intent = new Intent(this.getContext(), PhotoActivity.class);
         intent.putExtra("imagePosition", position);
         startActivity(intent);

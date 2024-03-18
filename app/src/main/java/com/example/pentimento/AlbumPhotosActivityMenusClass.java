@@ -7,9 +7,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public abstract class PhotoActivityMenusClass extends AppCompatActivity {
+public abstract class AlbumPhotosActivityMenusClass extends AppCompatActivity {
 
-    private static final String TAG = "PhotoActivityMenusClass";
+    private static final String TAG = "AlbumPhotosActivityMenusClass";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +31,14 @@ public abstract class PhotoActivityMenusClass extends AppCompatActivity {
     protected abstract int getLayoutId();
 
     private void setToolbarListeners() {
-        findViewById(R.id.btn_photoToolbar_back).setOnClickListener(this::onToolbarItemClick);
-        findViewById(R.id.btn_photoToolbar_add).setOnClickListener(this::onToolbarItemClick);
-        findViewById(R.id.btn_photoToolbar_edit).setOnClickListener(this::onToolbarItemClick);
+        findViewById(R.id.btn_albumPhotosToolbar_back).setOnClickListener(this::onToolbarItemClick);
+        findViewById(R.id.btn_albumPhotosToolbar_edit).setOnClickListener(this::onToolbarItemClick);
     }
 
     private void onToolbarItemClick(View view) {
         int id = view.getId();
-        if (id == R.id.btn_photoToolbar_back) {
+        if (id == R.id.btn_albumPhotosToolbar_back) {
             backBtnClicked();
-        } else if (id == R.id.btn_photoToolbar_add) {
-            addBtnClicked();
         } else if (id == R.id.btn_photoToolbar_edit) {
             editBtnClicked();
         }
@@ -49,10 +46,6 @@ public abstract class PhotoActivityMenusClass extends AppCompatActivity {
 
     private void backBtnClicked() {
         finish();
-    }
-
-    private void addBtnClicked() {
-        Toast.makeText(this, "add clicked", Toast.LENGTH_SHORT).show();
     }
 
     private void editBtnClicked() {

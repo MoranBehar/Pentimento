@@ -8,7 +8,7 @@
     tools:context=".AlbumPhotosActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/photoToolbar"
+        android:id="@+id/albumPhotosToolbar"
         style="@style/ToolBarStyle"
         android:theme="@style/ToolbarThemeOverlay">
 
@@ -23,16 +23,7 @@
             android:src="@drawable/baseline_arrow_back_ios_24" />
 
         <ImageButton
-            android:id="@+id/btn_photoToolbar_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:background="?attr/selectableItemBackground"
-            android:paddingRight="10dp"
-            android:src="@drawable/baseline_add_circle_24" />
-
-        <ImageButton
-            android:id="@+id/btn_photoToolbar_edit"
+            android:id="@+id/btn_albumPhotosToolbar_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
