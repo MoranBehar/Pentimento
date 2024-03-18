@@ -66,8 +66,10 @@ public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass {
     }
 
     private void photoClicked(int position) {
+        Photo photoToAdd = apManager.getPhotoByPosition(position);
+
         Intent intent = new Intent(this, PhotoActivity.class);
-        intent.putExtra("imagePosition", position);
+        intent.putExtra("photoId", photoToAdd.getId());
         startActivity(intent);
     }
 

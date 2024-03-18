@@ -36,7 +36,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
     ImageView ivPhoto, secretIcon, speakIcon;
     TextView secretMsg;
     Boolean isSecretHidden;
-    GalleryManager gm;
+    GalleryManager galleryManager;
     String secretMessageText;
 
     ImageButton btn_photoToolbar_add;
@@ -59,18 +59,29 @@ public class PhotoActivity extends PhotoActivityMenusClass
         bottomNav.setOnItemSelectedListener(navListener);
 
         ivPhoto = findViewById(R.id.ivPhoto);
-        gm = GalleryManager.getInstance();
+        galleryManager = GalleryManager.getInstance();
         dbManager = DBManager.getInstance();
 
         // Get the image resource position from the intent
-        int imageSrcPosition = getIntent().getIntExtra("imagePosition", -1);
-        if (imageSrcPosition != -1) {
+        int photoPosition = getIntent().getIntExtra("imagePosition", -1);
+        if (photoPosition != -1) {
 
-            // Get the photo src
-            photo = gm.getPhotoByPosition(imageSrcPosition);
+            // Get the photo
+            photo = galleryManager.getPhotoByPosition(photoPosition);
 
             // Set the image resource to the ImageView
             ivPhoto.setImageBitmap(photo.getPhoto());
+        } else {
+
+            String selectedPhotoId = getIntent().getStringExtra("photoId");
+            if (selectedPhotoId != null) {
+
+                // Get the photo
+                photo = galleryManager.getPhotoById(selectedPhotoId);
+
+                // Set the image resource to the ImageView
+                ivPhoto.setImageBitmap(photo.getPhoto());
+            }
         }
 
         // Init
@@ -384,7 +395,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
                         @Override
                         public void onStart(String utteranceId) {
-                             speakIcon.setImageResource(R.drawable.baseline_stop_circle_24);
+                            speakIcon.setImageResource(R.drawable.baseline_stop_circle_24);
                         }
 
                         @Override
@@ -404,7 +415,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
                     });
                 } else {
-                      Log.d(TAG, "Failed creating Text-To-Speech engine");
+                    Log.d(TAG, "Failed creating Text-To-Speech engine");
                 }
             }
         });

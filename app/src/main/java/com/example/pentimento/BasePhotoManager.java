@@ -82,6 +82,17 @@ public abstract class BasePhotoManager {
         return gallery.get(position);
     }
 
+    public Photo getPhotoById(String id) {
+        for (Photo photo : gallery) {
+            if (photo.getId().equals(id)) {
+                return photo;
+            }
+        }
+
+        // no such photo id
+        return null;
+    }
+
     public void cleanGallery() {
         gallery.clear();
         viewAdapter.notifyDataSetChanged();
