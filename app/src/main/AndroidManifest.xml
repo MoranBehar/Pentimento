@@ -29,6 +29,9 @@
             android:name=".PhotoActivity"
             android:exported="false" />
         <activity
+            android:name=".AlbumPhotosActivity"
+            android:exported="false" />
+        <activity
             android:name=".UserInfoActivity"
             android:exported="false" />
         <activity
