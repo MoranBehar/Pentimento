@@ -2,20 +2,29 @@ package com.example.pentimento;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-public class SecretManger  {
+public class SecretManger {
     private Activity myActivity;
     private BottomSheetDialog bottomSheetSecret;
-    public SecretManger(Activity activity) {
+
+    private String myMessage;
+    private Photo myPhoto;
+    public SecretManger(Activity activity, Photo photo, String msg) {
         this.myActivity = activity;
+        this.myPhoto = photo;
+        myMessage = msg;
         initBottomSheetDialog();
     }
 
@@ -42,9 +51,14 @@ public class SecretManger  {
             if (child instanceof Button) {
                 child.setOnClickListener(v -> {
                     if (v.getId() == R.id.btn_add_secret) {
+                        addSecretMsgToPhoto(createBitmapToImage(myPhoto), myPhoto, myMessage);
+
                         Toast.makeText(myActivity, "add", Toast.LENGTH_SHORT).show();
 
                     } else if (v.getId() == R.id.btn_edit_secret) {
+                        getSecretMsgFromPhoto(createBitmapToImage(myPhoto));
+                        //TODO - edit function
+
                         Toast.makeText(myActivity, "edit", Toast.LENGTH_SHORT).show();
 
                     }
@@ -59,5 +73,24 @@ public class SecretManger  {
                 });
             }
         }
+    }
+
+    private Bitmap createBitmapToImage(Photo photo) {
+        BitmapDrawable bitmapDrawable = new BitmapDrawable(myActivity.getResources(), photo.getPhoto());
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+
+//        Bitmap myPhotoBitmap = photo.getPhoto();
+        return  bitmap;
+    }
+
+    private void addSecretMsgToPhoto(Bitmap image, Photo photo, String msg) {
+        ImageLsbManipulation MsgEmbed = new ImageLsbManipulation(msg, image);
+        Bitmap bitmapWithMsg = MsgEmbed.EmbedMessageAction();
+        photo.setPhoto(bitmapWithMsg);
+    }
+
+    private void getSecretMsgFromPhoto(Bitmap image) {
+        ImageLsbManipulation extractMessage = new ImageLsbManipulation(image);
+        extractMessage.getMassage();
     }
 }
