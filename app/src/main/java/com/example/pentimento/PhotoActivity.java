@@ -261,7 +261,8 @@ public class PhotoActivity extends PhotoActivityMenusClass
     }
 
     private void secretManger() {
-        Toast.makeText(this, "secret", Toast.LENGTH_SHORT).show();
+        SecretManger secretManger = new SecretManger();
+        secretManger.showBottomSheetDialog();
     }
 
     private void sharePhoto() {
