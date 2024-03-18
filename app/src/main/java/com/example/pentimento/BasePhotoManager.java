@@ -82,5 +82,8 @@ public abstract class BasePhotoManager {
         return gallery.get(position);
     }
 
-
+    public void cleanGallery() {
+        gallery.clear();
+        viewAdapter.notifyDataSetChanged();
+    }
 }

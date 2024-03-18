@@ -17,7 +17,6 @@ public class AlbumPhotosManager extends BasePhotoManager {
 
     private static String TAG = "AlbumPhotosManager";
     private static AlbumPhotosManager instance;
-    private ArrayList<Photo> photos;
     private Album currentAlbum, newAlbum;
 
     // Implement Singleton
@@ -39,6 +38,7 @@ public class AlbumPhotosManager extends BasePhotoManager {
     protected void loadPhotos() {
 
         if (reloadNeeded()) {
+            cleanGallery();
             CollectionReference colRef = fbDB.collection("AlbumPhotos");
             colRef.whereEqualTo("albumId", newAlbum.getId())
                     .get()
@@ -47,8 +47,8 @@ public class AlbumPhotosManager extends BasePhotoManager {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Photo photoToAdd = document.toObject(Photo.class);
-                                    photos.add(photoToAdd);
+                                    Map<String, Object> row = document.getData();
+                                    createItem(row.get("photoId").toString());
                                 }
                             } else {
                                 Log.d(TAG, "get failed with ", task.getException());
@@ -59,11 +59,27 @@ public class AlbumPhotosManager extends BasePhotoManager {
 
     }
 
+    protected void createItem(String imageId) {
+        Photo photoToAdd = new Photo(imageId);
+        getImageById(photoToAdd);
+    }
     private boolean reloadNeeded() {
-        if (newAlbum != null) {
+
+        // If its the first album, load the album's photo
+        if ((newAlbum != null) && (currentAlbum == null)) {
+            currentAlbum = newAlbum;
             return true;
         }
 
+        // If its not the first album, reload only if the album requested is not in memory
+        if ((newAlbum != null) && (currentAlbum != null)) {
+            if (newAlbum.getId() != currentAlbum.getId()) {
+                currentAlbum = newAlbum;
+                return true;
+            }
+        }
+
+        // Its the same album - no need to reload
         return false;
     }
 

@@ -20,6 +20,7 @@ public class AlbumPhotosFragment extends Fragment {
     private GridView gvGallery;
     private PhotoAdapter adapter;
 
+    private Album album;
     private int albumPosition;
     private AlbumPhotosManager apManager;
 
@@ -48,12 +49,15 @@ public class AlbumPhotosFragment extends Fragment {
 
         apManager = AlbumPhotosManager.getInstance();
         apManager.setErrorCallBack(this::errorHandler);
-        apManager.setAlbum(albumPosition);
-
         adapter = new PhotoAdapter(getContext(), apManager.getPhotosList(), R.layout.photo_item_grid);
         apManager.setPhotoAdapter(adapter);
         gvGallery = view.findViewById(R.id.gvAlbumPhotosGallery);
         gvGallery.setAdapter(adapter);
+        apManager.setAlbum(albumPosition);
+
+        TextView title = view.findViewById(R.id.tvAlbumTitle);
+        album = AlbumsManager.getInstance().getAlbumByPosition(albumPosition);
+        title.setText(album.getTitle());
 
 //        gvGallery.setOnItemClickListener(photoSelectedEvent());
 
