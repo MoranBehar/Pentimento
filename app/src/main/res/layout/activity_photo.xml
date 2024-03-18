@@ -114,13 +114,25 @@
                     android:src="@drawable/dogs"
                     android:alpha="1"/>
 
-                <ImageView
-                    android:id="@+id/ivHasSecretIcon"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="top|end"
-                    android:padding="8dp"
-                    android:src="@drawable/baseline_eye_24_white" />
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rounded_icon_background">
+
+                    <ImageView
+                        android:id="@+id/ivHasSecretIcon"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_gravity="top|end"
+                        android:padding="8dp"
+                        android:src="@drawable/baseline_eye_24_white" />
+
+                </FrameLayout>
+
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
