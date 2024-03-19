@@ -1,10 +1,13 @@
 package com.example.pentimento;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -35,12 +38,27 @@ public class AlbumAdapter extends ArrayAdapter<Album> {
         }
 
         // Lookup view for data population
+        ImageView ivAlbumCover = convertView.findViewById(R.id.ivAlbumCover);
         TextView tvAlbumName = convertView.findViewById(R.id.tvAlbumName);
-        TextView tvAlbumCreateDate = convertView.findViewById(R.id.tvAlbumCreateDate);
+        TextView tvNumOfPhotos = convertView.findViewById(R.id.tvNumOfPhotos);
 
         // Populate the data into the template view using the data object
         tvAlbumName.setText(album.getTitle());
-        tvAlbumCreateDate.setText(album.getCreateDate());
+        tvNumOfPhotos.setText(String.valueOf(album.getNumOfPhotos()));
+
+        StorageManager.getInstance().getImageById(album.getAlbumCoverId(), new StorageActionResult<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                ivAlbumCover.setImageBitmap(bitmap);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+
 
         // Return the completed view to render on screen
         return convertView;

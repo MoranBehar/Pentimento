@@ -11,6 +11,9 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 
 public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass {
 
@@ -48,9 +51,15 @@ public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass {
         gvGallery.setAdapter(adapter);
         apManager.setAlbum(albumPosition);
 
-        TextView title = findViewById(R.id.tvAlbumTitle);
         album = AlbumsManager.getInstance().getAlbumByPosition(albumPosition);
-        title.setText(album.getTitle() + " Album");
+
+        String formattedTitle = String.format("%s Album (%d)", album.getTitle(), album.getNumOfPhotos());
+        TextView title = findViewById(R.id.tvAlbumTitle);
+        title.setText(formattedTitle);
+
+        TextView createDate = findViewById(R.id.tvAlbumCreateDate);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        createDate.setText(sdf.format(album.getCreateDate()));
 
         gvGallery.setOnItemClickListener(photoSelectedEvent());
 

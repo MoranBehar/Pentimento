@@ -38,17 +38,23 @@
         android:layout_height="60dp"
         android:background="@color/secondary_background"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="10dp">
 
         <TextView
             android:id="@+id/tvAlbumTitle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="Album Title"
             android:textColor="@color/primary_foreground"
             android:textSize="18dp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvAlbumCreateDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp" />
 
     </LinearLayout>
 

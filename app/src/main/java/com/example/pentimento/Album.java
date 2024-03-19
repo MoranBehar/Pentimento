@@ -1,27 +1,23 @@
 package com.example.pentimento;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class Album {
 
     private String id;
     private String ownerId;
     private String title;
-    private String createDate;
+    private Date createDate;
+    private int numOfPhotos;
+    private String albumCoverId;
 
-    private String getCurrentDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return sdf.format(new Date());
-    }
-
+    // Constructors
     public Album () {}
 
     public Album(String ownerId, String title) {
         this.ownerId = ownerId;
         this.title = title;
-        this.createDate = getCurrentDate();
+        this.createDate = new Date();
     }
 
     public String getTitle() {
@@ -48,11 +44,25 @@ public class Album {
         this.ownerId = ownerId;
     }
 
-    public String getCreateDate() {
-        return createDate;
+    public Date getCreateDate() { return createDate; }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
+    public int getNumOfPhotos() {
+        return numOfPhotos;
+    }
+
+    public void setNumOfPhotos(int numOfPhotos) {
+        this.numOfPhotos = numOfPhotos;
+    }
+
+    public String getAlbumCoverId() {
+        return albumCoverId;
+    }
+
+    public void setAlbumCoverId(String albumCoverId) {
+        this.albumCoverId = albumCoverId;
     }
 }

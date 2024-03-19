@@ -131,14 +131,19 @@ public class DBManager {
                 });
     }
 
-    public void addPhotoToAlbum(String albumId, String photoId) {
+    public void addPhotoToAlbum(Album album, String photoId) {
 
-        AlbumPhoto albumPhoto = new AlbumPhoto(albumId, photoId);
+        AlbumPhoto albumPhoto = new AlbumPhoto(album.getId(), photoId);
 
         fbDB.collection("AlbumPhotos").document().set(albumPhoto)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
+                        if (album.getNumOfPhotos() == 0) {
+                            album.setAlbumCoverId(photoId);
+                        }
+                        album.setNumOfPhotos(album.getNumOfPhotos()+1);
+                        updateAlbum(album);
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -205,6 +210,23 @@ public class DBManager {
                 });
     }
 
+    public void updateAlbum(Album albumToUpdate) {
+
+        DocumentReference albumDocRef =
+                fbDB.collection("Albums")
+                        .document(albumToUpdate.getId());
+
+        // Overwrite the document with the new Album object
+        albumDocRef.set(albumToUpdate)
+                .addOnSuccessListener(aVoid -> {
+                    // Handle success
+                    Log.d(TAG, "Album successfully updated");
+                })
+                .addOnFailureListener(e -> {
+                    // Handle error
+                    Log.w(TAG, "Album updating album", e);
+                });
+    }
 
     public void getFriends(DBActionResult callback) {
 

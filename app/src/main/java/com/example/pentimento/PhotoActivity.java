@@ -333,8 +333,8 @@ public class PhotoActivity extends PhotoActivityMenusClass
         }
     }
 
-    private void addPhotoToAlbum(String albumId, String photoId) {
-        dbManager.addPhotoToAlbum(albumId, photoId);
+    private void addPhotoToAlbum(Album album, String photoId) {
+        dbManager.addPhotoToAlbum(album, photoId);
     }
 
     private void createBottomSheet() {
@@ -363,7 +363,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
                 dbManager.getAlbumById(selectedAlbum.getId(), new DBActionResult() {
                     @Override
                     public void onSuccess(Object data) {
-                        addPhotoToAlbum(selectedAlbum.getId(), photo.getId());
+                        addPhotoToAlbum(selectedAlbum, photo.getId());
                     }
 
                     @Override
