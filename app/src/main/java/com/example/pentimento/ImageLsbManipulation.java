@@ -13,13 +13,16 @@ public class ImageLsbManipulation {
     //End Of Message terminating string
     public static final String EOM = "$$$EOM$$$";
 
+    //Start Of Message terminating string
+    public static final String SOM = "$$$SOM$$$";
+
     private TextUtils utils = new TextUtils();
 
 
 
     //Embed Message
     public ImageLsbManipulation(String Message, Bitmap bmpImage){
-        this.MessageToEmbed = Message + EOM;
+        this.MessageToEmbed = SOM + Message + EOM;
         this.imageToAddMassage = bmpImage;
         this.bmpWithMassage = bmpWithMassage;
     }
@@ -91,8 +94,8 @@ public class ImageLsbManipulation {
         String message = "";
 
         // loop through every pixel of the image
-        for (int x = 0; x < 1; x++) {
-            for (int y = 0; y < 128; y++) {
+        for (int x = 0; x < bmpWithMassage.getWidth(); x++) {
+            for (int y = 0; y < bmpWithMassage.getHeight(); y++) {
 
                 // Get the pixel
                 int pixel = bmpWithMassage.getPixel(x, y);
@@ -108,6 +111,12 @@ public class ImageLsbManipulation {
 
                 String extractedPartOfMessage = utils.convertBinaryToString(message);
 
+                //if there is a starting code - continue, if not, stop checking
+                if(!checkIfStartMsg(extractedPartOfMessage))
+                {
+                    return null;
+                }
+
                 //if the message includes the ending code - stop looping the image
                 if(checkIfEnd(extractedPartOfMessage))
                 {
@@ -121,10 +130,10 @@ public class ImageLsbManipulation {
         Log.d("POC", "TheMessage: "+message);
         Log.d("POC", "TheExtractedMessage: "+extractedMessage);
 
-        String extractedMessageWithoutEndingCode = removeEndingCode(extractedMessage);
-        Log.d("POC", "TheExtractedMessageWithoutEnding: "+extractedMessageWithoutEndingCode);
+        String extractedMessageWithoutMarkingCode = removeMarkingCode(extractedMessage);
+        Log.d("POC", "TheExtractedMessageWithoutEnding: "+extractedMessageWithoutMarkingCode);
 
-        return extractedMessageWithoutEndingCode;
+        return extractedMessageWithoutMarkingCode;
     }
 
     public boolean checkIfEnd(String partOfMsg){
@@ -139,6 +148,25 @@ public class ImageLsbManipulation {
 
         //extract the sub string from the beginning of the message up to the last index
         return msgWithEndingCode.substring(0, lastIndexOfRealMsg);
+    }
+
+
+    public boolean checkIfStartMsg(String partOfMsg){
+
+        return partOfMsg.startsWith(SOM);
+    }
+
+    public String removeMarkingCode(String msgWithMarkingCode)
+    {
+        //find the last index of the ending code in the message
+        int lastIndexOfRealMsg = msgWithMarkingCode.length() - EOM.length();
+
+        //find the first index of the ending code in the message
+        int firstIndexOfRealMsg = SOM.length() + 1;
+
+
+        //extract the sub string from the beginning of the message up to the last index
+        return msgWithMarkingCode.substring(firstIndexOfRealMsg, lastIndexOfRealMsg);
     }
 
 }

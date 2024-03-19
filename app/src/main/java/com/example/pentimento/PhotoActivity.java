@@ -96,8 +96,10 @@ public class PhotoActivity extends PhotoActivityMenusClass
         btn_photoToolbar_add.setOnClickListener(this);
     }
 
+    //TODO - fix
     private void extractSecretMessage() {
-        secretMessageText = "Moran, this message is for your eyes only. Please do not share this with the enemy.";
+        SecretManger secretManger = new SecretManger(this, photo);
+        secretMessageText = secretManger.getSecretMsgFromPhoto(photo.getPhoto());
     }
 
     protected int getLayoutId() {

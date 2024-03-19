@@ -48,11 +48,9 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
                 child.setOnClickListener(v -> {
                     if (v.getId() == R.id.btn_add_secret) {
                         openEditSecretMessageDialogFragment();
-                        addSecretMsgToPhoto(createBitmapToImage(myPhoto), myPhoto, myMessage);
                     }
                     else if (v.getId() == R.id.btn_edit_secret) {
                         openEditSecretMessageDialogFragment();
-                        addSecretMsgToPhoto(createBitmapToImage(myPhoto), myPhoto, myMessage);
                         //TODO - edit function (the prev name will be written,
                         // the uer will need to change it)
 
@@ -76,7 +74,6 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
         BitmapDrawable bitmapDrawable = new BitmapDrawable(myActivity.getResources(), photo.getPhoto());
         Bitmap bitmap = bitmapDrawable.getBitmap();
 
-//        Bitmap myPhotoBitmap = photo.getPhoto();
         return  bitmap;
     }
 
@@ -86,9 +83,9 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
         photo.setPhoto(bitmapWithMsg);
     }
 
-    private void getSecretMsgFromPhoto(Bitmap image) {
+    public String getSecretMsgFromPhoto(Bitmap image) {
         ImageLsbManipulation extractMessage = new ImageLsbManipulation(image);
-        extractMessage.getMassage();
+        return extractMessage.getMassage();
     }
 
 
@@ -105,5 +102,6 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
     @Override
     public void onDialogDataReturn(String msg) {
         this.myMessage = msg;
+        addSecretMsgToPhoto(createBitmapToImage(myPhoto), myPhoto, myMessage);
     }
 }

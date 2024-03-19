@@ -13,9 +13,12 @@ public class EmbedMessage {
     //End Of Message terminating string
     public static final String EOM = "$$$EOM$$$";
 
+    //Start Of Message terminating string
+    public static final String SOM = "$$$SOM$$$";
+
 
     public EmbedMessage(String Message, Bitmap bmpImage) {
-        this.MessageToEmbed = Message + EOM;
+        this.MessageToEmbed = SOM + Message + EOM;
         this.imageToAddMassage = bmpImage;
     }
 
