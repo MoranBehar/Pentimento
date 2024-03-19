@@ -2,6 +2,7 @@ package com.example.pentimento;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
@@ -12,6 +13,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;;
+import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.UUID;
 
 public class StorageManager {
@@ -43,14 +46,9 @@ public class StorageManager {
         storageRef = storage.getReference();
     }
 
-    public void uploadImageToStorage(Bitmap bitmap, StorageActionResult callback) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] arr = stream.toByteArray();
-        UUID imageUUID = UUID.randomUUID();
-        String imageId = imageUUID.toString();
+    public void uploadImageToStorage(String imageId, byte[] imageBytes, StorageActionResult callback) {
 
-        UploadTask task = storageRef.child("images/").child(imageId).putBytes(arr);
+        UploadTask task = storageRef.child("images/").child(imageId).putBytes(imageBytes);
         task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -80,5 +78,40 @@ public class StorageManager {
                 });
     }
 
+    public void addImageToStorage(Bitmap bitmap, StorageActionResult callback) {
+        UUID imageUUID = UUID.randomUUID();
+        String imageId = imageUUID.toString();
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] arr = stream.toByteArray();
+
+        uploadImageToStorage(imageId, arr, callback);
+
+    }
+    public void updateImageInStorage(Photo photoToUpdate, StorageActionResult callback) {
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        photoToUpdate.getPhoto().compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] arr = stream.toByteArray();
+
+//        byte[] arr = bitmapToByteArray(photoToUpdate.getPhoto());
+
+        uploadImageToStorage(photoToUpdate.getId(), arr, callback);
+    }
+
+    public byte[] bitmapToByteArray(Bitmap bitmap) {
+        // Calculate how many bytes our image consists of.
+        int bytes = bitmap.getByteCount();
+
+        // Create a new buffer
+        ByteBuffer buffer = ByteBuffer.allocate(bytes);
+
+        // Move the byte data to the buffer
+        bitmap.copyPixelsToBuffer(buffer);
+
+        // Get the byte array
+        return buffer.array();
+    }
 
 }

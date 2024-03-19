@@ -233,7 +233,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
 
 
     private void addNewPhoto(Bitmap bp) {
-        stManager.uploadImageToStorage(bp, new StorageActionResult<String>() {
+        stManager.addImageToStorage(bp, new StorageActionResult<String>() {
             @Override
             public void onSuccess(String data) {
 //                GalleryManager.getInstance().addToGallery("temp-id-addNewPhoto", bp);

@@ -3,6 +3,7 @@ package com.example.pentimento;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,10 +18,16 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
     private BottomSheetDialog bottomSheetSecret;
     private String myMessage;
     private Photo myPhoto;
+
+    private StorageManager storageManager;
+
+
     public SecretManger(Activity activity, Photo photo) {
         this.myActivity = activity;
         this.myPhoto = photo;
         initBottomSheetDialog();
+
+        storageManager = StorageManager.getInstance();
     }
 
     public void initBottomSheetDialog() {
@@ -102,5 +109,20 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
     public void onDialogDataReturn(String msg) {
         this.myMessage = msg;
         addSecretMsgToPhoto(createBitmapToImage(myPhoto), myPhoto, myMessage);
+//        updatePhotoInStorage();
+    }
+
+    private void updatePhotoInStorage() {
+        storageManager.updateImageInStorage(myPhoto, new StorageActionResult() {
+            @Override
+            public void onSuccess(Object data) {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.d("LSBManipulation", "onError() returned: " + myPhoto);
+            }
+        });
     }
 }
