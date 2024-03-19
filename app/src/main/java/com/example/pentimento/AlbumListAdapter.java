@@ -15,11 +15,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.List;
 
-public class AlbumAdapter extends ArrayAdapter<Album> {
+public class AlbumListAdapter extends AlbumAdapter {
     private List<Album> albumList;
 
-    public AlbumAdapter(Context context, List<Album> albums) {
-        super(context, 0, albums);
+    public AlbumListAdapter(Context context, List<Album> albums) {
+        super(context, albums);
         this.albumList = albums;
     }
 
@@ -33,17 +33,15 @@ public class AlbumAdapter extends ArrayAdapter<Album> {
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.album_item_grid, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.album_item_add_list, parent, false);
         }
 
         // Lookup view for data population
         ImageView ivAlbumCover = convertView.findViewById(R.id.ivAlbumCover);
         TextView tvAlbumName = convertView.findViewById(R.id.tvAlbumName);
-        TextView tvNumOfPhotos = convertView.findViewById(R.id.tvNumOfPhotos);
 
         // Fill the data into the template view using the data object
         tvAlbumName.setText(album.getTitle());
-        tvNumOfPhotos.setText(String.valueOf(album.getNumOfPhotos()));
 
         album.getCoverImage(new Album.getCoverImageResult() {
             @Override
@@ -52,8 +50,8 @@ public class AlbumAdapter extends ArrayAdapter<Album> {
             }
         });
 
+
         // Return the completed view to render on screen
         return convertView;
     }
-
 }

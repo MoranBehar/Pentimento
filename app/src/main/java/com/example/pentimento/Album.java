@@ -1,5 +1,8 @@
 package com.example.pentimento;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.util.Date;
 
 public class Album {
@@ -64,5 +67,24 @@ public class Album {
 
     public void setAlbumCoverId(String albumCoverId) {
         this.albumCoverId = albumCoverId;
+    }
+
+    public interface getCoverImageResult {
+        void onImageReady(Bitmap bitmap);
+    }
+
+    public void getCoverImage(getCoverImageResult callback) {
+        StorageManager.getInstance().getImageById(getAlbumCoverId(), new StorageActionResult<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                callback.onImageReady(bitmap);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
     }
 }

@@ -348,7 +348,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
         lvAlbumsListView = bottomSheetAlbum.findViewById(R.id.lvAlbumsListView);
 
         albums = new ArrayList<>();
-        adapter = new AlbumAdapter(this, albums);
+        adapter = new AlbumListAdapter(this, albums);
 
         lvAlbumsListView.setAdapter(adapter);
         lvAlbumsListView.setOnItemClickListener(albumClickListener());
