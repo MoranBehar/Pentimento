@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TestActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -58,14 +59,15 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void addSecretMsgToPhoto(Bitmap image) {
-        ImageLsbManipulation MsgEmbed = new ImageLsbManipulation("a", image);
+        ImageLsbManipulation MsgEmbed = new ImageLsbManipulation("Test", image);
         Bitmap bitmapWithMsg = MsgEmbed.EmbedMessageAction();
         ivPhoto.setImageBitmap(bitmapWithMsg);
     }
 
     private void getSecretMsgFromPhoto(Bitmap image) {
         ImageLsbManipulation extractMessage = new ImageLsbManipulation(image);
-        extractMessage.getMassage();
+        String msg = extractMessage.getMessage();
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     private void grayScale() {

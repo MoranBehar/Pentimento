@@ -8,7 +8,7 @@ public class ImageLsbManipulation {
 
     private String MessageToEmbed;
     private Bitmap imageToAddMassage;
-    private Bitmap bmpWithMassage;
+    private Bitmap bmpWithMessage;
 
     //End Of Message terminating string
     public static final String EOM = "$$$EOM$$$";
@@ -24,12 +24,12 @@ public class ImageLsbManipulation {
     public ImageLsbManipulation(String Message, Bitmap bmpImage){
         this.MessageToEmbed = SOM + Message + EOM;
         this.imageToAddMassage = bmpImage;
-        this.bmpWithMassage = bmpWithMassage;
+        this.bmpWithMessage = bmpWithMessage;
     }
 
     //Extract Message
     public ImageLsbManipulation(Bitmap bmpWithMassage){
-        this.bmpWithMassage = bmpWithMassage;
+        this.bmpWithMessage = bmpWithMassage;
     }
 
 
@@ -40,22 +40,22 @@ public class ImageLsbManipulation {
         return hideMessageInLSB(imageToAddMassage, binaryMessage);
     }
 
-    public Bitmap hideMessageInLSB(Bitmap bmp, String msg) {
+    public Bitmap hideMessageInLSB(Bitmap bmp, String binaryMessage) {
 
         //duplicate the bitMap so i could do manipulation on it
         Bitmap newBitmap = bmp.copy(Bitmap.Config.ARGB_8888, true);
 
         int changeBit = 0;
 
-        // loop through every char of the massage
-        for(int x = 0; x < msg.length(); x++)
+        // loop through every bit of the message
+        for(int i = 0; i < binaryMessage.length(); i++)
         {
-            //find the char we need to implement in the pixel
-            changeBit =  Integer.valueOf(msg.substring(x,x+1));
+            // find the bit we need to implement in the pixel
+            changeBit =  Integer.valueOf(binaryMessage.substring(i,i+1));
 
-            //find the pixel place (x, y)
-            int pixelX = x/(newBitmap.getHeight());
-            int pixelY = x%(newBitmap.getWidth());
+            // find the pixel place (x, y)
+            int pixelY = (int)Math.floor(i/(newBitmap.getWidth()));
+            int pixelX = i%(newBitmap.getWidth());
 
             // Get the pixel
             int pixel = newBitmap.getPixel(pixelX,pixelY);
@@ -79,50 +79,58 @@ public class ImageLsbManipulation {
             }
 
             // replace pixel with the manipulated pixel
-            newBitmap.setPixel(pixelX, pixelY,
-                    Color.rgb(redLSBChanged, green, blue));
+            newBitmap.setPixel(pixelX, pixelY, Color.rgb(redLSBChanged, green, blue));
 
-//            Log.d("POC", String.format("x:%d ,y:%d, red:%d ",pixelX,pixelY,redLSBChanged));
+            Log.d("POC", String.format("x:%d ,y:%d, bit:%d, red:%d changed:%d",pixelX,pixelY,changeBit,red, redLSBChanged));
 
         }
 
         return newBitmap;
     }
 
-    public String getMassage() {
+    public String getMessage() {
 
         String message = "";
+        int bitCounter = 0;
+        boolean SOMFound = false;
 
         // loop through every pixel of the image
-        for (int x = 0; x < bmpWithMassage.getWidth(); x++) {
-            for (int y = 0; y < bmpWithMassage.getHeight(); y++) {
+        scanImageLoop:
+        for (int y = 0; y < bmpWithMessage.getHeight(); y++) {
+            for (int x = 0; x < bmpWithMessage.getWidth(); x++) {
 
                 // Get the pixel
-                int pixel = bmpWithMassage.getPixel(x, y);
+                int pixel = bmpWithMessage.getPixel(x, y);
 
                 // Get red channel of the pixel
                 int red = Color.red(pixel);
 
-                //get the lsb number of the red channel
+                // get the LSB bit of the red channel
                 int lsbRed = red & 1;
 
-                //add the new char to the string msg
+                // add the new bit to the string msg
                 message += Integer.toString(lsbRed);
+                bitCounter++;
 
-                String extractedPartOfMessage = utils.convertBinaryToString(message);
+                Log.d("POC", String.format("x:%d ,y:%d, bit:%d, red:%d ",x,y,lsbRed,red));
 
-                //if there is a starting code - continue, if not, stop checking
-                if(!checkIfStartMsg(extractedPartOfMessage))
-                {
-                    return null;
+                if (bitCounter/8 >= SOM.length()) {
+                    String extractedPartOfMessage = utils.convertBinaryToString(message);
+                    Log.d("POC", "extractedPartOfMessage: "+extractedPartOfMessage);
+
+                    // if there we didn't find SOM header - there is no message embedded
+                    if(!SOMFound && !checkIfStartMsg(extractedPartOfMessage))
+                    {
+                        SOMFound = true;
+                        return null;
+                    }
+
+                    // if we've reached the EOM footer - exit the loop cause we extracted the message
+                    if(bitCounter%8 == 0 && checkIfEnd(extractedPartOfMessage))
+                    {
+                        break scanImageLoop;
+                    }
                 }
-
-                //if the message includes the ending code - stop looping the image
-                if(checkIfEnd(extractedPartOfMessage))
-                {
-                    break;
-                }
-
             }
         }
 
@@ -130,14 +138,13 @@ public class ImageLsbManipulation {
         Log.d("POC", "TheMessage: "+message);
         Log.d("POC", "TheExtractedMessage: "+extractedMessage);
 
-        String extractedMessageWithoutMarkingCode = removeMarkingCode(extractedMessage);
+        String extractedMessageWithoutMarkingCode = extractMessageBody(extractedMessage);
         Log.d("POC", "TheExtractedMessageWithoutEnding: "+extractedMessageWithoutMarkingCode);
 
         return extractedMessageWithoutMarkingCode;
     }
 
     public boolean checkIfEnd(String partOfMsg){
-
         return partOfMsg.endsWith(EOM);
     }
 
@@ -152,21 +159,19 @@ public class ImageLsbManipulation {
 
 
     public boolean checkIfStartMsg(String partOfMsg){
-
         return partOfMsg.startsWith(SOM);
     }
 
-    public String removeMarkingCode(String msgWithMarkingCode)
+    public String extractMessageBody(String messageFromImage)
     {
-        //find the last index of the ending code in the message
-        int lastIndexOfRealMsg = msgWithMarkingCode.length() - EOM.length();
+        // find the start index of the message body
+        int firstIndexOfRealMsg = SOM.length();
 
-        //find the first index of the ending code in the message
-        int firstIndexOfRealMsg = SOM.length() + 1;
-
+        // find the last index of the message body
+        int lastIndexOfRealMsg = messageFromImage.length() - EOM.length();
 
         //extract the sub string from the beginning of the message up to the last index
-        return msgWithMarkingCode.substring(firstIndexOfRealMsg, lastIndexOfRealMsg);
+        return messageFromImage.substring(firstIndexOfRealMsg, lastIndexOfRealMsg);
     }
 
 }

@@ -49,6 +49,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
     private ArrayList<Album> albums;
 
     private AlbumAdapter adapter;
+    private SecretManger secretManger;
 
 
     @Override
@@ -87,19 +88,22 @@ public class PhotoActivity extends PhotoActivityMenusClass
         // Init
         initPhotoArea();
         configureTTS();
-        addToAlbumBtn();
-
+        setAddToAlbumBtn();
     }
 
-    private void addToAlbumBtn() {
+    private void setAddToAlbumBtn() {
         btn_photoToolbar_add = findViewById(R.id.btn_photoToolbar_add);
         btn_photoToolbar_add.setOnClickListener(this);
     }
 
     //TODO - fix
     private void extractSecretMessage() {
-        SecretManger secretManger = new SecretManger(this, photo);
-        secretMessageText = secretManger.getSecretMsgFromPhoto(photo.getPhoto());
+        secretMessageText = secretManger.getSecretMsgFromPhoto();
+
+        // Show scrambled text
+        if (secretMessageText != null) {
+            secretMsg.setText(incrementChars(secretMessageText, 1));
+        }
     }
 
     protected int getLayoutId() {
@@ -143,14 +147,19 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
 
         // Get secret
+        secretManger = new SecretManger(this, photo);
         extractSecretMessage();
-
-        // Show scrambled text
-        secretMsg.setText(incrementChars(secretMessageText, 1));
 
     }
 
     private void toggleSecretMessage() {
+
+        if (secretMessageText == null ) {
+            extractSecretMessage();
+        }
+
+        // If there is no message, nothing to do
+        if (secretMessageText == null ) return;
 
         float startFade = 1f;
         float endFade = 0.4f;
@@ -277,8 +286,8 @@ public class PhotoActivity extends PhotoActivityMenusClass
     }
 
     private void secretManager() {
-        SecretManger secretManger = new SecretManger(this, photo);
         secretManger.showBottomSheetDialog();
+        secretMessageText = secretManger.getSecretMsgFromPhoto();
     }
 
     private void sharePhoto() {

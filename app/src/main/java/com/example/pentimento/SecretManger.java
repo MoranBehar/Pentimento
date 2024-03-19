@@ -12,10 +12,9 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-public class SecretManger implements editSecretMessageDialogFragment.DialogListener{
+public class SecretManger implements editSecretMessageDialogFragment.DialogListener {
     private Activity myActivity;
     private BottomSheetDialog bottomSheetSecret;
-
     private String myMessage;
     private Photo myPhoto;
     public SecretManger(Activity activity, Photo photo) {
@@ -83,9 +82,9 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
         photo.setPhoto(bitmapWithMsg);
     }
 
-    public String getSecretMsgFromPhoto(Bitmap image) {
-        ImageLsbManipulation extractMessage = new ImageLsbManipulation(image);
-        return extractMessage.getMassage();
+    public String getSecretMsgFromPhoto() {
+        ImageLsbManipulation extractMessage = new ImageLsbManipulation(myPhoto.getPhoto());
+        return extractMessage.getMessage();
     }
 
 
