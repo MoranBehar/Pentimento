@@ -311,7 +311,13 @@ public class PhotoActivity extends PhotoActivityMenusClass
         confirmDeletingPhoto.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                startDeletingProcess();
+                photo.delete(new Photo.actionCallback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+                });
+                // TODO back to gallery
             }
         });
 
@@ -325,10 +331,11 @@ public class PhotoActivity extends PhotoActivityMenusClass
         confirmDeletingPhoto.create().show();
     }
 
+
     private void startDeletingProcess() {
 
         //get the album id by the photo in it
-        dbManager.getAlbumByThePhotoInIt(photo, new DBActionResult<String>() {
+        dbManager.getAlbumsByPhotoId(photo, new DBActionResult<String>() {
             @Override
             public void onSuccess(String data) {
                 //after we have the album id, we can get the album itself

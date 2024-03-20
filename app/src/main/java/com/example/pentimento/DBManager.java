@@ -60,7 +60,6 @@ public class DBManager {
     }
 
 
-
     private void initDBManager() {
         fbAuth = FirebaseAuth.getInstance();
         fbDB = FirebaseFirestore.getInstance();
@@ -153,7 +152,7 @@ public class DBManager {
                         if (album.getNumOfPhotos() == 0) {
                             album.setAlbumCoverId(photoId);
                         }
-                        album.setNumOfPhotos(album.getNumOfPhotos()+1);
+                        album.setNumOfPhotos(album.getNumOfPhotos() + 1);
                         updateAlbum(album);
 
                     }
@@ -181,7 +180,8 @@ public class DBManager {
 
                         //get the albums
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Album newAlbum = document.toObject(Album.class);;
+                            Album newAlbum = document.toObject(Album.class);
+                            ;
                             albumList.add(newAlbum);
                         }
 
@@ -340,21 +340,43 @@ public class DBManager {
     }
 
     public void deletePhotoFromAlbum(Photo photoToDelete, Album albumToDeleteFrom) {
-        DocumentReference docRefAlbum = documentsCollectionAlbum.document(photoToDelete.getId());
 
-        //delete the document
-        docRefAlbum.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                albumToDeleteFrom.setNumOfPhotos(albumToDeleteFrom.getNumOfPhotos()-1);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("DBManger",
-                        "Error deleting document from albumPhotos: " + e.getMessage());
-            }
-        });
+        CollectionReference colRef = fbDB.collection("AlbumPhotos");
+
+        // Get the document associating album to photo
+        colRef
+            .whereEqualTo("albumId", albumToDeleteFrom.getId())
+            .whereEqualTo("photoId", photoToDelete.getId())
+            .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            //  Delete this document
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                fbDB.collection("AlbumPhotos").document(document.getId()).delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "Document successfully deleted!");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w(TAG, "Error deleting document", e);
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+//        albumToDeleteFrom.setNumOfPhotos(albumToDeleteFrom.getNumOfPhotos() - 1);
+
+
     }
 
     public void deletePhotoFromShare(Photo photoToDelete) {
@@ -375,7 +397,7 @@ public class DBManager {
         });
     }
 
-    public void getAlbumByThePhotoInIt(Photo photoInAlbum, DBActionResult<String> callBack) {
+    public void getAlbumsByPhotoId(Photo photoInAlbum, DBActionResult<String> callBack) {
 
         String albumId = "";
 

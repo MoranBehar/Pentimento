@@ -55,4 +55,18 @@ public class Photo {
         this.createDate = createDate;
     }
 
+
+    public interface actionCallback {
+        void onSuccess();
+    }
+
+    public void delete(actionCallback callback) {
+        // delete the photo file from storage
+
+        // OnSuccess:
+        // 1. delete the photo from all albums
+        // 2. delete the photo from any sharing
+        // 3. delete the photo from the user (main gallery)
+    }
+
 }

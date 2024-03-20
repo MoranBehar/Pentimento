@@ -2,6 +2,7 @@ package com.example.pentimento;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -86,5 +87,9 @@ public class Album {
 
             }
         });
+    }
+
+    public void removePhoto(Photo photoToRemove) {
+        DBManager.getInstance().deletePhotoFromAlbum(photoToRemove, this);
     }
 }
