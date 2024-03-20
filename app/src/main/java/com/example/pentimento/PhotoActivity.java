@@ -14,6 +14,7 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -34,6 +35,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
     private Photo photo;
 
     ImageView ivPhoto, secretIcon, speakIcon;
+    FrameLayout speakIconContainer;
     TextView secretMsg;
     Boolean isSecretHidden;
     GalleryManager galleryManager;
@@ -99,11 +101,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
     //TODO - fix
     private void extractSecretMessage() {
         secretMessageText = secretManger.getSecretMsgFromPhoto();
-
-        // Show scrambled text
-        if (secretMessageText != null) {
-            secretMsg.setText(incrementChars(secretMessageText, 1));
-        }
+        checkSecretMessage();
     }
 
     protected int getLayoutId() {
@@ -114,6 +112,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
         secretIcon = (ImageView) findViewById(R.id.ivHasSecretIcon);
         secretMsg = (TextView) findViewById(R.id.tvSecretMsg);
         speakIcon = (ImageView) findViewById(R.id.ivPlayMessage);
+        speakIconContainer = (FrameLayout) findViewById(R.id.flHasSecretIconContainer);
 
         isSecretHidden = true;
 
@@ -149,7 +148,6 @@ public class PhotoActivity extends PhotoActivityMenusClass
         // Get secret
         secretManger = new SecretManger(this, photo);
         extractSecretMessage();
-
     }
 
     private void toggleSecretMessage() {
@@ -231,6 +229,13 @@ public class PhotoActivity extends PhotoActivityMenusClass
         handler.post(updateTask);
     }
 
+    private void checkSecretMessage() {
+        if (secretMessageText != null) {
+            secretMsg.setText(incrementChars(secretMessageText, 1));
+            speakIconContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
     private String incrementChars(String input, int offset) {
 
         StringBuilder result = new StringBuilder();
@@ -287,7 +292,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
     private void secretManager() {
         secretManger.showBottomSheetDialog();
-        secretMessageText = secretManger.getSecretMsgFromPhoto();
+        extractSecretMessage();
     }
 
     private void sharePhoto() {

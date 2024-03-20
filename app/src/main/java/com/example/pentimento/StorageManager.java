@@ -52,7 +52,6 @@ public class StorageManager {
         task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                DBManager.getInstance().connectImageToCurrentUser(imageId);
                 callback.onSuccess(imageId);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -82,22 +81,20 @@ public class StorageManager {
         UUID imageUUID = UUID.randomUUID();
         String imageId = imageUUID.toString();
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] arr = stream.toByteArray();
-
+        byte[] arr = convertBitmapToPNG(bitmap);
         uploadImageToStorage(imageId, arr, callback);
 
     }
     public void updateImageInStorage(Photo photoToUpdate, StorageActionResult callback) {
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        photoToUpdate.getPhoto().compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] arr = stream.toByteArray();
-
-//        byte[] arr = bitmapToByteArray(photoToUpdate.getPhoto());
-
+        byte[] arr = convertBitmapToPNG(photoToUpdate.getPhoto());
         uploadImageToStorage(photoToUpdate.getId(), arr, callback);
+    }
+
+    private byte[] convertBitmapToPNG(Bitmap bp) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] arr = stream.toByteArray();
+        return arr;
     }
 
     public byte[] bitmapToByteArray(Bitmap bitmap) {

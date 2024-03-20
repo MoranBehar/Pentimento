@@ -87,6 +87,7 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
         ImageLsbManipulation MsgEmbed = new ImageLsbManipulation(msg, image);
         Bitmap bitmapWithMsg = MsgEmbed.EmbedMessageAction();
         photo.setPhoto(bitmapWithMsg);
+        updatePhotoInStorage();
     }
 
     public String getSecretMsgFromPhoto() {
@@ -116,7 +117,6 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
         storageManager.updateImageInStorage(myPhoto, new StorageActionResult() {
             @Override
             public void onSuccess(Object data) {
-
             }
 
             @Override

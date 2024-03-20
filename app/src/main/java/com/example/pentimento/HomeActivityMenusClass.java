@@ -237,6 +237,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
             @Override
             public void onSuccess(String data) {
                 Photo newPhoto = new Photo(data, bp);
+                DBManager.getInstance().connectImageToCurrentUser(newPhoto.getId());
                 GalleryManager.getInstance().addToGallery(newPhoto);
             }
 
