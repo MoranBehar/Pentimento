@@ -82,18 +82,11 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                                     HomeActivity.class);
                             startActivity(intent);
                         }
-                        else if(email != fbAuth.getCurrentUser().getEmail())
-                        {
-                            Toast.makeText(LogInActivity.this,
-                                    "Email incorrect",
-                                    Toast.LENGTH_LONG).show();
-                        }
                         else
                         {
-                            Toast.makeText(LogInActivity.this,
-                                    "Password incorrect",
-                                    Toast.LENGTH_LONG).show();
+                            cmpPassword.setError("Login failed - no such user or wrong password");
                         }
+
                     }
                 });
     }

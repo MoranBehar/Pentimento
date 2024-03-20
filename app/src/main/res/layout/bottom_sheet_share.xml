@@ -41,9 +41,7 @@
             app:iconTint="@null"
             android:text="WhatsApp"
             style="@style/iconMaterialButton"/>
-
-
-
+        
     </LinearLayout>
 
 
