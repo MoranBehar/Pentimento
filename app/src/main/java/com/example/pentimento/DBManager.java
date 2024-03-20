@@ -15,6 +15,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -38,12 +39,9 @@ public class DBManager {
     private FirebaseFirestore fbDB;
     private FirebaseStorage storage;
     private StorageReference storageRef;
-
     private StorageManager storageManager;
-    private CollectionReference documentsCollectionAlbum;
-    private CollectionReference documentsCollectionShare;
 
-
+    //Implement Singleton
     private DBManager() {
         initDBManager();
     }
@@ -67,9 +65,6 @@ public class DBManager {
         storageRef = storage.getReference();
 
         storageManager = StorageManager.getInstance();
-
-        documentsCollectionAlbum = fbDB.collection("AlbumPhotos");
-        documentsCollectionShare = fbDB.collection("PhotoSharing");
     }
 
     public void connectImageToCurrentUser(String imageId) {
@@ -101,7 +96,6 @@ public class DBManager {
         shareObject.put("sharedBy", fbAuth.getUid());
         shareObject.put("sharedTo", toUserId);
         shareObject.put("sharedOn", getCurrentDate());
-
 
         fbDB.collection("PhotoSharing").document().set(shareObject)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -236,7 +230,25 @@ public class DBManager {
                 });
     }
 
-    public void getFriends(DBActionResult callback) {
+    public void updateAlbumNumOfPhotos(String albumId, int change) {
+
+        DocumentReference albumDocRef =
+                fbDB.collection("Albums")
+                        .document(albumId);
+
+        // Overwrite the document with the new Album object
+        albumDocRef.update("numOfPhotos", FieldValue.increment(change))
+                .addOnSuccessListener(aVoid -> {
+                    // Handle success
+                    Log.d(TAG, "Album successfully updated");
+                })
+                .addOnFailureListener(e -> {
+                    // Handle error
+                    Log.w(TAG, "Album updating album", e);
+                });
+    }
+
+    public void getFriends(DBActionResult<ArrayList> callback) {
 
         String uid = fbAuth.getUid();
 
@@ -320,34 +332,46 @@ public class DBManager {
                 });
     }
 
-    public void DeletePhoto(Photo photoToDelete, Album album, DBActionResult<String> callBack) {
-        storageManager.deletePhotoFromStorage(photoToDelete.getId(),
-                new StorageActionResult() {
-                    @Override
-                    public void onSuccess(Object data) {
-                        //after deleting photo from storage - delete photo from db with connection to storage
-                        deletePhotoFromAlbum(photoToDelete, album);
-                        deletePhotoFromShare(photoToDelete);
-                        callBack.onSuccess(data.toString());
-                    }
 
+    public void getPhotosAlbums(Photo photo, DBActionResult<ArrayList> callback) {
+
+        String uid = fbAuth.getUid();
+
+        CollectionReference colRef = fbDB.collection("AlbumPhotos");
+        colRef.whereNotEqualTo("photoId", photo.getId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onError(Exception e) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        // Create a list of Album objects
+                        ArrayList<String> albumsList = new ArrayList<String>();
+
+                        // extract the users
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Map<String, Object> row = document.getData();
+                            String albumId = row.get("albumId").toString();
+                            albumsList.add(albumId);
+                        }
+
+                        callback.onSuccess(albumsList);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
 
                     }
                 });
-
     }
-
     public void deletePhotoFromAlbum(Photo photoToDelete, Album albumToDeleteFrom) {
 
         CollectionReference colRef = fbDB.collection("AlbumPhotos");
 
-        // Get the document associating album to photo
+        // Get all the documents associating album to photo
         colRef
-            .whereEqualTo("albumId", albumToDeleteFrom.getId())
-            .whereEqualTo("photoId", photoToDelete.getId())
-            .get()
+                .whereEqualTo("albumId", albumToDeleteFrom.getId())
+                .whereEqualTo("photoId", photoToDelete.getId())
+                .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -374,28 +398,78 @@ public class DBManager {
                     }
                 });
 
-//        albumToDeleteFrom.setNumOfPhotos(albumToDeleteFrom.getNumOfPhotos() - 1);
-
-
     }
 
-    public void deletePhotoFromShare(Photo photoToDelete) {
-        DocumentReference docRefAlbum = documentsCollectionShare.document(photoToDelete.getId());
+    public void deletePhotoSharing(Photo photoToUnShare) {
 
-        //delete the document
-        docRefAlbum.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
+        CollectionReference colRef = fbDB.collection("PhotoSharing");
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("DBManger",
-                        "Error deleting document from photoSharing: " + e.getMessage());
-            }
-        });
+        // Get all the documents associating album to photo
+        colRef
+                .whereEqualTo("photoId", photoToUnShare.getId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            //  Delete this document
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                fbDB.collection("PhotoSharing").document(document.getId()).delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "Document successfully deleted!");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w(TAG, "Error deleting document", e);
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
+
+    public void deletePhotoFromOwner(Photo photoToRemove) {
+
+        CollectionReference colRef = fbDB.collection("UserPhotos");
+
+        // Get all the documents associating album to photo
+        colRef
+                .whereEqualTo("id", photoToRemove.getId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            //  Delete this document
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                fbDB.collection("UserPhotos").document(document.getId()).delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "Document successfully deleted!");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w(TAG, "Error deleting document", e);
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
 
     public void getAlbumsByPhotoId(Photo photoInAlbum, DBActionResult<String> callBack) {
 

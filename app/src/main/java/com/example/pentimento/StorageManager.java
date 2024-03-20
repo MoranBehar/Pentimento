@@ -2,11 +2,8 @@ package com.example.pentimento;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.util.Log;
 import android.os.Environment;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,7 +30,6 @@ public class StorageManager {
     private StorageReference storageRef;
 
 
-
     private StorageManager() {
         initStorageManager();
     }
@@ -41,7 +37,7 @@ public class StorageManager {
     public static StorageManager getInstance() {
         if (instance == null) {
             synchronized (StorageManager.class) {
-                if(instance == null) {
+                if (instance == null) {
                     instance = new StorageManager();
                 }
             }
@@ -69,8 +65,8 @@ public class StorageManager {
         });
     }
 
-    public void getImageById(String imageId,  StorageActionResult callback) {
-        StorageReference photoRef = storageRef.child("images/" +imageId);
+    public void getImageById(String imageId, StorageActionResult callback) {
+        StorageReference photoRef = storageRef.child("images/" + imageId);
         photoRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
@@ -93,6 +89,7 @@ public class StorageManager {
         uploadImageToStorage(imageId, arr, callback);
 
     }
+
     public void updateImageInStorage(Photo photoToUpdate, StorageActionResult callback) {
         byte[] arr = convertBitmapToPNG(photoToUpdate.getPhoto());
         uploadImageToStorage(photoToUpdate.getId(), arr, callback);
@@ -109,7 +106,7 @@ public class StorageManager {
 
         // Save the photo to the device's pictures directory
         File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File imageFile = new File(storageDir, "Pentimento_"+photoToDownload.getId()+".png");
+        File imageFile = new File(storageDir, "Pentimento_" + photoToDownload.getId() + ".png");
 
         try (FileOutputStream out = new FileOutputStream(imageFile)) {
             // Compress the bitmap as PNG and save it to the file
@@ -121,7 +118,7 @@ public class StorageManager {
         }
     }
 
-    public void deletePhotoFromStorage(String photoId, StorageActionResult callback) {
+    public void deletePhoto(String photoId, StorageActionResult callback) {
         // create a reference to the file to delete
         StorageReference fileRef = storageRef.child("images/" + photoId);
 
@@ -140,7 +137,6 @@ public class StorageManager {
                         Log.e("MyActivity", "Error deleting file: " + e.getMessage());
                     }
                 });
-
     }
 
 }

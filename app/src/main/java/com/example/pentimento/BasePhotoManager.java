@@ -72,6 +72,11 @@ public abstract class BasePhotoManager {
         viewAdapter.notifyDataSetChanged();
     }
 
+    public void deleteFromGallery(Photo photoToDel) {
+        gallery.remove(photoToDel);
+        viewAdapter.notifyDataSetChanged();
+    }
+
     private void notifyError(String errorMessage) {
         if (errorCallBack != null) {
             errorCallBack.accept(errorMessage);

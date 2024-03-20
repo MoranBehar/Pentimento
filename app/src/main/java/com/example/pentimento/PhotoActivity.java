@@ -301,7 +301,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
 
     private void checkBeforeDeleting() {
-        AlertDialog.Builder confirmDeletingPhoto = new AlertDialog.Builder(this);
+        AlertDialog.Builder confirmDeletingPhoto = new AlertDialog.Builder(this, R.style.DefaultDialogStyle);
 
         confirmDeletingPhoto.setIcon(R.drawable.baseline_delete_24);
         confirmDeletingPhoto.setTitle("Delete this photo");
@@ -314,10 +314,17 @@ public class PhotoActivity extends PhotoActivityMenusClass
                 photo.delete(new Photo.actionCallback() {
                     @Override
                     public void onSuccess() {
+                        // remove from gallery
+                        galleryManager.deleteFromGallery(photo);
 
+                        // remove from active album
+                        AlbumPhotosManager.getInstance().deleteFromGallery(photo);
+
+                        // back to gallery
+                        finish();
                     }
                 });
-                // TODO back to gallery
+
             }
         });
 
@@ -329,46 +336,6 @@ public class PhotoActivity extends PhotoActivityMenusClass
         });
 
         confirmDeletingPhoto.create().show();
-    }
-
-
-    private void startDeletingProcess() {
-
-        //get the album id by the photo in it
-        dbManager.getAlbumsByPhotoId(photo, new DBActionResult<String>() {
-            @Override
-            public void onSuccess(String data) {
-                //after we have the album id, we can get the album itself
-                dbManager.getAlbumById(data, new DBActionResult<Album>() {
-                    @Override
-                    public void onSuccess(Album albumToDeleteFrom) {
-                        // delete photo
-                        dbManager.DeletePhoto(photo, albumToDeleteFrom, new DBActionResult<String>() {
-                            @Override
-                            public void onSuccess(String data) {
-                                Toast.makeText(PhotoActivity.this, data, Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        });
-
     }
 
     @Override

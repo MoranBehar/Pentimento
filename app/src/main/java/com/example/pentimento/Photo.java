@@ -1,6 +1,8 @@
 package com.example.pentimento;
 
 import android.graphics.Bitmap;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Photo {
@@ -62,11 +64,78 @@ public class Photo {
 
     public void delete(actionCallback callback) {
         // delete the photo file from storage
+        StorageManager.getInstance().deletePhoto(getId(),
+                new StorageActionResult() {
+                    @Override
+                    public void onSuccess(Object data) {
 
-        // OnSuccess:
-        // 1. delete the photo from all albums
-        // 2. delete the photo from any sharing
-        // 3. delete the photo from the user (main gallery)
+                        // 1. delete the photo from all albums
+                        removeFromAlbums();
+
+                        // 2. delete the photo from any sharing
+                        cancelSharing();
+
+                        // 3. delete the photo from the user (main gallery)
+                        deleteFromOwner();
+
+                        // return
+                        callback.onSuccess();
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                });
+
     }
 
+    private void removeFromAlbums() {
+        DBManager.getInstance().getPhotosAlbums(this, new DBActionResult<ArrayList>() {
+            @Override
+            public void onSuccess(ArrayList data) {
+                for (Object albumId : data) {
+                    DBManager.getInstance().updateAlbumNumOfPhotos((String) albumId, -1);
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+
+    }
+
+
+    private void cancelSharing() {
+        DBManager.getInstance().deletePhotoSharing(this);
+    }
+
+    private void deleteFromOwner() {
+        DBManager.getInstance().deletePhotoFromOwner(this);
+    }
+
+    // Override equals() - needed to support removing the object from ArrayList<Photo>
+    @Override
+    public boolean equals(Object o) {
+
+        // If its the same Photo object its equal
+        if (this == o) return true;
+
+        // If its not the same type of object (i.e. photo <> album) return false
+        if (o == null || getClass() != o.getClass()) return false;
+
+        // its the same class, check if id are equals
+        Photo photo = (Photo) o;
+
+        if ( id != null) {
+            // if not null we can compare the ids
+            return id.equals(photo.id) ;
+        } else {
+            // if null = check if null
+            return photo.id == null;
+        }
+
+    }
 }
