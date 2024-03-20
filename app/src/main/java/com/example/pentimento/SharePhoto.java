@@ -73,6 +73,14 @@ public class SharePhoto {
             }
         });
 
+        MaterialButton saveBtn = bottomSheetShare.findViewById(R.id.btn_save);
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save();
+            }
+        });
+
     }
 
     private OnItemClickListener userClickListener = new OnItemClickListener() {
@@ -83,6 +91,10 @@ public class SharePhoto {
             bottomSheetShare.cancel();
         }
     };
+
+    private void save() {
+        StorageManager.getInstance().downloadPhotoAsPNG(bottomSheetShare.getContext(), photoToShare);
+    }
 
     private void shareToWhatsApp() {
         Toast.makeText(bottomSheetShare.getContext(), "COMING SOON - Share to WhatsApp", Toast.LENGTH_SHORT).show();

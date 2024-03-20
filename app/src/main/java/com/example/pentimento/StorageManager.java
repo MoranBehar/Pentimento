@@ -1,8 +1,10 @@
 package com.example.pentimento;
 
+import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.os.Environment;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -14,7 +16,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;;
 import java.io.File;
-import java.nio.ByteBuffer;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 public class StorageManager {
@@ -95,6 +98,22 @@ public class StorageManager {
         bp.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] arr = stream.toByteArray();
         return arr;
+    }
+
+    public void downloadPhotoAsPNG(Context context, Photo photoToDownload) {
+
+        // Save the photo to the device's pictures directory
+        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File imageFile = new File(storageDir, "Pentimento_"+photoToDownload.getId()+".png");
+
+        try (FileOutputStream out = new FileOutputStream(imageFile)) {
+            // Compress the bitmap as PNG and save it to the file
+            photoToDownload.getPhoto().compress(Bitmap.CompressFormat.PNG, 100, out);
+            Toast.makeText(context, "Photo saved to pictures directory", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Photo saved to pictures directory");
+        } catch (IOException e) {
+            Log.d(TAG, "Failed saving photo to pictures directory - file not found");
+        }
     }
 
 }
