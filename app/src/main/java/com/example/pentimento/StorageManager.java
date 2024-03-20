@@ -97,18 +97,4 @@ public class StorageManager {
         return arr;
     }
 
-    public byte[] bitmapToByteArray(Bitmap bitmap) {
-        // Calculate how many bytes our image consists of.
-        int bytes = bitmap.getByteCount();
-
-        // Create a new buffer
-        ByteBuffer buffer = ByteBuffer.allocate(bytes);
-
-        // Move the byte data to the buffer
-        bitmap.copyPixelsToBuffer(buffer);
-
-        // Get the byte array
-        return buffer.array();
-    }
-
 }

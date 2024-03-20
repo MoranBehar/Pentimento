@@ -23,9 +23,4 @@
         android:drawableLeft="@drawable/baseline_create_new_folder_24"
         style="@style/bottomMenuButton"/>
 
-    <Button
-        android:id="@+id/btn_option_4"
-        android:text="Option 4"
-        style="@style/bottomMenuButton"/>
-
 </LinearLayout>
