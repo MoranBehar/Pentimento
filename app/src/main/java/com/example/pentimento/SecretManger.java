@@ -87,7 +87,6 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
         ImageLsbManipulation MsgEmbed = new ImageLsbManipulation(msg, image);
         Bitmap bitmapWithMsg = MsgEmbed.EmbedMessageAction();
         photo.setPhoto(bitmapWithMsg);
-        updatePhotoInStorage();
     }
 
     public String getSecretMsgFromPhoto() {
@@ -110,7 +109,7 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
     public void onDialogDataReturn(String msg) {
         this.myMessage = msg;
         addSecretMsgToPhoto(createBitmapToImage(myPhoto), myPhoto, myMessage);
-//        updatePhotoInStorage();
+        updatePhotoInStorage();
     }
 
     private void updatePhotoInStorage() {

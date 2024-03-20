@@ -24,6 +24,12 @@
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save"
+            app:icon="@drawable/baseline_save_alt_24"
+            android:text="Save"
+            style="@style/iconMaterialButton"/>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_email"
             app:icon="@drawable/baseline_email_24"
             android:text="Email"
@@ -31,10 +37,11 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_whatsapp"
-            app:icon="@drawable/baseline_message_24"
+            app:icon="@drawable/whatsapp"
+            app:iconTint="@null"
             android:text="WhatsApp"
             style="@style/iconMaterialButton"/>
-
+        
     </LinearLayout>
 
 
