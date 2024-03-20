@@ -37,9 +37,12 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_whatsapp"
-            app:icon="@drawable/baseline_message_24"
+            app:icon="@drawable/whatsapp"
+            app:iconTint="@null"
             android:text="WhatsApp"
             style="@style/iconMaterialButton"/>
+
+
 
     </LinearLayout>
 
