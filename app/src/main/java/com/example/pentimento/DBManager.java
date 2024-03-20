@@ -39,6 +39,10 @@ public class DBManager {
     private FirebaseStorage storage;
     private StorageReference storageRef;
 
+    private StorageManager storageManager;
+    private CollectionReference documentsCollectionAlbum;
+    private CollectionReference documentsCollectionShare;
+
 
     private DBManager() {
         initDBManager();
@@ -55,11 +59,18 @@ public class DBManager {
         return instance;
     }
 
+
+
     private void initDBManager() {
         fbAuth = FirebaseAuth.getInstance();
         fbDB = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
+
+        storageManager = StorageManager.getInstance();
+
+        documentsCollectionAlbum = fbDB.collection("AlbumPhotos");
+        documentsCollectionShare = fbDB.collection("PhotoSharing");
     }
 
     public void connectImageToCurrentUser(String imageId) {
@@ -170,9 +181,6 @@ public class DBManager {
 
                         //get the albums
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Map<String, Object> row = document.getData();
-                            Log.d(TAG, "onComplete: ");
-
                             Album newAlbum = document.toObject(Album.class);;
                             albumList.add(newAlbum);
                         }
@@ -310,6 +318,87 @@ public class DBManager {
                         }
                     }
                 });
+    }
 
+    public void DeletePhoto(Photo photoToDelete, Album album, DBActionResult<String> callBack) {
+        storageManager.deletePhotoFromStorage(photoToDelete.getId(),
+                new StorageActionResult() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        //after deleting photo from storage - delete photo from db with connection to storage
+                        deletePhotoFromAlbum(photoToDelete, album);
+                        deletePhotoFromShare(photoToDelete);
+                        callBack.onSuccess(data.toString());
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                });
+
+    }
+
+    public void deletePhotoFromAlbum(Photo photoToDelete, Album albumToDeleteFrom) {
+        DocumentReference docRefAlbum = documentsCollectionAlbum.document(photoToDelete.getId());
+
+        //delete the document
+        docRefAlbum.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                albumToDeleteFrom.setNumOfPhotos(albumToDeleteFrom.getNumOfPhotos()-1);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("DBManger",
+                        "Error deleting document from albumPhotos: " + e.getMessage());
+            }
+        });
+    }
+
+    public void deletePhotoFromShare(Photo photoToDelete) {
+        DocumentReference docRefAlbum = documentsCollectionShare.document(photoToDelete.getId());
+
+        //delete the document
+        docRefAlbum.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("DBManger",
+                        "Error deleting document from photoSharing: " + e.getMessage());
+            }
+        });
+    }
+
+    public void getAlbumByThePhotoInIt(Photo photoInAlbum, DBActionResult<String> callBack) {
+
+        String albumId = "";
+
+        CollectionReference colRef = fbDB.collection("AlbumPhotos");
+        colRef.whereEqualTo("photoId", photoInAlbum.getId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Map<String, Object> row = document.getData();
+
+                            String albumId = row.get("albumId").toString();
+                        }
+
+                        callBack.onSuccess(albumId);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
     }
 }

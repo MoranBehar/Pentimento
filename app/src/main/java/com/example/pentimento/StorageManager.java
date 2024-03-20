@@ -3,11 +3,14 @@ package com.example.pentimento;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -95,6 +98,28 @@ public class StorageManager {
         bp.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] arr = stream.toByteArray();
         return arr;
+    }
+
+    public void deletePhotoFromStorage(String photoId, StorageActionResult callback) {
+        // create a reference to the file to delete
+        StorageReference fileRef = storageRef.child("images/" + photoId);
+
+        // Delete the file
+        fileRef.delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String Delete = "Photo deleted from your storage";
+                        callback.onSuccess(Delete);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("MyActivity", "Error deleting file: " + e.getMessage());
+                    }
+                });
+
     }
 
 }

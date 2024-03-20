@@ -326,6 +326,42 @@ public class PhotoActivity extends PhotoActivityMenusClass
     }
 
     private void startDeletingProcess() {
+
+        //get the album id by the photo in it
+        dbManager.getAlbumByThePhotoInIt(photo, new DBActionResult<String>() {
+            @Override
+            public void onSuccess(String data) {
+                //after we have the album id, we can get the album itself
+                dbManager.getAlbumById(data, new DBActionResult<Album>() {
+                    @Override
+                    public void onSuccess(Album albumToDeleteFrom) {
+                        // delete photo
+                        dbManager.DeletePhoto(photo, albumToDeleteFrom, new DBActionResult<String>() {
+                            @Override
+                            public void onSuccess(String data) {
+                                Toast.makeText(PhotoActivity.this, data, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+
     }
 
     @Override
