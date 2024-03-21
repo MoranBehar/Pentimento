@@ -59,7 +59,7 @@ public abstract class BasePhotoManager {
                 // Photo downloaded - set it to the photo to be displayed
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 newPhoto.setPhoto(bitmap);
-                viewAdapter.notifyDataSetChanged();
+                refreshUI();
             }
 
             @Override
@@ -71,12 +71,12 @@ public abstract class BasePhotoManager {
 
     public void addToGallery(Photo newPhoto) {
         gallery.add(newPhoto);
-        viewAdapter.notifyDataSetChanged();
+        refreshUI();
     }
 
     public void deleteFromGallery(Photo photoToDel) {
         gallery.remove(photoToDel);
-        viewAdapter.notifyDataSetChanged();
+        refreshUI();
     }
 
     private void notifyError(String errorMessage) {
@@ -100,8 +100,14 @@ public abstract class BasePhotoManager {
         return null;
     }
 
+    private void refreshUI() {
+        if (viewAdapter != null) {
+            viewAdapter.notifyDataSetChanged();
+        }
+    }
+
     public void cleanGallery() {
         gallery.clear();
-        viewAdapter.notifyDataSetChanged();
+        refreshUI();
     }
 }

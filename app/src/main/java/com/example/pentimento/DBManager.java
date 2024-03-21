@@ -474,7 +474,7 @@ public class DBManager {
 
         CollectionReference colRef = fbDB.collection("UserPhotos");
 
-        // Get all the documents associating album to photo
+        // Get all the UserPhoto document
         colRef
                 .whereEqualTo("id", photoToRemove.getId())
                 .get()
