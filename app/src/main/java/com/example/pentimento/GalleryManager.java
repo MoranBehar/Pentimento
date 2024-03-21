@@ -1,6 +1,9 @@
 package com.example.pentimento;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -11,6 +14,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class GalleryManager extends BasePhotoManager {
 
@@ -36,23 +41,56 @@ public class GalleryManager extends BasePhotoManager {
     }
 
     protected void loadPhotos() {
-        CollectionReference colRef = fbDB.collection("UserPhotos");
-        colRef.whereEqualTo("ownerId", fbAuth.getUid())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+        newLoadPhotos();
+
+//        CollectionReference colRef = fbDB.collection("UserPhotos");
+//        colRef.whereEqualTo("ownerId", fbAuth.getUid())
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Photo photo = document.toObject(Photo.class);
+//                                getImageById(photo);
+//                            }
+//                        } else {
+//                            Log.d(TAG, "get failed with ", task.getException());
+//                        }
+//                    }
+//                });
+
+    }
+
+    protected void newLoadPhotos() {
+
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        executor.execute(() -> {
+            CollectionReference colRef = fbDB.collection("UserPhotos");
+            colRef.whereEqualTo("ownerId", fbAuth.getUid())
+                    .get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Photo photo = document.toObject(Photo.class);
-                                getImageById(photo);
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Photo photo = document.toObject(Photo.class);
+                                    getImageById(photo);
+                                }
+                            } else {
+                                Log.d(TAG, "get failed with ", task.getException());
                             }
                         } else {
-                            Log.d(TAG, "get failed with ", task.getException());
+                            Log.d("Executor", "Error getting documents: ", task.getException());
                         }
-                    }
-                });
+                    });
 
+            handler.post(() -> {
+                // Update UI here if necessary
+            });
+        });
     }
 
 }

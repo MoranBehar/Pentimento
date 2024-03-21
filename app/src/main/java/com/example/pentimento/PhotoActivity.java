@@ -417,7 +417,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
                     @Override
                     public void onError(Exception e) {
-
+                        Log.d(TAG, e.getMessage());
                     }
                 });
 
