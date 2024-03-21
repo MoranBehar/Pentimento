@@ -145,8 +145,14 @@ public class PhotoActivity extends PhotoActivityMenusClass
         });
 
 
-        // Get secret
-        secretManger = new SecretManger(this, photo);
+        // Init secret
+        secretManger = new SecretManger(this, photo, new SecretManger.secretResult() {
+            @Override
+            public void onSecretAdded(String msg) {
+                secretMessageText = msg;
+                checkSecretMessage();
+            }
+        });
         extractSecretMessage();
     }
 
@@ -269,7 +275,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
                         sharePhoto();
 
                     } else if (itemId == R.id.nav_secret_fragment) {
-                        secretManager();
+                        openSecretMenu();
 
                     } else if (itemId == R.id.nav_favorite_fragment) {
                         favToggle();
@@ -290,9 +296,8 @@ public class PhotoActivity extends PhotoActivityMenusClass
         Toast.makeText(this, "favorite", Toast.LENGTH_SHORT).show();
     }
 
-    private void secretManager() {
+    private void openSecretMenu() {
         secretManger.showBottomSheetDialog();
-        extractSecretMessage();
     }
 
     private void sharePhoto() {

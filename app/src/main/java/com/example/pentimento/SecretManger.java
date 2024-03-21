@@ -18,16 +18,21 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
     private BottomSheetDialog bottomSheetSecret;
     private String myMessage;
     private Photo myPhoto;
-
+    private secretResult callback;
     private StorageManager storageManager;
 
 
-    public SecretManger(Activity activity, Photo photo) {
+    public SecretManger(Activity activity, Photo photo, secretResult callback) {
         this.myActivity = activity;
         this.myPhoto = photo;
+        this.callback = callback;
         initBottomSheetDialog();
 
         storageManager = StorageManager.getInstance();
+    }
+
+    public interface secretResult {
+        void onSecretAdded(String msg);
     }
 
     public void initBottomSheetDialog() {
@@ -87,6 +92,7 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
         ImageLsbManipulation MsgEmbed = new ImageLsbManipulation(msg, image);
         Bitmap bitmapWithMsg = MsgEmbed.EmbedMessageAction();
         photo.setPhoto(bitmapWithMsg);
+        callback.onSecretAdded(msg);
     }
 
     public String getSecretMsgFromPhoto() {
