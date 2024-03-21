@@ -380,7 +380,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Album selectedAlbum = albums.get(position);
-                dbManager.getAlbumById(selectedAlbum.getId(), new DBActionResult() {
+                dbManager.getAlbumById(selectedAlbum.getId(), new DBManager.DBActionResult() {
                     @Override
                     public void onSuccess(Object data) {
                         addPhotoToAlbum(selectedAlbum, photo.getId());
@@ -400,7 +400,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
 
     private void loadAlbumsList() {
-        dbManager.getUserAlbums(new DBActionResult<ArrayList>() {
+        dbManager.getUserAlbums(new DBManager.DBActionResult<ArrayList>() {
             @Override
             public void onSuccess(ArrayList data) {
                 albums.addAll(data);

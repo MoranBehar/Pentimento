@@ -43,7 +43,7 @@ public class AlbumsFragment extends Fragment {
         dbManager = DBManager.getInstance();
         adapter = new AlbumAdapter(getContext(), albums);
 
-        dbManager.getUserAlbums(new DBActionResult<ArrayList>() {
+        dbManager.getUserAlbums(new DBManager.DBActionResult<ArrayList>() {
             @Override
             public void onSuccess(ArrayList data) {
                 albums.addAll(data);

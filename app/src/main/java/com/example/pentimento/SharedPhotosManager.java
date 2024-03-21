@@ -29,7 +29,7 @@ public class SharedPhotosManager extends BasePhotoManager {
     protected void loadPhotos() {
 
         // Register to get future realtime updates on new sharing
-        DBManager.getInstance().photoSharingRealTimeUpdates(new DBActionResult<QueryDocumentSnapshot>() {
+        DBManager.getInstance().photoSharingRealTimeUpdates(new DBManager.DBActionResult<QueryDocumentSnapshot>() {
 
             @Override
             public void onSuccess(QueryDocumentSnapshot document) {
@@ -51,7 +51,7 @@ public class SharedPhotosManager extends BasePhotoManager {
 
     protected void createItem(String imageId, String sharedById, String sharedOn) {
 
-        DBManager.getInstance().getUserById(sharedById, new DBActionResult<User>() {
+        DBManager.getInstance().getUserById(sharedById, new DBManager.DBActionResult<User>() {
             @Override
             public void onSuccess(User sharedBy) {
                 Photo photoToAdd = new SharedPhoto(imageId, sharedBy, sharedOn);

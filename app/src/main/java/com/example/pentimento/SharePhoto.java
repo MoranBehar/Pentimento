@@ -111,7 +111,7 @@ public class SharePhoto {
 
     private void loadFriendsList() {
 
-        dbManager.getFriends(new DBActionResult<ArrayList>() {
+        dbManager.getFriends(new DBManager.DBActionResult<ArrayList>() {
             @Override
             public void onSuccess(ArrayList data) {
                 friendsList.addAll(data);

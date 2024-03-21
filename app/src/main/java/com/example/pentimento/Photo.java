@@ -91,7 +91,7 @@ public class Photo {
     }
 
     private void removeFromAlbums() {
-        DBManager.getInstance().getPhotosAlbums(this, new DBActionResult<ArrayList>() {
+        DBManager.getInstance().getPhotosAlbums(this, new DBManager.DBActionResult<ArrayList>() {
             @Override
             public void onSuccess(ArrayList data) {
                 for (Object albumId : data) {

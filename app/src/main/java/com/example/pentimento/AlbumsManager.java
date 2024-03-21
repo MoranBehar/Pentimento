@@ -40,7 +40,7 @@ public class AlbumsManager {
         albums = new ArrayList<Album>();
         dbManager = DBManager.getInstance();
 
-        dbManager.getUserAlbums(new DBActionResult<ArrayList>() {
+        dbManager.getUserAlbums(new DBManager.DBActionResult<ArrayList>() {
             @Override
             public void onSuccess(ArrayList data) {
                 albums.addAll(data);

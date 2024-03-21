@@ -57,6 +57,11 @@ public class DBManager {
         return instance;
     }
 
+    public interface DBActionResult<T> {
+        void onSuccess(T data);
+
+        void onError(Exception e);
+    }
 
     private void initDBManager() {
         fbAuth = FirebaseAuth.getInstance();
