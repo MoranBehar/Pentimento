@@ -19,7 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class UserInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
     FormTextEditComponent cmpEmail, cmpName, cmpAge, cmpPhone;
-    TextView etUserDetailsEmail,etUserDetailsName,etUserDetailsAge, etUserDetailsPhone;
+    TextView etUserDetailsEmail, etUserDetailsName, etUserDetailsAge, etUserDetailsPhone;
 
     Button btnClose, btnUpdateInfo;
 
@@ -35,8 +35,8 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         findViews();
         setListeners();
 
-        fbAuth=FirebaseAuth.getInstance();
-        store=FirebaseFirestore.getInstance();
+        fbAuth = FirebaseAuth.getInstance();
+        store = FirebaseFirestore.getInstance();
 
         loadUserData();
     }
@@ -60,18 +60,15 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         etUserDetailsAge = cmpAge.getEditText();
         etUserDetailsPhone = cmpPhone.getEditText();
 
-        btnClose=findViewById(R.id.btnClose);
-        btnUpdateInfo=findViewById(R.id.btnUpdateInfo);
+        btnClose = findViewById(R.id.btnClose);
+        btnUpdateInfo = findViewById(R.id.btnUpdateInfo);
     }
 
     @Override
     public void onClick(View v) {
-        if(v == btnClose)
-        {
+        if (v == btnClose) {
             finish();
-        }
-        else if(v == btnUpdateInfo)
-        {
+        } else if (v == btnUpdateInfo) {
             String newEmail = etUserDetailsEmail.getText().toString();
             String newName = etUserDetailsName.getText().toString();
             String newPhone = etUserDetailsPhone.getText().toString();
@@ -80,14 +77,11 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
             //check if new data is valid
             Boolean validate = validateNewData(newEmail, newName, newPhone, newAge);
 
-            if(!validate)
-            {
+            if (!validate) {
                 Toast.makeText(this, "Your data does not valid", Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
+            } else {
                 //creating new user with the new date
-                User newUserInfo = new User(fbAuth.getUid(),newEmail, newName, newPhone ,Integer.parseInt(newAge));
+                User newUserInfo = new User(fbAuth.getUid(), newEmail, newName, newPhone, Integer.parseInt(newAge));
 
                 //update the current user to the new user with the same id
                 updateUserInfo(newUserInfo);
@@ -98,8 +92,10 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     private Boolean validateNewData(String newEmail, String newName, String newPhone, String newAge) {
         ValidationUtils validate = new ValidationUtils();
 
-        return validate.isEmailOK(newEmail) & validate.isNameOK(newName) &
-                validate.isPhoneOK(newPhone) & validate.isAgeOK(newAge);
+        return validate.isEmailOK(newEmail) &
+                validate.isNameOK(newName) &
+                validate.isPhoneOK(newPhone) &
+                validate.isAgeOK(newAge);
     }
 
     private void updateUserInfo(User user) {
@@ -108,7 +104,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         String uid = fbAuth.getUid();
 
         //chang the current user data with the new user data
-        store.collection("users").document(uid).set(user)
+        store.collection("Users").document(uid).set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -123,7 +119,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     private void loadUserData() {
         String uid = fbAuth.getUid();
 
-        store.collection("users").document(uid).get()
+        store.collection("Users").document(uid).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {

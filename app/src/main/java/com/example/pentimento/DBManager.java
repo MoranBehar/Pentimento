@@ -254,7 +254,7 @@ public class DBManager {
 
         String uid = fbAuth.getUid();
 
-        CollectionReference colRef = fbDB.collection("users");
+        CollectionReference colRef = fbDB.collection("Users");
         colRef.whereNotEqualTo("id", uid)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -287,7 +287,7 @@ public class DBManager {
             return;
         }
 
-        CollectionReference colRef = fbDB.collection("users");
+        CollectionReference colRef = fbDB.collection("Users");
         colRef.document(userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -295,6 +295,7 @@ public class DBManager {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
+
                             if (document.exists()) {
                                 User user = document.toObject(User.class);
                                 callback.onSuccess(user);
