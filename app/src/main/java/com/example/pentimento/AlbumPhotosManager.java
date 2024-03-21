@@ -50,7 +50,11 @@ public class AlbumPhotosManager extends BasePhotoManager {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> row = document.getData();
+                                String pId = row.get("photoId").toString();
+
                                 Photo photo = document.toObject(Photo.class);
+                                photo.setId(pId);
                                 getImageById(photo);
                             }
                         } else {
@@ -86,7 +90,7 @@ public class AlbumPhotosManager extends BasePhotoManager {
     }
 
     public void reloadAlbum(Album album) {
-        if (album.getId().equals(currentAlbum.getId())) {
+        if (currentAlbum != null && album.getId().equals(currentAlbum.getId())) {
             loadFromDB();
         }
     }
