@@ -38,8 +38,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
     FrameLayout speakIconContainer;
     TextView secretMsg, tvPhotoTitle, tvPhotoOwner;
     Boolean isSecretHidden;
-    GalleryManager galleryManager;
-    BasePhotoManager sharedPhotoManager;
+    BasePhotoManager galleryManager, sharedPhotoManager;
     String secretMessageText;
 
     ImageButton btn_photoToolbar_add;
@@ -89,7 +88,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
         String source = getIntent().getStringExtra("source");
 
         // If the source is a shared photo - load it from the shared manager
-        if (source.equals("shared")) {
+        if (source != null && source.equals("shared")) {
             photo = sharedPhotoManager.getPhotoById(selectedPhotoId);
             return;
         }
@@ -120,7 +119,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
             @Override
             public void onError(Exception e) {
-
+                Log.d(TAG, "No such photo owner");
             }
         });
 

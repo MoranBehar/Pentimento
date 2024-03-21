@@ -230,12 +230,12 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
 
     private void addNewPhoto(Bitmap bp) {
 
-
         stManager.addImageToStorage(bp, new StorageActionResult<String>() {
             @Override
             public void onSuccess(String data) {
                 Photo newPhoto = new Photo(data, bp);
                 newPhoto.setOwnerId(fbAuth.getUid());
+                newPhoto.setTitle("New Photo");
                 DBManager.getInstance().savePhoto(newPhoto);
                 GalleryManager.getInstance().addToGallery(newPhoto);
             }
