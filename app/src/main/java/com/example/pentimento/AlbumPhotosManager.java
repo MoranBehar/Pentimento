@@ -10,7 +10,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class AlbumPhotosManager extends BasePhotoManager {
@@ -36,27 +35,29 @@ public class AlbumPhotosManager extends BasePhotoManager {
     }
 
     protected void loadPhotos() {
-
         if (reloadNeeded()) {
-            cleanGallery();
-            CollectionReference colRef = fbDB.collection("AlbumPhotos");
-            colRef.whereEqualTo("albumId", newAlbum.getId())
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Map<String, Object> row = document.getData();
-                                    createItem(row.get("photoId").toString());
-                                }
-                            } else {
-                                Log.d(TAG, "get failed with ", task.getException());
-                            }
-                        }
-                    });
+            loadFromDB();
         }
+    }
 
+    private void loadFromDB() {
+        cleanGallery();
+        CollectionReference colRef = fbDB.collection("AlbumPhotos");
+        colRef.whereEqualTo("albumId", newAlbum.getId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> row = document.getData();
+                                createItem(row.get("photoId").toString());
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
     }
 
     protected void createItem(String imageId) {
@@ -73,7 +74,7 @@ public class AlbumPhotosManager extends BasePhotoManager {
 
         // If its not the first album, reload only if the album requested is not in memory
         if ((newAlbum != null) && (currentAlbum != null)) {
-            if (newAlbum.getId() != currentAlbum.getId()) {
+            if (!newAlbum.getId().equals(currentAlbum.getId())) {
                 currentAlbum = newAlbum;
                 return true;
             }
@@ -86,5 +87,11 @@ public class AlbumPhotosManager extends BasePhotoManager {
     public void setAlbum(int albumPosition) {
         newAlbum = AlbumsManager.getInstance().getAlbumByPosition(albumPosition);
         loadPhotos();
+    }
+
+    public void reloadAlbum(Album album) {
+        if (album.getId().equals(currentAlbum.getId())) {
+            loadFromDB();
+        }
     }
 }

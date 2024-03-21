@@ -341,7 +341,6 @@ public class PhotoActivity extends PhotoActivityMenusClass
     @Override
     public void onClick(View v) {
         if (v == btn_photoToolbar_add) {
-
             createBottomSheet();
             loadAlbumsList();
             bottomSheetAlbum.show();
@@ -350,6 +349,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
     private void addPhotoToAlbum(Album album, String photoId) {
         dbManager.addPhotoToAlbum(album, photoId);
+        AlbumPhotosManager.getInstance().reloadAlbum(album);
     }
 
     private void createBottomSheet() {
