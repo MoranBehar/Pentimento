@@ -14,8 +14,8 @@
         android:icon="@drawable/baseline_folder_shared_24"
         android:title="Sharing" />
     <item
-        android:id="@+id/nav_view_fragment"
-        android:icon="@drawable/baseline_eye_24_black"
-        android:title="View" />
+        android:id="@+id/nav_analytics_fragment"
+        android:icon="@drawable/baseline_bar_chart_24"
+        android:title="Analytics" />
 
 </menu>
