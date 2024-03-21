@@ -45,31 +45,6 @@ public class GalleryManager extends BasePhotoManager {
     }
 
     protected void loadPhotos() {
-
-//        newLoadPhotos();
-        newLoadPhotos2();
-
-//        CollectionReference colRef = fbDB.collection("UserPhotos");
-//        colRef.whereEqualTo("ownerId", fbAuth.getUid())
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Photo photo = document.toObject(Photo.class);
-//                                getImageById(photo);
-//                            }
-//                        } else {
-//                            Log.d(TAG, "get failed with ", task.getException());
-//                        }
-//                    }
-//                });
-
-    }
-
-
-    protected void newLoadPhotos2() {
         CollectionReference colRef = fbDB.collection("UserPhotos");
 
         colRef.whereEqualTo("ownerId", fbAuth.getUid())
@@ -85,44 +60,13 @@ public class GalleryManager extends BasePhotoManager {
                         for (DocumentChange dc : value.getDocumentChanges()) {
                             switch (dc.getType()) {
                                 case ADDED:
-                                    Log.d(TAG, "New photo shared: " + dc.getDocument().getData());
                                     Photo photo = dc.getDocument().toObject(Photo.class);
                                     getImageById(photo);
-                                    break;
-                                case REMOVED:
-                                    Log.d(TAG, "Share Removed: " + dc.getDocument().getData());
                                     break;
                             }
                         }
                     }
                 });
     }
-//        protected void newLoadPhotos () {
-//
-//
-//            ExecutorService executor = Executors.newSingleThreadExecutor();
-//            Handler handler = new Handler(Looper.getMainLooper());
-//
-//            executor.execute(() -> {
-//                CollectionReference colRef = fbDB.collection("UserPhotos");
-//                colRef.whereEqualTo("ownerId", fbAuth.getUid())
-//                        .get().addOnCompleteListener(task -> {
-//                            if (task.isSuccessful()) {
-//                                if (task.isSuccessful()) {
-//                                    for (QueryDocumentSnapshot document : task.getResult()) {
-//                                        Photo photo = document.toObject(Photo.class);
-//                                        getImageById(photo);
-//                                    }
-//                                } else {
-//                                    Log.d(TAG, "get failed with ", task.getException());
-//                                }
-//                            } else {
-//                                Log.d("Executor", "Error getting documents: ", task.getException());
-//                            }
-//                        });
-//
-//
-//            });
-//        }
 
-    }
+}
