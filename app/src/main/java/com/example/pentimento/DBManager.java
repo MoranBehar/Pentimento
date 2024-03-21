@@ -342,7 +342,8 @@ public class DBManager {
 
     public void getPhotosAlbums(Photo photo, DBActionResult<ArrayList> callback) {
 
-        String uid = fbAuth.getUid();
+        // Create a list of Album objects
+        ArrayList<String> albumsList = new ArrayList<String>();
 
         CollectionReference colRef = fbDB.collection("AlbumPhotos");
         colRef.whereNotEqualTo("photoId", photo.getId())
@@ -351,10 +352,7 @@ public class DBManager {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-                        // Create a list of Album objects
-                        ArrayList<String> albumsList = new ArrayList<String>();
-
-                        // extract the users
+                        // extract the albums
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Map<String, Object> row = document.getData();
                             String albumId = row.get("albumId").toString();
@@ -366,7 +364,7 @@ public class DBManager {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        callback.onError(e);
                     }
                 });
     }
@@ -474,6 +472,7 @@ public class DBManager {
                             Log.w(TAG, "Error getting documents: ", task.getException());
                         }
                     }
+
                 });
     }
 

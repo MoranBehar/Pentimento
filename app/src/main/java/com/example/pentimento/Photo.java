@@ -1,6 +1,7 @@
 package com.example.pentimento;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -130,7 +131,8 @@ public class Photo {
 
             @Override
             public void onError(Exception e) {
-
+                //if no album was found - we have noting to do
+                Log.e("photoDelete", "onError: ");
             }
         });
 
