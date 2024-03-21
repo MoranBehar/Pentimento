@@ -104,7 +104,7 @@
                     android:layout_gravity="center_vertical"
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/dogs"
+                    android:src="@drawable/placeholder_photo"
                     android:alpha="1"/>
 
 
