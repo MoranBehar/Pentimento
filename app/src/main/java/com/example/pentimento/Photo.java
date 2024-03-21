@@ -123,7 +123,8 @@ public class Photo {
             @Override
             public void onSuccess(ArrayList data) {
                 for (Object albumId : data) {
-                    DBManager.getInstance().updateAlbumNumOfPhotos((String) albumId, -1);
+                    DBManager.getInstance().deletePhotoFromAlbum(getId(), albumId.toString());
+                    DBManager.getInstance().updateAlbumNumOfPhotos(albumId.toString(), -1);
                 }
             }
 

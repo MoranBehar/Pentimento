@@ -102,7 +102,4 @@ public class Album {
         });
     }
 
-    public void removePhoto(Photo photoToRemove) {
-        DBManager.getInstance().deletePhotoFromAlbum(photoToRemove, this);
-    }
 }

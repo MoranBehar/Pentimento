@@ -370,14 +370,14 @@ public class DBManager {
                     }
                 });
     }
-    public void deletePhotoFromAlbum(Photo photoToDelete, Album albumToDeleteFrom) {
+    public void deletePhotoFromAlbum(String photoId, String albumId) {
 
         CollectionReference colRef = fbDB.collection("AlbumPhotos");
 
         // Get all the documents associating album to photo
         colRef
-                .whereEqualTo("albumId", albumToDeleteFrom.getId())
-                .whereEqualTo("photoId", photoToDelete.getId())
+                .whereEqualTo("albumId", albumId)
+                .whereEqualTo("photoId", photoId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
