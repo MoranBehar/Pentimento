@@ -376,7 +376,7 @@ public class DBManager {
         ArrayList<String> albumsList = new ArrayList<String>();
 
         CollectionReference colRef = fbDB.collection("AlbumPhotos");
-        colRef.whereNotEqualTo("photoId", photo.getId())
+        colRef.whereEqualTo("photoId", photo.getId())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
