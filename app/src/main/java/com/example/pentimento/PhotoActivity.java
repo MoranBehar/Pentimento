@@ -39,6 +39,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
     TextView secretMsg, tvPhotoTitle, tvPhotoOwner;
     Boolean isSecretHidden;
     GalleryManager galleryManager;
+    BasePhotoManager sharedPhotoManager;
     String secretMessageText;
 
     ImageButton btn_photoToolbar_add;
@@ -65,20 +66,11 @@ public class PhotoActivity extends PhotoActivityMenusClass
         tvPhotoTitle = findViewById(R.id.tvPhotoTitle);
         tvPhotoOwner = findViewById(R.id.tvPhotoOwner);
         galleryManager = GalleryManager.getInstance();
+        sharedPhotoManager = SharedPhotosManager.getInstance();
         dbManager = DBManager.getInstance();
 
-        // Get the image resource position from the intent
-        int photoPosition = getIntent().getIntExtra("imagePosition", -1);
-        if (photoPosition != -1) {
-            photo = galleryManager.getPhotoByPosition(photoPosition);
-        } else {
-            String selectedPhotoId = getIntent().getStringExtra("photoId");
-            if (selectedPhotoId != null) {
-                photo = galleryManager.getPhotoById(selectedPhotoId);
-            }
-        }
-
         // Init
+        loadPhoto();
         setPhoto();
         configureTTS();
         setAddToAlbumBtn();
@@ -87,6 +79,29 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
     protected int getLayoutId() {
         return R.layout.activity_photo;
+    }
+
+    private void loadPhoto() {
+
+        // Read params
+        int photoPosition = getIntent().getIntExtra("imagePosition", -1);
+        String selectedPhotoId = getIntent().getStringExtra("photoId");
+        String source = getIntent().getStringExtra("source");
+
+        // If the source is a shared photo - load it from the shared manager
+        if (source.equals("shared")) {
+            photo = sharedPhotoManager.getPhotoById(selectedPhotoId);
+            return;
+        }
+
+        // If the source is the main gallery - load from it
+        if (photoPosition != -1) {
+            photo = galleryManager.getPhotoByPosition(photoPosition);
+        } else {
+            if (selectedPhotoId != null) {
+                photo = galleryManager.getPhotoById(selectedPhotoId);
+            }
+        }
     }
 
     private void setPhoto() {

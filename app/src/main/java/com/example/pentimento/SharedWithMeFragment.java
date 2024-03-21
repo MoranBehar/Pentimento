@@ -66,6 +66,7 @@ public class SharedWithMeFragment extends Fragment {
         Photo photoToAdd = gm.getPhotoByPosition(position);
 
         Intent intent = new Intent(this.getContext(), PhotoActivity.class);
+        intent.putExtra("source", "shared");
         intent.putExtra("photoId", photoToAdd.getId());
         startActivity(intent);
     }
