@@ -65,7 +65,6 @@ public class PhotoActivity extends PhotoActivityMenusClass
         tvPhotoTitle = findViewById(R.id.tvPhotoTitle);
         tvPhotoOwner = findViewById(R.id.tvPhotoOwner);
         galleryManager = GalleryManager.getInstance();
-        sharedPhotoManager = SharedPhotosManager.getInstance();
         dbManager = DBManager.getInstance();
 
         // Init
@@ -89,7 +88,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
         // If the source is a shared photo - load it from the shared manager
         if (source != null && source.equals("shared")) {
-            photo = sharedPhotoManager.getPhotoById(selectedPhotoId);
+            photo = SharedPhotosManager.getInstance().getPhotoById(selectedPhotoId);
             return;
         }
 
