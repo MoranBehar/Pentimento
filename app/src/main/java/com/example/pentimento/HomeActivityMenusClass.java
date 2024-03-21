@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -27,9 +26,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
@@ -237,7 +233,8 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
             @Override
             public void onSuccess(String data) {
                 Photo newPhoto = new Photo(data, bp);
-                DBManager.getInstance().connectImageToCurrentUser(newPhoto.getId());
+                newPhoto.setOwnerId(fbAuth.getUid());
+                DBManager.getInstance().savePhoto(newPhoto);
                 GalleryManager.getInstance().addToGallery(newPhoto);
             }
 

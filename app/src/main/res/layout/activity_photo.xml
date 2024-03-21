@@ -69,17 +69,18 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tvPhotoTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Photo Title"
+                    android:text="No Title"
                     android:textColor="@color/primary_foreground"
                     android:textSize="18dp"
                     android:textStyle="bold"></TextView>
 
                 <TextView
+                    android:id="@+id/tvPhotoOwner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="MoranBehar"
                     android:textColor="@color/primary_foreground"></TextView>
 
             </LinearLayout>

@@ -44,8 +44,8 @@ public class GalleryManager extends BasePhotoManager {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Map<String, Object> row = document.getData();
-                                createItem(row.get("id").toString());
+                                Photo photo = document.toObject(Photo.class);
+                                getImageById(photo);
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
@@ -54,11 +54,5 @@ public class GalleryManager extends BasePhotoManager {
                 });
 
     }
-
-    protected void createItem(String imageId) {
-        Photo photoToAdd = new Photo(imageId);
-        getImageById(photoToAdd);
-    }
-
 
 }

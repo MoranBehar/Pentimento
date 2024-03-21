@@ -34,7 +34,6 @@ public class DBManager {
 
     private static String TAG = "DBManager";
     private static DBManager instance;
-
     private FirebaseAuth fbAuth;
     private FirebaseFirestore fbDB;
     private FirebaseStorage storage;
@@ -72,14 +71,14 @@ public class DBManager {
         storageManager = StorageManager.getInstance();
     }
 
-    public void connectImageToCurrentUser(String imageId) {
-        connectImageToUser(imageId, fbAuth.getUid());
-    }
-
-    public void connectImageToUser(String imageId, String userId) {
+    public void savePhoto(Photo photo) {
         Map<String, Object> image = new HashMap<>();
-        image.put("id", imageId);
-        image.put("Creator", userId);
+        image.put("id", photo.getId());
+        image.put("OwnerId", photo.getOwnerId());
+        image.put("Title", photo.getTitle());
+        image.put("createDate", photo.getCreateDate());
+        image.put("locationLatitude", photo.getLocationLatitude());
+        image.put("locationLongitude", photo.getLocationLongitude());
 
         fbDB.collection("UserPhotos").document().set(image)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -285,8 +284,12 @@ public class DBManager {
 
     public void getUserById(String userId, DBActionResult callback) {
 
-        CollectionReference colRef = fbDB.collection("users");
+        if (userId == null) {
+            callback.onError(new Exception("User id is null"));
+            return;
+        }
 
+        CollectionReference colRef = fbDB.collection("users");
         colRef.document(userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

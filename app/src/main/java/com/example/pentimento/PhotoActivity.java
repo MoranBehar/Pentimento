@@ -36,7 +36,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
     ImageView ivPhoto, secretIcon, speakIcon;
     FrameLayout speakIconContainer;
-    TextView secretMsg;
+    TextView secretMsg, tvPhotoTitle, tvPhotoOwner;
     Boolean isSecretHidden;
     GalleryManager galleryManager;
     String secretMessageText;
@@ -62,50 +62,54 @@ public class PhotoActivity extends PhotoActivityMenusClass
         bottomNav.setOnItemSelectedListener(navListener);
 
         ivPhoto = findViewById(R.id.ivPhoto);
+        tvPhotoTitle = findViewById(R.id.tvPhotoTitle);
+        tvPhotoOwner = findViewById(R.id.tvPhotoOwner);
         galleryManager = GalleryManager.getInstance();
         dbManager = DBManager.getInstance();
 
         // Get the image resource position from the intent
         int photoPosition = getIntent().getIntExtra("imagePosition", -1);
         if (photoPosition != -1) {
-
-            // Get the photo
             photo = galleryManager.getPhotoByPosition(photoPosition);
-
-            // Set the image resource to the ImageView
-            ivPhoto.setImageBitmap(photo.getPhoto());
         } else {
-
             String selectedPhotoId = getIntent().getStringExtra("photoId");
             if (selectedPhotoId != null) {
-
-                // Get the photo
                 photo = galleryManager.getPhotoById(selectedPhotoId);
-
-                // Set the image resource to the ImageView
-                ivPhoto.setImageBitmap(photo.getPhoto());
             }
         }
 
         // Init
-        initPhotoArea();
+        setPhoto();
         configureTTS();
         setAddToAlbumBtn();
     }
 
-    private void setAddToAlbumBtn() {
-        btn_photoToolbar_add = findViewById(R.id.btn_photoToolbar_add);
-        btn_photoToolbar_add.setOnClickListener(this);
-    }
-
-    //TODO - fix
-    private void extractSecretMessage() {
-        secretMessageText = secretManger.getSecretMsgFromPhoto();
-        checkSecretMessage();
-    }
 
     protected int getLayoutId() {
         return R.layout.activity_photo;
+    }
+
+    private void setPhoto() {
+
+        // Set the image resource to the ImageView
+        ivPhoto.setImageBitmap(photo.getPhoto());
+
+        // Set other fields
+        tvPhotoTitle.setText(photo.getTitle());
+
+        DBManager.getInstance().getUserById(photo.getOwnerId(), new DBManager.DBActionResult<User>() {
+            @Override
+            public void onSuccess(User owner) {
+                tvPhotoOwner.setText(owner.getName());
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+
+        initPhotoArea();
     }
 
     private void initPhotoArea() {
@@ -156,6 +160,17 @@ public class PhotoActivity extends PhotoActivityMenusClass
         extractSecretMessage();
     }
 
+
+    private void setAddToAlbumBtn() {
+        btn_photoToolbar_add = findViewById(R.id.btn_photoToolbar_add);
+        btn_photoToolbar_add.setOnClickListener(this);
+    }
+
+    //TODO - fix
+    private void extractSecretMessage() {
+        secretMessageText = secretManger.getSecretMsgFromPhoto();
+        checkSecretMessage();
+    }
     private void toggleSecretMessage() {
 
         if (secretMessageText == null ) {

@@ -11,6 +11,10 @@ public class Photo {
     private String id;
     private String title;
     private Date createDate;
+    private String ownerId;
+    private double locationLatitude;
+    private double locationLongitude;
+
 
     // Constructors
     public Photo() {}
@@ -22,6 +26,7 @@ public class Photo {
     public Photo(String id, Bitmap photo) {
         this.photo = photo;
         this.id = id;
+        this.createDate = new Date();
     }
 
     // Getters and setters
@@ -57,6 +62,29 @@ public class Photo {
         this.createDate = createDate;
     }
 
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public double getLocationLatitude() {
+        return locationLatitude;
+    }
+
+    public void setLocationLatitude(double locationLatitude) {
+        this.locationLatitude = locationLatitude;
+    }
+
+    public double getLocationLongitude() {
+        return locationLongitude;
+    }
+
+    public void setLocationLongitude(double locationLongitude) {
+        this.locationLongitude = locationLongitude;
+    }
 
     public interface actionCallback {
         void onSuccess();
