@@ -21,6 +21,7 @@
         android:id="@+id/ivNewImage"
         android:layout_width="140dp"
         android:layout_height="140dp"
+        android:src="@drawable/placeholder_photo"
         android:background="@drawable/border_thin"
         android:scaleType="centerCrop" />
 

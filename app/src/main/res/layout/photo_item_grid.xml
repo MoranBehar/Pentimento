@@ -8,6 +8,7 @@
         android:layout_width="140dp"
         android:layout_height="140dp"
         android:background="@drawable/border_thin"
+        android:src="@drawable/placeholder_photo"
         android:scaleType="centerCrop"/>
 
 </LinearLayout>

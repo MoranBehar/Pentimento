@@ -37,7 +37,7 @@ public class GalleryManager extends BasePhotoManager {
 
     protected void loadPhotos() {
         CollectionReference colRef = fbDB.collection("UserPhotos");
-        colRef.whereEqualTo("Creator", fbAuth.getUid())
+        colRef.whereEqualTo("OwnerId", fbAuth.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

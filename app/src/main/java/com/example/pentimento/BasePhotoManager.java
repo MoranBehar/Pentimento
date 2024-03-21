@@ -52,12 +52,16 @@ public abstract class BasePhotoManager {
     }
 
     protected void getImageById(Photo newPhoto) {
+
+        // Add photo to gallery to load placeholder
+        addToGallery(newPhoto);
         stManager.getImageById(newPhoto.getId(), new StorageActionResult<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
+                // Photo downloaded - set it to the photo to be displayed
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 newPhoto.setPhoto(bitmap);
-                addToGallery(newPhoto);
+                viewAdapter.notifyDataSetChanged();
             }
 
             @Override
