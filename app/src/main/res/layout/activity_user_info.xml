@@ -22,94 +22,64 @@
         android:layout_margin="30sp"
         android:gravity="center">
 
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            style="@style/LinearLayoutFormItem">
+        <com.example.pentimento.FormTextEditComponent
+            android:id="@+id/etUserDetailsEmail"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            app:customHint="Enter your email"
+            app:topLabelText="Email" />
 
-            <EditText
-                android:id="@+id/etUserDetailsEmail"
-                style="@style/LinearLayoutFormItem.EditText" />
+        <com.example.pentimento.FormTextEditComponent
+            android:id="@+id/etUserDetailsName"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            app:customHint="Enter your name"
+            app:topLabelText="Name" />
 
-            <TextView
-                android:id="@+id/tvUserDetailsEmailLabel"
-                style="@style/LinearLayoutFormItem.TextView"
-                android:text="Email" />
+        <com.example.pentimento.FormTextEditComponent
+            android:id="@+id/etUserDetailsAge"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            app:customHint="What is your age"
+            app:topLabelText="Age" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            style="@style/LinearLayoutFormItem">
-
-            <EditText
-                android:id="@+id/etUserDetailsName"
-                style="@style/LinearLayoutFormItem.EditText"/>
-
-            <TextView
-                android:id="@+id/tvUserDetailsNameLabel"
-                style="@style/LinearLayoutFormItem.TextView"
-                android:text="Name" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            style="@style/LinearLayoutFormItem">
-
-            <EditText
-                android:id="@+id/etUserDetailsAge"
-                style="@style/LinearLayoutFormItem.EditText" />
-
-            <TextView
-                android:id="@+id/tvUserDetailsAgeLabel"
-                style="@style/LinearLayoutFormItem.TextView"
-                android:text="Age" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            style="@style/LinearLayoutFormItem">
-
-            <EditText
-                android:id="@+id/etUserDetailsPhone"
-                style="@style/LinearLayoutFormItem.EditText"/>
-
-            <TextView
-                android:id="@+id/tvUserDetailsPhoneLabel"
-                style="@style/LinearLayoutFormItem.TextView"
-                android:text="Phone Number" />
-
-        </LinearLayout>
+        <com.example.pentimento.FormTextEditComponent
+            android:id="@+id/etUserDetailsPhone"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            app:customHint="Enter your mobile phone"
+            app:topLabelText="Phone Number" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:gravity="center"
         android:padding="40dp">
 
         <Button
             android:id="@+id/btnUpdateInfo"
-            android:layout_width="match_parent"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:text="Update"
-            android:textSize="20dp"
+            android:textSize="18dp"
+            android:layout_marginEnd="18dp"
             android:textColor="@color/btn_textColor"
             android:background="@drawable/btn_rounded"
-            android:layout_marginBottom="10dp"/>
-<!--            android:enabled="false"-->
+            android:enabled="true"
+            style="@style/normalButton"/>
 
         <Button
             android:id="@+id/btnClose"
-            android:layout_width="match_parent"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:text="Close"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:textColor="@color/btn_textColor"
-            android:background="@drawable/btn_rounded"/>
+            android:background="@drawable/btn_rounded"
+            style="@style/normalButton"/>
 
     </LinearLayout>
 

@@ -9,6 +9,7 @@
         <item name="android:buttonBarButtonStyle">@style/DefaultDialogButtonStyle</item>
         <item name="android:borderlessButtonStyle">@style/DefaultDialogButtonStyle</item>
 
+
     </style>
 
     <style name="DefaultDialogButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">

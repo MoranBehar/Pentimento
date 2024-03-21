@@ -24,11 +24,14 @@ public class ValidationUtils {
         return true;
     }
     public boolean isNameOK(String name) {
+
+        String allowedNameRegex = "^[A-Za-z\\s]+$";
+
         if (android.text.TextUtils.isEmpty(name))
             return false;
         else if (name.length() < 2)
             return false;
-        else if(!name.chars().allMatch(Character::isLetter))
+        else if(!name.matches(allowedNameRegex))
             return false;
 
         return true;

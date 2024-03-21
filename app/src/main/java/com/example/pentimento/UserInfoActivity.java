@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class UserInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
+    FormTextEditComponent cmpEmail, cmpName, cmpAge, cmpPhone;
     TextView etUserDetailsEmail,etUserDetailsName,etUserDetailsAge, etUserDetailsPhone;
 
     Button btnClose, btnUpdateInfo;
@@ -46,10 +47,19 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void findViews() {
-        etUserDetailsEmail=findViewById(R.id.etUserDetailsEmail);
-        etUserDetailsName=findViewById(R.id.etUserDetailsName);
-        etUserDetailsAge=findViewById(R.id.etUserDetailsAge);
-        etUserDetailsPhone=findViewById(R.id.etUserDetailsPhone);
+
+        // Edit Components
+        cmpEmail = findViewById(R.id.etUserDetailsEmail);
+        cmpName = findViewById(R.id.etUserDetailsName);
+        cmpAge = findViewById(R.id.etUserDetailsAge);
+        cmpPhone = findViewById(R.id.etUserDetailsPhone);
+
+        // Text view
+        etUserDetailsEmail = cmpEmail.getEditText();
+        etUserDetailsName = cmpName.getEditText();
+        etUserDetailsAge = cmpAge.getEditText();
+        etUserDetailsPhone = cmpPhone.getEditText();
+
         btnClose=findViewById(R.id.btnClose);
         btnUpdateInfo=findViewById(R.id.btnUpdateInfo);
     }
@@ -103,6 +113,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(UserInfoActivity.this, "User updated Successfully ", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 });
 
