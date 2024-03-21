@@ -38,7 +38,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
     FrameLayout speakIconContainer;
     TextView secretMsg, tvPhotoTitle, tvPhotoOwner;
     Boolean isSecretHidden;
-    BasePhotoManager galleryManager, sharedPhotoManager;
+    GalleryManager galleryManager;
     String secretMessageText;
 
     ImageButton btn_photoToolbar_add;
@@ -65,7 +65,6 @@ public class PhotoActivity extends PhotoActivityMenusClass
         tvPhotoTitle = findViewById(R.id.tvPhotoTitle);
         tvPhotoOwner = findViewById(R.id.tvPhotoOwner);
         galleryManager = GalleryManager.getInstance();
-        sharedPhotoManager = SharedPhotosManager.getInstance();
         dbManager = DBManager.getInstance();
 
         // Init
@@ -89,7 +88,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
         // If the source is a shared photo - load it from the shared manager
         if (source != null && source.equals("shared")) {
-            photo = sharedPhotoManager.getPhotoById(selectedPhotoId);
+            photo = SharedPhotosManager.getInstance().getPhotoById(selectedPhotoId);
             return;
         }
 
@@ -185,14 +184,15 @@ public class PhotoActivity extends PhotoActivityMenusClass
         secretMessageText = secretManger.getSecretMsgFromPhoto();
         checkSecretMessage();
     }
+
     private void toggleSecretMessage() {
 
-        if (secretMessageText == null ) {
+        if (secretMessageText == null) {
             extractSecretMessage();
         }
 
         // If there is no message, nothing to do
-        if (secretMessageText == null ) return;
+        if (secretMessageText == null) return;
 
         float startFade = 1f;
         float endFade = 0.4f;
