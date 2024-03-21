@@ -229,6 +229,8 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
 
 
     private void addNewPhoto(Bitmap bp) {
+
+
         stManager.addImageToStorage(bp, new StorageActionResult<String>() {
             @Override
             public void onSuccess(String data) {
