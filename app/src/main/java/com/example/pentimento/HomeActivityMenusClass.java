@@ -179,6 +179,8 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
     private void logout() {
         fbAuth.signOut();
         GalleryManager.getInstance().destroy();
+        SharedPhotosManager.getInstance().destroy();
+        AlbumPhotosManager.getInstance().destroy();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
