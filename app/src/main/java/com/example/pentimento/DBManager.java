@@ -74,8 +74,8 @@ public class DBManager {
     public void savePhoto(Photo photo) {
         Map<String, Object> image = new HashMap<>();
         image.put("id", photo.getId());
-        image.put("OwnerId", photo.getOwnerId());
-        image.put("Title", photo.getTitle());
+        image.put("ownerId", photo.getOwnerId());
+        image.put("title", photo.getTitle());
         image.put("createDate", photo.getCreateDate());
         image.put("locationLatitude", photo.getLocationLatitude());
         image.put("locationLongitude", photo.getLocationLongitude());
