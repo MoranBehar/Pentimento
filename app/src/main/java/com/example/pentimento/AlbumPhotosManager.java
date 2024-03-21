@@ -34,6 +34,10 @@ public class AlbumPhotosManager extends BasePhotoManager {
         return instance;
     }
 
+    public void destroy() {
+        instance = null;
+    }
+
     protected void loadPhotos() {
         if (reloadNeeded()) {
             loadFromDB();

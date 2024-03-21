@@ -26,6 +26,10 @@ public class SharedPhotosManager extends BasePhotoManager {
         return instance;
     }
 
+    public void destroy() {
+        instance = null;
+    }
+
     protected void loadPhotos() {
 
         // Register to get future realtime updates on new sharing

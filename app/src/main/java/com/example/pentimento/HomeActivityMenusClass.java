@@ -162,7 +162,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         confirmLogOut.setPositiveButton("Logout", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                backToStart();
+                logout();
             }
         });
 
@@ -176,7 +176,9 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         confirmLogOut.create().show();
     }
 
-    private void backToStart() {
+    private void logout() {
+        fbAuth.signOut();
+        GalleryManager.getInstance().destroy();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

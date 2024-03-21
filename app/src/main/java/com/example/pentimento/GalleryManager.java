@@ -44,6 +44,11 @@ public class GalleryManager extends BasePhotoManager {
         return instance;
     }
 
+    public void destroy() {
+        instance = null;
+    }
+
+
 
     protected void loadPhotos() {
         CollectionReference colRef = fbDB.collection("UserPhotos");

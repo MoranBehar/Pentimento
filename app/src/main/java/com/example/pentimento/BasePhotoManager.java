@@ -36,6 +36,8 @@ public abstract class BasePhotoManager {
     }
 
     protected abstract void loadPhotos();
+    public abstract void destroy();
+
 
     public void setErrorCallBack(Consumer<String> callBack) {
         errorCallBack = callBack;
@@ -110,4 +112,5 @@ public abstract class BasePhotoManager {
         gallery.clear();
         refreshUI();
     }
+
 }
