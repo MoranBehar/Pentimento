@@ -237,7 +237,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
                 newPhoto.setOwnerId(fbAuth.getUid());
                 newPhoto.setTitle("New Photo");
                 DBManager.getInstance().savePhoto(newPhoto);
-                // GalleryManager.getInstance().addToGallery(newPhoto);
+                GalleryManager.getInstance().addToGallery(newPhoto);
             }
 
             @Override
