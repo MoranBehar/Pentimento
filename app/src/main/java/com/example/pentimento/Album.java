@@ -15,12 +15,17 @@ public class Album {
     private int numOfPhotos;
     private String albumCoverId;
 
+    // 1 - user album
+    // 2 - favorites
+    private int type;
+
     // Constructors
     public Album () {}
 
     public Album(String ownerId, String title) {
         this.ownerId = ownerId;
         this.title = title;
+        this.type = 1;
         this.createDate = new Date();
     }
 
@@ -68,6 +73,14 @@ public class Album {
 
     public void setAlbumCoverId(String albumCoverId) {
         this.albumCoverId = albumCoverId;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public interface getCoverImageResult {

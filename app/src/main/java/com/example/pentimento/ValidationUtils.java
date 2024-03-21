@@ -29,7 +29,7 @@ public class ValidationUtils {
 
         if (android.text.TextUtils.isEmpty(name))
             return false;
-        else if (name.length() < 2)
+        else if (name.length() < 3)
             return false;
         else if(!name.matches(allowedNameRegex))
             return false;

@@ -119,9 +119,7 @@ public class DBManager {
         return sdf.format(new Date());
     }
 
-    public void createAlbum(String albumName, String userId) {
-
-        Album newAlbum = new Album(userId, albumName);
+    public void createAlbum(Album newAlbum) {
 
         DocumentReference newAlbumRef = fbDB.collection("Albums").document();
         newAlbum.setId(newAlbumRef.getId());
