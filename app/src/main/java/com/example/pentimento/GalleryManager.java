@@ -44,29 +44,49 @@ public class GalleryManager extends BasePhotoManager {
         return instance;
     }
 
+
     protected void loadPhotos() {
         CollectionReference colRef = fbDB.collection("UserPhotos");
-
         colRef.whereEqualTo("ownerId", fbAuth.getUid())
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot value,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listener failed.", e);
-                            return;
-                        }
-
-                        for (DocumentChange dc : value.getDocumentChanges()) {
-                            switch (dc.getType()) {
-                                case ADDED:
-                                    Photo photo = dc.getDocument().toObject(Photo.class);
-                                    getImageById(photo);
-                                    break;
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Photo photo = document.toObject(Photo.class);
+                                getImageById(photo);
                             }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
                         }
                     }
                 });
+
     }
+//    protected void loadPhotos() {
+//        CollectionReference colRef = fbDB.collection("UserPhotos");
+//
+//        colRef.whereEqualTo("ownerId", fbAuth.getUid())
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@Nullable QuerySnapshot value,
+//                                        @Nullable FirebaseFirestoreException e) {
+//                        if (e != null) {
+//                            Log.w(TAG, "Listener failed.", e);
+//                            return;
+//                        }
+//
+//                        for (DocumentChange dc : value.getDocumentChanges()) {
+//                            switch (dc.getType()) {
+//                                case ADDED:
+//                                    Photo photo = dc.getDocument().toObject(Photo.class);
+//                                    getImageById(photo);
+//                                    break;
+//                            }
+//                        }
+//                    }
+//                });
+//    }
 
 }
