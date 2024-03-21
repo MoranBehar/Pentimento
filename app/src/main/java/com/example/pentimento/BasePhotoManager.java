@@ -15,7 +15,7 @@ public abstract class BasePhotoManager {
     protected FirebaseFirestore fbDB;
     protected StorageManager stManager;
     private ArrayList<Photo> gallery;
-    private PhotoAdapter viewAdapter;
+    protected PhotoAdapter viewAdapter;
     private Consumer<String> errorCallBack;
 
     protected static String TAG = "BasePhotoManager";
