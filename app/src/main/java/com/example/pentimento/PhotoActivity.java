@@ -38,7 +38,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
     FrameLayout speakIconContainer;
     TextView secretMsg, tvPhotoTitle, tvPhotoOwner;
     Boolean isSecretHidden;
-    BasePhotoManager galleryManager, sharedPhotoManager;
+    GalleryManager galleryManager;
     String secretMessageText;
 
     ImageButton btn_photoToolbar_add;
@@ -70,6 +70,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
 
         // Init
         loadPhoto();
+        setPhoto();
         configureTTS();
         setAddToAlbumBtn();
     }
@@ -86,24 +87,9 @@ public class PhotoActivity extends PhotoActivityMenusClass
         String selectedPhotoId = getIntent().getStringExtra("photoId");
         String source = getIntent().getStringExtra("source");
 
-        // In case the photo was not loaded yet - put placeholder empty photo
-        if (photo == null) {
-            photo = new Photo();
-        }
-
         // If the source is a shared photo - load it from the shared manager
         if (source != null && source.equals("shared")) {
-            DBManager.getInstance().getPhotoById(selectedPhotoId, new DBManager.DBActionResult<Photo>() {
-                @Override
-                public void onSuccess(Photo newPhoto) {
-                    photo = newPhoto;
-                }
-
-                @Override
-                public void onError(Exception e) {
-                }
-            });
-
+            photo = sharedPhotoManager.getPhotoById(selectedPhotoId);
             return;
         }
 
