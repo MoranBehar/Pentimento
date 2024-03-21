@@ -184,15 +184,14 @@ public class PhotoActivity extends PhotoActivityMenusClass
         secretMessageText = secretManger.getSecretMsgFromPhoto();
         checkSecretMessage();
     }
-
     private void toggleSecretMessage() {
 
-        if (secretMessageText == null) {
+        if (secretMessageText == null ) {
             extractSecretMessage();
         }
 
         // If there is no message, nothing to do
-        if (secretMessageText == null) return;
+        if (secretMessageText == null ) return;
 
         float startFade = 1f;
         float endFade = 0.4f;

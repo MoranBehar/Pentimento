@@ -339,6 +339,36 @@ public class DBManager {
                 });
     }
 
+    public void getPhotoById(String photoId, DBActionResult callback) {
+
+        if (photoId == null) {
+            callback.onError(new Exception("Photo id is null"));
+            return;
+        }
+
+        CollectionReference colRef = fbDB.collection("UsersPhotos");
+        colRef.document(photoId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+
+                            if (document.exists()) {
+                                Photo photo = document.toObject(Photo.class);
+                                callback.onSuccess(photo);
+                            } else {
+                                Log.d(TAG, "No such photo");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+
+    }
+
 
     public void getPhotosAlbums(Photo photo, DBActionResult<ArrayList> callback) {
 
