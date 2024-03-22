@@ -448,6 +448,8 @@ public class PhotoActivity extends PhotoActivityMenusClass
             @Override
             public void onInit(int status) {
                 if (status != TextToSpeech.ERROR) {
+
+                    // Set language to English
                     ttsEngine.setLanguage(Locale.US);
 
                     ttsEngine.setOnUtteranceProgressListener(new UtteranceProgressListener() {
