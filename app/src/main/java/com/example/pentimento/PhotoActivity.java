@@ -239,7 +239,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
     private void scrambleSecretText() {
 
         final Handler handler = new Handler();
-        final Runnable updateTask = new Runnable() {
+        final Runnable scrambleTask = new Runnable() {
             int count = 0;
 
             @Override
@@ -259,8 +259,8 @@ public class PhotoActivity extends PhotoActivityMenusClass
             }
         };
 
-        // Start the updates
-        handler.post(updateTask);
+        // Start the scramble
+        handler.post(scrambleTask);
     }
 
     private void checkSecretMessage() {
