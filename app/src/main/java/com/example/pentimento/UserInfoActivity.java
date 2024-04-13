@@ -103,7 +103,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         //get current user id
         String uid = fbAuth.getUid();
 
-        //chang the current user data with the new user data
+        //change the current user data with the new user data
         store.collection("Users").document(uid).set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

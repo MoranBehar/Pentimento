@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/menu_bottom_background"
+    android:padding="16dp">
+
+    <Button
+        android:id="@+id/btn_edit_name"
+        android:text="Edit photo name"
+        android:drawableLeft="@drawable/baseline_mode_edit_outline_24"
+        style="@style/bottomMenuButton"/>
+
+    <Button
+        android:id="@+id/btn_black_and_white_filter"
+        android:text="Black and white filter"
+        android:drawableLeft="@drawable/baseline_photo_filter_24"
+        style="@style/bottomMenuButton"/>
+
+</LinearLayout>

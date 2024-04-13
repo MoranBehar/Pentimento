@@ -70,6 +70,7 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
                     }
                     else if (v.getId() == R.id.btn_delete_secret)
                     {
+                        //TODO - delete function
                         Toast.makeText(myActivity, "delete", Toast.LENGTH_SHORT).show();
 
                     }
@@ -88,7 +89,7 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
         return  bitmap;
     }
 
-    private void addSecretMsgToPhoto(Bitmap image, Photo photo, String msg) {
+    public void addSecretMsgToPhoto(Bitmap image, Photo photo, String msg) {
         ImageLsbManipulation MsgEmbed = new ImageLsbManipulation(msg, image);
         Bitmap bitmapWithMsg = MsgEmbed.EmbedMessageAction();
         photo.setPhoto(bitmapWithMsg);
