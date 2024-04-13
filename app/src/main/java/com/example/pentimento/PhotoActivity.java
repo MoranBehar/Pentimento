@@ -2,9 +2,11 @@ package com.example.pentimento;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
 
 import android.animation.ValueAnimator;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
@@ -13,7 +15,9 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,6 +27,8 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -41,12 +47,14 @@ public class PhotoActivity extends PhotoActivityMenusClass
     GalleryManager galleryManager;
     String secretMessageText;
 
-    ImageButton btn_photoToolbar_add;
+    ImageButton btn_photoToolbar_add, btn_photoToolbar_edit;
     TextToSpeech ttsEngine;
 
     private DBManager dbManager;
+    private StorageManager storageManager;
 
-    private BottomSheetDialog bottomSheetAlbum;
+
+    private BottomSheetDialog bottomSheetAlbum, bottomSheetEdit;
     private ListView lvAlbumsListView;
     private ArrayList<Album> albums;
 
@@ -66,12 +74,14 @@ public class PhotoActivity extends PhotoActivityMenusClass
         tvPhotoOwner = findViewById(R.id.tvPhotoOwner);
         galleryManager = GalleryManager.getInstance();
         dbManager = DBManager.getInstance();
+        storageManager = StorageManager.getInstance();
 
         // Init
         loadPhoto();
         setPhoto();
         configureTTS();
         setAddToAlbumBtn();
+        setEditPhotoBtn();
     }
 
 
@@ -177,6 +187,11 @@ public class PhotoActivity extends PhotoActivityMenusClass
     private void setAddToAlbumBtn() {
         btn_photoToolbar_add = findViewById(R.id.btn_photoToolbar_add);
         btn_photoToolbar_add.setOnClickListener(this);
+    }
+
+    private void setEditPhotoBtn() {
+        btn_photoToolbar_edit = findViewById(R.id.btn_photoToolbar_edit);
+        btn_photoToolbar_edit.setOnClickListener(this);
     }
 
     //TODO - fix
@@ -374,10 +389,105 @@ public class PhotoActivity extends PhotoActivityMenusClass
     @Override
     public void onClick(View v) {
         if (v == btn_photoToolbar_add) {
-            createBottomSheet();
+            createBottomSheetAlbums();
             loadAlbumsList();
             bottomSheetAlbum.show();
         }
+        if (v == btn_photoToolbar_edit) {
+            createBottomSheetEdit();
+            bottomSheetEdit.show();
+        }
+    }
+
+    private void createBottomSheetEdit() {
+
+        // Create bottom sheet
+        View bottomSheetView = this.getLayoutInflater().inflate(R.layout.bottom_sheet_edit_photo, null);
+        bottomSheetEdit = new BottomSheetDialog(this);
+        bottomSheetEdit.setContentView(bottomSheetView);
+
+        ViewGroup viewGroup = (ViewGroup) bottomSheetView;
+        setupBottomSheetDialogButtonsListenerEdit(viewGroup, bottomSheetEdit);
+    }
+
+    private void setupBottomSheetDialogButtonsListenerEdit(ViewGroup viewGroup, BottomSheetDialog bottomSheetEdit) {
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View child = viewGroup.getChildAt(i);
+
+            // Only set listeners to Buttons
+            if (child instanceof Button) {
+                child.setOnClickListener(v -> {
+                    if (v.getId() == R.id.btn_edit_name) {
+//                        openEditPhotoNameDialogFragment();
+                        Toast.makeText(PhotoActivity.this, "edit", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (v.getId() == R.id.btn_black_and_white_filter) {
+                        setBlackAndWhiteFiler();
+                        Toast.makeText(PhotoActivity.this, "filter", Toast.LENGTH_SHORT).show();
+                    }
+
+                    //set the photo by the changes
+                    setPhoto();
+
+                    // Dismiss the BottomSheetDialog
+                    bottomSheetEdit.dismiss();
+                });
+            }
+        }
+    }
+
+    private void setBlackAndWhiteFiler() {
+        String msg;
+        Bitmap bitmapWithFilter;
+
+        //check for secret msg
+        if(secretManger.getSecretMsgFromPhoto() != null)
+        {
+            //msg exist - extract
+            msg = secretManger.getSecretMsgFromPhoto();
+
+            //set filter on photo
+            ImageProcessor imageProcessor = new ImageProcessor();
+            bitmapWithFilter = imageProcessor.grayScale(photo.getPhoto(), 50);
+
+            //set photo bitmap with the new bitmap
+            photo.setPhoto(bitmapWithFilter);
+
+            //msg exist - implement in photo
+            secretManger.addSecretMsgToPhoto(bitmapWithFilter, photo, msg);
+        }
+
+        else
+        {
+            //set filter on photo
+            ImageProcessor imageProcessor = new ImageProcessor();
+            bitmapWithFilter = imageProcessor.grayScale(photo.getPhoto(), 50);
+
+            //set photo bitmap with the new bitmap
+            photo.setPhoto(bitmapWithFilter);
+        }
+
+        storageManager.updateImageInStorage(photo, new StorageActionResult() {
+            @Override
+            public void onSuccess(Object data) {
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.d("editPhotoFilter", "onError() returned: " + photo);
+            }
+        });
+    }
+
+    //TODO - create edit name fragment
+    private void openEditPhotoNameDialogFragment() {
+        editSecretMessageDialogFragment dialogFragment = new editSecretMessageDialogFragment();
+
+        FragmentActivity fragmentActivity = (FragmentActivity) PhotoActivity.this;
+
+        // Set the listener
+//        dialogFragment.setDialogListener(this);
+        dialogFragment.show(fragmentActivity.getSupportFragmentManager(), "YourDialogFragment");
     }
 
     private void addPhotoToAlbum(Album album, String photoId) {
@@ -385,7 +495,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
         AlbumPhotosManager.getInstance().reloadAlbum(album);
     }
 
-    private void createBottomSheet() {
+    private void createBottomSheetAlbums() {
 
         // Create bottom sheet
         View bottomSheetView = this.getLayoutInflater().inflate(R.layout.bottom_sheet_albums, null);
