@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="7 Day photo views"
+        android:text="7 Day Activity"
         android:textAlignment="center"
         android:padding="5dp"
         android:textSize="26dp"
@@ -18,10 +18,18 @@
         android:background="@color/secondary_background"
         android:textColor="@color/primary_foreground"/>
 
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/barChart"
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"/>
+
+<!--    <com.github.mikephil.charting.charts.BarChart-->
+<!--        android:id="@+id/barChart"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_margin="10dp"/>-->
+
+
 
 </LinearLayout>

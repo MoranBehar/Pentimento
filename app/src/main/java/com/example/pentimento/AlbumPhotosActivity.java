@@ -63,6 +63,9 @@ public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass {
 
         gvGallery.setOnItemClickListener(photoSelectedEvent());
 
+        // Log view
+        DBManager.getInstance().addLogEntry(album.getId(), 2);
+
     }
 
     private  AdapterView.OnItemClickListener photoSelectedEvent() {

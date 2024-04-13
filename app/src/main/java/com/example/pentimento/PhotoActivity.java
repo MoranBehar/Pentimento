@@ -23,12 +23,14 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
 import java.util.Locale;
 
-public class PhotoActivity extends PhotoActivityMenusClass
+public class PhotoActivity
+        extends PhotoActivityMenusClass
         implements View.OnClickListener {
 
     private static final String TAG = PhotoActivity.class.getSimpleName();
@@ -72,6 +74,9 @@ public class PhotoActivity extends PhotoActivityMenusClass
         setPhoto();
         configureTTS();
         setAddToAlbumBtn();
+
+        // Log view
+        dbManager.addLogEntry(photo.getId(), 1);
     }
 
 
@@ -168,6 +173,10 @@ public class PhotoActivity extends PhotoActivityMenusClass
             public void onSecretAdded(String msg) {
                 secretMessageText = msg;
                 checkSecretMessage();
+
+                // Log secret added
+                DBManager.getInstance().addLogEntry(photo.getId(), 4);
+
             }
         });
         extractSecretMessage();
@@ -204,6 +213,10 @@ public class PhotoActivity extends PhotoActivityMenusClass
             endFade = 1f;
             startTextSize = 24f;
             endTextSize = 0f;
+        } else {
+            // Log secret view
+            DBManager.getInstance().addLogEntry(photo.getId(), 3);
+
         }
 
         speakIcon.setVisibility(View.INVISIBLE);
