@@ -2,63 +2,89 @@ package com.example.pentimento;
 
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AnalyticsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
 public class AnalyticsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public AnalyticsFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AnalyticsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AnalyticsFragment newInstance(String param1, String param2) {
-        AnalyticsFragment fragment = new AnalyticsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_analytics, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_analytics, container, false);
+
+        initAnalytics(view);
+
+        return view;
     }
+
+    private void initAnalytics(View view) {
+        Map<String, Integer> photoViews = getPhotoViews();
+        setupBarChart(view, photoViews);
+    }
+
+    private Map<String, Integer> getPhotoViews() {
+
+        // Temp data
+        // TODO - Read from Database
+        Map<String, Integer> photoViews = new HashMap<>();
+        photoViews.put("photo_1", 160);
+        photoViews.put("photo_2", 696);
+        photoViews.put("photo_3", 106);
+        photoViews.put("photo_4", 25);
+        photoViews.put("photo_5", 206);
+        photoViews.put("photo_6", 423);
+        photoViews.put("photo_7", 265);
+        photoViews.put("photo_8", 655);
+        photoViews.put("photo_9", 333);
+        photoViews.put("photo_10", 429);
+
+        return photoViews;
+    }
+
+    public void setupBarChart(View view, Map<String, Integer> photoViews) {
+        BarChart chart = view.findViewById(R.id.barChart);
+        List<BarEntry> entries = new ArrayList<>();
+        List<String> id1s = new ArrayList<>();
+
+        List<Integer> colors = new ArrayList<>();
+        int color1 = ContextCompat.getColor(view.getContext(), R.color.primary_foreground);
+        colors.add(color1);
+
+        int index = 0;
+        for (Map.Entry<String, Integer> entry : photoViews.entrySet()) {
+            entries.add(new BarEntry(index, entry.getValue()));
+            id1s.add(entry.getKey());
+            index++;
+        }
+
+        // Set colors
+        BarDataSet dataSet = new BarDataSet(entries, "Views");
+        dataSet.setColors(colors);
+
+        // Set the bar chart
+        BarData barData = new BarData(dataSet);
+        chart.setData(barData);
+        chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(id1s));
+        chart.getDescription().setEnabled(false);
+        chart.invalidate(); // refresh
+    }
+
 }

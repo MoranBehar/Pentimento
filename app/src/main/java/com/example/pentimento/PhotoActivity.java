@@ -254,7 +254,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
     private void scrambleSecretText() {
 
         final Handler handler = new Handler();
-        final Runnable updateTask = new Runnable() {
+        final Runnable scrambleTask = new Runnable() {
             int count = 0;
 
             @Override
@@ -274,8 +274,8 @@ public class PhotoActivity extends PhotoActivityMenusClass
             }
         };
 
-        // Start the updates
-        handler.post(updateTask);
+        // Start the scramble
+        handler.post(scrambleTask);
     }
 
     private void checkSecretMessage() {
@@ -558,6 +558,8 @@ public class PhotoActivity extends PhotoActivityMenusClass
             @Override
             public void onInit(int status) {
                 if (status != TextToSpeech.ERROR) {
+
+                    // Set language to English
                     ttsEngine.setLanguage(Locale.US);
 
                     ttsEngine.setOnUtteranceProgressListener(new UtteranceProgressListener() {
