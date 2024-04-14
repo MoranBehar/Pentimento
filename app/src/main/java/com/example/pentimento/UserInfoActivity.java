@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
 
     FirebaseAuth fbAuth;
     FirebaseFirestore store;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -136,12 +139,94 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void getUserData(DocumentSnapshot documentSnapshot) {
+        //if the user exist - get his data
         if (documentSnapshot.exists()) {
             User user = documentSnapshot.toObject(User.class);
             etUserDetailsEmail.setText(user.getEmail());
             etUserDetailsName.setText(user.getName());
             etUserDetailsAge.setText(String.valueOf(user.getAge()));
             etUserDetailsPhone.setText(user.getPhone());
+
+            // Check if data has changed
+            configureFormChangedListeners();
         }
+    }
+
+    private void configureFormChangedListeners() {
+
+        //check for each one of the user data for changes
+        //if there is a change - set the flag to true
+        etUserDetailsPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                formChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        etUserDetailsAge.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                formChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        etUserDetailsName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                formChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        etUserDetailsEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                formChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void formChanged () {
+
+        //there is new data
+        btnUpdateInfo.setEnabled(true);
     }
 }
