@@ -11,6 +11,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.AggregateQuery;
+import com.google.firebase.firestore.AggregateQuerySnapshot;
+import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -27,8 +30,11 @@ import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -200,7 +206,7 @@ public class DBManager {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG,"Exception " + e.getMessage());
+                        Log.d(TAG, "Exception " + e.getMessage());
                     }
                 });
     }
@@ -384,7 +390,7 @@ public class DBManager {
                 });
     }
 
-    public void getPhotoById(String photoId, DBActionResult callback) {
+    public void getPhotoById(String photoId, DBActionResult<Photo> callback) {
 
         if (photoId == null) {
             callback.onError(new Exception("Photo id is null"));
@@ -443,6 +449,7 @@ public class DBManager {
                     }
                 });
     }
+
     public void deletePhotoFromAlbum(String photoId, String albumId) {
 
         CollectionReference colRef = fbDB.collection("AlbumPhotos");
@@ -575,6 +582,116 @@ public class DBManager {
                     @Override
                     public void onFailure(@NonNull Exception e) {
 
+                    }
+                });
+    }
+
+
+    // Log activities in the app
+    // 1 - Photo View
+    // 2 - Album View
+    // 3 - Secret Views
+    // 4 - Secret Added
+
+    public void addLogEntry(String itemId, int type) {
+
+        String userId = fbAuth.getUid();
+
+        Map<String, Object> logView = new HashMap<>();
+        logView.put("itemId", itemId);
+        logView.put("userId", userId);
+        logView.put("viewDate", new Date());
+        logView.put("type", type);
+
+        fbDB.collection("ActivityLog").document().set(logView)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
+    }
+
+//    public void getTopPhotoViewed(int topX, int lastXDays, DBActionResult<List<Map.Entry<String, Integer>>> callBack) {
+//
+//        // Get current userId
+//        String uid = fbAuth.getUid();
+//
+//        // Get the time range date and time
+//        Date now = new Date();
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(now);
+//        cal.add(Calendar.DAY_OF_MONTH, -lastXDays);
+//        Date daysAgo = cal.getTime();
+//
+//        CollectionReference colRef = fbDB.collection("ActivityLog");
+//
+//
+//        // Query to get views in the last "lastXDays" days, grouped by photoId
+//        colRef
+//                .whereEqualTo("userId", uid)
+//                .whereGreaterThan("viewDate", daysAgo)
+////                .orderBy("viewDate", Query.Direction.DESCENDING)
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        Map<String, Integer> photoViewCounts = new HashMap<>();
+//
+//                        // Count the views per photoId
+//                        task.getResult().forEach(
+//                                document -> {
+//                                    String photoId = document.getString("photoId");
+//                                    photoViewCounts.put(photoId, photoViewCounts.getOrDefault(photoId, 0) + 1);
+//                                });
+//
+//
+//                        // Find the top "topX" viewed photos
+//                        List<Map.Entry<String, Integer>> topViewedList = new ArrayList<>(photoViewCounts.entrySet());
+//                        topViewedList.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+//
+//                        callBack.onSuccess(topViewedList.subList(0, topX));
+//
+//                    } else {
+//                        Log.e(TAG, "Failed getting view log data");
+//                    }
+//                });
+//    }
+
+    public void getLogCount(int lastXDays, int type, DBActionResult<Long> callBack) {
+
+        // Get current userId
+        String uid = fbAuth.getUid();
+
+        // Get the time range date and time
+        Date now = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+        cal.add(Calendar.DAY_OF_MONTH, -lastXDays);
+        Date daysAgo = cal.getTime();
+
+        CollectionReference colRef = fbDB.collection("ActivityLog");
+
+        AggregateQuery countQuery = colRef
+                .whereEqualTo("userId", uid)
+                .whereEqualTo("type", type)
+                .whereGreaterThan("viewDate", daysAgo)
+                .count();
+
+        countQuery.get(AggregateSource.SERVER).addOnCompleteListener(
+                new OnCompleteListener<AggregateQuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            // Get the count and send back the results
+                            AggregateQuerySnapshot snapshot = task.getResult();
+                            callBack.onSuccess(snapshot.getCount());
+                        } else {
+                            Log.d(TAG, "Count failed: ", task.getException());
+                        }
                     }
                 });
     }

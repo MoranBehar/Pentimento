@@ -1,5 +1,6 @@
 package com.example.pentimento;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -10,81 +11,216 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 
 public class AnalyticsFragment extends Fragment {
 
+    private View view;
+    private DBManager dbManager;
+    private CountDownLatch latchLoadData;
+    private Long totalPhotoViews, totalAlbumViews, totalSecretViews, totalSecretAdded;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_analytics, container, false);
-
+        view = inflater.inflate(R.layout.fragment_analytics, container, false);
         initAnalytics(view);
 
         return view;
     }
 
     private void initAnalytics(View view) {
-        Map<String, Integer> photoViews = getPhotoViews();
-        setupBarChart(view, photoViews);
+        dbManager = DBManager.getInstance();
+
+        latchLoadData = new CountDownLatch(4);
+        loadPhotoViews();
+        loadAlbumViews();
+        loadSecretViews();
+        loadSecretAdded();
+
+
+        new Thread(() -> {
+            try {
+                latchLoadData.await();
+                // switch back to UI thread to update UI
+                getActivity().runOnUiThread(() -> setupPieChart());
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+
+
     }
 
-    private Map<String, Integer> getPhotoViews() {
+    private void loadAlbumViews() {
+        dbManager.getLogCount(7, 2, new DBManager.DBActionResult<Long>() {
+            @Override
+            public void onSuccess(Long data) {
+                totalAlbumViews = data;
+                latchLoadData.countDown();  // Decrease count
+            }
 
-        // Temp data
-        // TODO - Read from Database
-        Map<String, Integer> photoViews = new HashMap<>();
-        photoViews.put("photo_1", 160);
-        photoViews.put("photo_2", 696);
-        photoViews.put("photo_3", 106);
-        photoViews.put("photo_4", 25);
-        photoViews.put("photo_5", 206);
-        photoViews.put("photo_6", 423);
-        photoViews.put("photo_7", 265);
-        photoViews.put("photo_8", 655);
-        photoViews.put("photo_9", 333);
-        photoViews.put("photo_10", 429);
-
-        return photoViews;
+            @Override
+            public void onError(Exception e) {
+                latchLoadData.countDown();
+            }
+        });
     }
 
-    public void setupBarChart(View view, Map<String, Integer> photoViews) {
-        BarChart chart = view.findViewById(R.id.barChart);
-        List<BarEntry> entries = new ArrayList<>();
-        List<String> id1s = new ArrayList<>();
+    private void loadPhotoViews() {
+        dbManager.getLogCount(7, 1, new DBManager.DBActionResult<Long>() {
+            @Override
+            public void onSuccess(Long data) {
+                totalPhotoViews = data;
+                latchLoadData.countDown();  // Decrease count
+            }
+
+            @Override
+            public void onError(Exception e) {
+                latchLoadData.countDown();
+            }
+        });
+    }
+
+    private void loadSecretViews() {
+        dbManager.getLogCount(7, 3, new DBManager.DBActionResult<Long>() {
+            @Override
+            public void onSuccess(Long data) {
+                totalSecretViews = data;
+                latchLoadData.countDown();  // Decrease count
+            }
+
+            @Override
+            public void onError(Exception e) {
+                latchLoadData.countDown();
+            }
+        });
+    }
+
+    private void loadSecretAdded() {
+        dbManager.getLogCount(7, 4, new DBManager.DBActionResult<Long>() {
+            @Override
+            public void onSuccess(Long data) {
+                totalSecretAdded = data;
+                latchLoadData.countDown();  // Decrease count
+            }
+
+            @Override
+            public void onError(Exception e) {
+                latchLoadData.countDown();
+            }
+        });
+    }
+
+//    private void loadTopViews() {
+//
+//        List<Map.Entry<String, Integer>> topViews = new ArrayList<>();
+//
+//        dbManager.getTopPhotoViewed(5, 7, new DBManager.DBActionResult<List<Map.Entry<String, Integer>>>() {
+//            @Override
+//            public void onSuccess(List data) {
+//                topViews.addAll(data);
+//                setupBarChart(view, topViews);
+//            }
+//
+//            @Override
+//            public void onError(Exception e) {
+//
+//            }
+//        });
+//
+//    }
+
+//    public void setupBarChart(View view, List<Map.Entry<String, Integer>> photoViews) {
+//        BarChart chart = view.findViewById(R.id.barChart);
+//        List<BarEntry> entries = new ArrayList<>();
+//        List<String> id1s = new ArrayList<>();
+//
+//        List<Integer> colors = new ArrayList<>();
+//        int color1 = ContextCompat.getColor(view.getContext(), R.color.primary_foreground);
+//        colors.add(color1);
+//
+//        int index = 0;
+//        for (Map.Entry<String, Integer> entry : photoViews) {
+//            entries.add(new BarEntry(index, entry.getValue()));
+//            id1s.add(entry.getKey());
+//            index++;
+//        }
+//
+//        // Set colors
+//        BarDataSet dataSet = new BarDataSet(entries, "Views");
+//        dataSet.setColors(colors);
+//
+//        // Set the bar chart
+//        BarData barData = new BarData(dataSet);
+//        chart.setData(barData);
+//        chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(id1s));
+//        chart.getDescription().setEnabled(false);
+//        chart.invalidate(); // refresh
+//    }
+
+    public void setupPieChart() {
+
+        PieChart pieChart = view.findViewById(R.id.pieChart);
 
         List<Integer> colors = new ArrayList<>();
-        int color1 = ContextCompat.getColor(view.getContext(), R.color.primary_foreground);
+        int color1 = ContextCompat.getColor(view.getContext(), R.color.pie_1);
+        int color2 = ContextCompat.getColor(view.getContext(), R.color.pie_2);
+        int color3 = ContextCompat.getColor(view.getContext(), R.color.pie_3);
+        int color4 = ContextCompat.getColor(view.getContext(), R.color.pie_4);
+
         colors.add(color1);
+        colors.add(color2);
+        colors.add(color3);
+        colors.add(color4);
 
-        int index = 0;
-        for (Map.Entry<String, Integer> entry : photoViews.entrySet()) {
-            entries.add(new BarEntry(index, entry.getValue()));
-            id1s.add(entry.getKey());
-            index++;
-        }
+        // Creating a list of PieEntries
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        entries.add(new PieEntry(totalPhotoViews.floatValue(), "Photo Views"));
+        entries.add(new PieEntry(totalAlbumViews.floatValue(), "Album Views"));
+        entries.add(new PieEntry(totalSecretAdded.floatValue(), "New Secrets"));
+        entries.add(new PieEntry(totalSecretViews.floatValue(), "Secret Views"));
 
-        // Set colors
-        BarDataSet dataSet = new BarDataSet(entries, "Views");
+        float total =
+                totalPhotoViews.floatValue() +
+                totalAlbumViews.floatValue() +
+                totalSecretAdded.floatValue() +
+                totalSecretViews.floatValue();
+
+        // Creating a DataSet
+        PieDataSet dataSet = new PieDataSet(entries, "Categories");
+
+        // Set chart colors
         dataSet.setColors(colors);
 
-        // Set the bar chart
-        BarData barData = new BarData(dataSet);
-        chart.setData(barData);
-        chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(id1s));
-        chart.getDescription().setEnabled(false);
-        chart.invalidate(); // refresh
+        // Set format of data displayed ( value + percentage)
+        dataSet.setValueFormatter(new AnalyticsValueFormatter(total));
+        dataSet.setValueTextSize(14f); // Set the text size for values
+        dataSet.setValueTextColor(Color.WHITE); // Set the text color for values
+
+        // Creating a PieData object with the DataSet
+        PieData pieData = new PieData(dataSet);
+
+        // Setting the PieData UI
+        pieChart.setData(pieData);
+        pieChart.setEntryLabelTextSize(12f);
+        pieChart.setCenterText("Category");
+        pieChart.setCenterTextSize(14f);
+        pieChart.invalidate(); // Refresh the chart
     }
 
 }

@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -34,8 +35,9 @@ import java.util.ArrayList;
 
 import java.util.Locale;
 
-public class PhotoActivity extends PhotoActivityMenusClass
-        implements View.OnClickListener, editPhotoNameDialogFragment.DialogListener {
+public class PhotoActivity
+        extends PhotoActivityMenusClass
+        implements View.OnClickListener {
 
     private static final String TAG = PhotoActivity.class.getSimpleName();
     private Photo photo;
@@ -82,6 +84,9 @@ public class PhotoActivity extends PhotoActivityMenusClass
         configureTTS();
         setAddToAlbumBtn();
         setEditPhotoBtn();
+
+        // Log view
+        dbManager.addLogEntry(photo.getId(), 1);
     }
 
 
@@ -178,6 +183,10 @@ public class PhotoActivity extends PhotoActivityMenusClass
             public void onSecretAdded(String msg) {
                 secretMessageText = msg;
                 checkSecretMessage();
+
+                // Log secret added
+                DBManager.getInstance().addLogEntry(photo.getId(), 4);
+
             }
         });
         extractSecretMessage();
@@ -219,6 +228,10 @@ public class PhotoActivity extends PhotoActivityMenusClass
             endFade = 1f;
             startTextSize = 24f;
             endTextSize = 0f;
+        } else {
+            // Log secret view
+            DBManager.getInstance().addLogEntry(photo.getId(), 3);
+
         }
 
         speakIcon.setVisibility(View.INVISIBLE);
@@ -406,7 +419,6 @@ public class PhotoActivity extends PhotoActivityMenusClass
         bottomSheetEdit = new BottomSheetDialog(this);
         bottomSheetEdit.setContentView(bottomSheetView);
 
-        // define the listener
         ViewGroup viewGroup = (ViewGroup) bottomSheetView;
         setupBottomSheetDialogButtonsListenerEdit(viewGroup, bottomSheetEdit);
     }
@@ -419,10 +431,12 @@ public class PhotoActivity extends PhotoActivityMenusClass
             if (child instanceof Button) {
                 child.setOnClickListener(v -> {
                     if (v.getId() == R.id.btn_edit_name) {
-                        openEditPhotoNameDialogFragment();
+//                        openEditPhotoNameDialogFragment();
+                        Toast.makeText(PhotoActivity.this, "edit", Toast.LENGTH_SHORT).show();
                     }
                     else if (v.getId() == R.id.btn_black_and_white_filter) {
                         setBlackAndWhiteFiler();
+                        Toast.makeText(PhotoActivity.this, "filter", Toast.LENGTH_SHORT).show();
                     }
 
                     //set the photo by the changes
@@ -478,24 +492,15 @@ public class PhotoActivity extends PhotoActivityMenusClass
         });
     }
 
+    //TODO - create edit name fragment
     private void openEditPhotoNameDialogFragment() {
-        editPhotoNameDialogFragment dialogFragment = new editPhotoNameDialogFragment();
+        editSecretMessageDialogFragment dialogFragment = new editSecretMessageDialogFragment();
 
         FragmentActivity fragmentActivity = (FragmentActivity) PhotoActivity.this;
 
         // Set the listener
-        dialogFragment.setDialogListener(this::onDialogDataReturn);
+//        dialogFragment.setDialogListener(this);
         dialogFragment.show(fragmentActivity.getSupportFragmentManager(), "YourDialogFragment");
-    }
-
-    @Override
-    public void onDialogDataReturn(String photoName) {
-        photo.setTitle(photoName);
-
-        dbManager.updatePhotoTitle(photo);
-
-        //set the ui text to the updated name
-        tvPhotoTitle.setText(photoName);
     }
 
     private void addPhotoToAlbum(Album album, String photoId) {
@@ -618,4 +623,5 @@ public class PhotoActivity extends PhotoActivityMenusClass
         }
         super.onDestroy();
     }
+
 }
