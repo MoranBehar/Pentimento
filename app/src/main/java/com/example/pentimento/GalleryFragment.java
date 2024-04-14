@@ -46,6 +46,7 @@ public class GalleryFragment extends Fragment {
         gvGallery = view.findViewById(R.id.gvGallery);
         gvGallery.setAdapter(adapter);
         gvGallery.setOnItemClickListener(photoSelectedEvent());
+
     }
 
     public void errorHandler(String errorMessage) {
