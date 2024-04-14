@@ -592,7 +592,6 @@ public class DBManager {
     // 2 - Album View
     // 3 - Secret Views
     // 4 - Secret Added
-
     public void addLogEntry(String itemId, int type) {
 
         String userId = fbAuth.getUid();
