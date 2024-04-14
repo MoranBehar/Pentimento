@@ -203,7 +203,6 @@ public class PhotoActivity
         btn_photoToolbar_edit.setOnClickListener(this);
     }
 
-    //TODO - fix
     private void extractSecretMessage() {
         secretMessageText = secretManger.getSecretMsgFromPhoto();
         checkSecretMessage();
