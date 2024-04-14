@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class PhotoActivity extends PhotoActivityMenusClass
-        implements View.OnClickListener {
+        implements View.OnClickListener, editPhotoNameDialogFragment.DialogListener {
 
     private static final String TAG = PhotoActivity.class.getSimpleName();
     private Photo photo;
@@ -406,6 +406,7 @@ public class PhotoActivity extends PhotoActivityMenusClass
         bottomSheetEdit = new BottomSheetDialog(this);
         bottomSheetEdit.setContentView(bottomSheetView);
 
+        // define the listener
         ViewGroup viewGroup = (ViewGroup) bottomSheetView;
         setupBottomSheetDialogButtonsListenerEdit(viewGroup, bottomSheetEdit);
     }
@@ -418,12 +419,10 @@ public class PhotoActivity extends PhotoActivityMenusClass
             if (child instanceof Button) {
                 child.setOnClickListener(v -> {
                     if (v.getId() == R.id.btn_edit_name) {
-//                        openEditPhotoNameDialogFragment();
-                        Toast.makeText(PhotoActivity.this, "edit", Toast.LENGTH_SHORT).show();
+                        openEditPhotoNameDialogFragment();
                     }
                     else if (v.getId() == R.id.btn_black_and_white_filter) {
                         setBlackAndWhiteFiler();
-                        Toast.makeText(PhotoActivity.this, "filter", Toast.LENGTH_SHORT).show();
                     }
 
                     //set the photo by the changes
@@ -479,15 +478,24 @@ public class PhotoActivity extends PhotoActivityMenusClass
         });
     }
 
-    //TODO - create edit name fragment
     private void openEditPhotoNameDialogFragment() {
-        editSecretMessageDialogFragment dialogFragment = new editSecretMessageDialogFragment();
+        editPhotoNameDialogFragment dialogFragment = new editPhotoNameDialogFragment();
 
         FragmentActivity fragmentActivity = (FragmentActivity) PhotoActivity.this;
 
         // Set the listener
-//        dialogFragment.setDialogListener(this);
+        dialogFragment.setDialogListener(this::onDialogDataReturn);
         dialogFragment.show(fragmentActivity.getSupportFragmentManager(), "YourDialogFragment");
+    }
+
+    @Override
+    public void onDialogDataReturn(String photoName) {
+        photo.setTitle(photoName);
+
+        dbManager.updatePhotoTitle(photo);
+
+        //set the ui text to the updated name
+        tvPhotoTitle.setText(photoName);
     }
 
     private void addPhotoToAlbum(Album album, String photoId) {
@@ -610,5 +618,4 @@ public class PhotoActivity extends PhotoActivityMenusClass
         }
         super.onDestroy();
     }
-
 }

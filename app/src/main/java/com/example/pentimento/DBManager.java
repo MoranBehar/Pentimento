@@ -95,6 +95,49 @@ public class DBManager {
                 });
     }
 
+    public void updatePhotoTitle (Photo photo) {
+        // Reference to the "UserPhotos" collection
+        CollectionReference  userPhotosRef =
+                fbDB.collection("UserPhotos");
+
+        // Create a query to find the document where the photoId
+        Query query = userPhotosRef.whereEqualTo("id", photo.getId());
+
+        // Execute the query
+        query.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                // Get the Id of the document
+                                String documentId = document.getId();
+
+                                // Update the title field in the document
+                                DocumentReference docRef = userPhotosRef.document(documentId);
+
+                                docRef.update("title", photo.getTitle())
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    // Field updated successfully
+                                                    Log.i(TAG, "onComplete: title updated");
+                                                }
+                                            }
+                                        });
+                            }
+                        }
+                        else
+                        {
+                            // Failed to execute query
+                            Log.i(TAG, "onComplete: title hasn't changed");
+                        }
+                    }
+                });
+
+    }
+
     public void sharePhotoToUser(String photoId, String toUserId) {
 
         Map<String, Object> shareObject = new HashMap<>();
