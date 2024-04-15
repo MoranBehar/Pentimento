@@ -98,9 +98,9 @@ public class DBManager {
                 });
     }
 
-    public void updatePhotoTitle (Photo photo) {
+    public void updatePhotoTitle(Photo photo) {
         // Reference to the "UserPhotos" collection
-        CollectionReference  userPhotosRef =
+        CollectionReference userPhotosRef =
                 fbDB.collection("UserPhotos");
 
         // Create a query to find the document where the photoId
@@ -111,7 +111,7 @@ public class DBManager {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()) {
+                        if (task.isSuccessful()) {
                             for (DocumentSnapshot document : task.getResult()) {
                                 // Get the Id of the document
                                 String documentId = document.getId();
@@ -130,9 +130,7 @@ public class DBManager {
                                             }
                                         });
                             }
-                        }
-                        else
-                        {
+                        } else {
                             // Failed to execute query
                             Log.i(TAG, "onComplete: title hasn't changed");
                         }
@@ -167,7 +165,7 @@ public class DBManager {
         return sdf.format(new Date());
     }
 
-    public void createAlbum(Album newAlbum) {
+    public void createAlbum(Album newAlbum, DBActionResult<String> callback) {
 
         DocumentReference newAlbumRef = fbDB.collection("Albums").document();
         newAlbum.setId(newAlbumRef.getId());
@@ -175,12 +173,12 @@ public class DBManager {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-
+                        callback.onSuccess(newAlbumRef.getId());
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        callback.onError(null);
                     }
                 });
     }
@@ -257,6 +255,38 @@ public class DBManager {
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    public void getAlbumByType(int albumType, String uid, DBActionResult<Album> callback) {
+        fbDB.collection("Albums")
+                .whereEqualTo("type", albumType)
+                .whereEqualTo("ownerId", uid)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            if (task.getResult().isEmpty()) {
+                                //callback null - no album with that type
+                                callback.onError(null);
+                            } else {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    if (document.exists()) {
+                                        // newAlbum contains the data from document
+                                        Album album = document.toObject(Album.class);
+
+                                        //callback the album info
+                                        callback.onSuccess(album);
+                                    }
+                                }
+                            }
+                        } else {
+                            //exception
+                            Log.d(TAG, "Error getting album: ", task.getException());
                         }
                     }
                 });

@@ -28,8 +28,6 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -55,6 +53,7 @@ public class PhotoActivity
     private DBManager dbManager;
     private StorageManager storageManager;
 
+    private FirebaseAuth auth;
 
     private BottomSheetDialog bottomSheetAlbum, bottomSheetEdit;
     private ListView lvAlbumsListView;
@@ -77,6 +76,7 @@ public class PhotoActivity
         galleryManager = GalleryManager.getInstance();
         dbManager = DBManager.getInstance();
         storageManager = StorageManager.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         // Init
         loadPhoto();
@@ -348,6 +348,44 @@ public class PhotoActivity
     }
 
     private void favToggle() {
+        String uid = auth.getUid();
+
+
+        //get album fav(type 2) - if exist add to album, if not - create and add
+        dbManager.getAlbumByType(2, uid, new DBManager.DBActionResult<Album>() {
+            @Override
+            public void onSuccess(Album favAlbum) {
+                //adding photo to fav album
+                addPhotoToAlbum(favAlbum, photo.getId());
+
+                Toast.makeText(PhotoActivity.this,
+                        "Photo added to favorites album", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                // favorite album doesn't exist - create (type 2 - fav)
+                Album favAlbum = new Album(uid, "Favorites", 2);
+                dbManager.createAlbum(favAlbum, new DBManager.DBActionResult<String>() {
+                    @Override
+                    public void onSuccess(String albumId) {
+                        //adding photo to fav album
+                        favAlbum.setId(albumId);
+                        favAlbum.setTitle("Favorites");
+                        addPhotoToAlbum(favAlbum, photo.getId());
+
+                        Toast.makeText(PhotoActivity.this,
+                                "Photo added to favorites album", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                });
+            }
+        });
+
         Toast.makeText(this, "favorite", Toast.LENGTH_SHORT).show();
     }
 
