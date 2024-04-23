@@ -212,6 +212,7 @@ public class DBManager {
 
         CollectionReference colRef = fbDB.collection("Albums");
         colRef.whereEqualTo("ownerId", uid)
+                .orderBy("type", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

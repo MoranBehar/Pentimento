@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
@@ -69,6 +70,8 @@ public class PhotoActivity
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(navListener);
+//        bottomNav.setItemIconTintList(null);
+
 
         ivPhoto = findViewById(R.id.ivPhoto);
         tvPhotoTitle = findViewById(R.id.tvPhotoTitle);
@@ -357,7 +360,7 @@ public class PhotoActivity
             public void onSuccess(Album favAlbum) {
                 //adding photo to fav album
                 addPhotoToAlbum(favAlbum, photo.getId());
-
+                setFavButtonIcon();
                 Toast.makeText(PhotoActivity.this,
                         "Photo added to favorites album", Toast.LENGTH_LONG).show();
             }
@@ -387,6 +390,11 @@ public class PhotoActivity
         });
 
         Toast.makeText(this, "favorite", Toast.LENGTH_SHORT).show();
+    }
+
+    private void setFavButtonIcon() {
+        BottomNavigationItemView btnFav = findViewById(R.id.nav_delete_fragment);
+        btnFav.setChecked(true);
     }
 
     private void openSecretMenu() {
