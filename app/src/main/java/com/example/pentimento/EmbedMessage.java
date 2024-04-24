@@ -57,10 +57,6 @@ public class EmbedMessage {
     }
 
 
-    //
-    // need to check if working!!!
-    //
-    //
     public Bitmap hideMessageInLSB(Bitmap bmp, String msg) {
 
         //duplicate the bitMap so i could do manipulation on it
@@ -109,5 +105,4 @@ public class EmbedMessage {
 
         return newBitmap;
     }
-
 }

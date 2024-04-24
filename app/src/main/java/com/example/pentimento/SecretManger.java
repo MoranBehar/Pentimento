@@ -21,7 +21,6 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
     private secretResult callback;
     private StorageManager storageManager;
 
-
     public SecretManger(Activity activity, Photo photo, secretResult callback) {
         this.myActivity = activity;
         this.myPhoto = photo;
@@ -33,6 +32,8 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
 
     public interface secretResult {
         void onSecretAdded(String msg);
+
+        void onSecretDeleted();
     }
 
     public void initBottomSheetDialog() {
@@ -44,7 +45,7 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
         setupBottomSheetDialogButtonsListener(viewGroup, bottomSheetSecret);
     }
 
-    public void showBottomSheetDialog() {
+    public void  showBottomSheetDialog() {
         bottomSheetSecret.show();
     }
 
@@ -62,17 +63,22 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
                     }
                     else if (v.getId() == R.id.btn_edit_secret) {
                         openEditSecretMessageDialogFragment();
-                        //TODO - edit function (the prev name will be written,
-                        // the uer will need to change it)
-
-                        Toast.makeText(myActivity, "edit", Toast.LENGTH_SHORT).show();
-
                     }
                     else if (v.getId() == R.id.btn_delete_secret)
                     {
-                        //TODO - delete function
-                        Toast.makeText(myActivity, "delete", Toast.LENGTH_SHORT).show();
+                        ImageLsbManipulation lsbManipulation = new
+                                ImageLsbManipulation(myPhoto.getPhoto());
 
+                        // delete the msg and refresh memory
+                        myPhoto.setPhoto(lsbManipulation.deleteMessageFromLSB());
+
+                        //update image in storage
+                        updatePhotoInStorage();
+
+                        //update the activity the msg deleted
+                        callback.onSecretDeleted();
+
+                        Toast.makeText(myActivity, "message deleted", Toast.LENGTH_LONG).show();
                     }
 
                     // Dismiss the BottomSheetDialog
@@ -123,6 +129,7 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
         storageManager.updateImageInStorage(myPhoto, new StorageActionResult() {
             @Override
             public void onSuccess(Object data) {
+                Log.d("LSBManipulation", "onSuccess: " + myPhoto);
             }
 
             @Override

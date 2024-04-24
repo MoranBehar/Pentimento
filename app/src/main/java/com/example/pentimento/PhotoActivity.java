@@ -191,6 +191,11 @@ public class PhotoActivity
                 DBManager.getInstance().addLogEntry(photo.getId(), 4);
 
             }
+
+            @Override
+            public void onSecretDeleted() {
+                recreate();
+            }
         });
         extractSecretMessage();
     }
