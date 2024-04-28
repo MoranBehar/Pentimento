@@ -1,6 +1,7 @@
 package com.example.pentimento;
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -216,6 +218,7 @@ public class AnalyticsFragment extends Fragment {
         PieData pieData = new PieData(dataSet);
 
         customizeLegend(pieChart);
+        customizeDescription(pieChart);
 
         // Setting the PieData UI
         pieChart.setData(pieData);
@@ -236,5 +239,18 @@ public class AnalyticsFragment extends Fragment {
         legend.setTextSize(16f);
         legend.setEnabled(true);
     }
+
+    public void customizeDescription(PieChart pieChart) {
+        Description desc = new Description();
+        desc.setText("Pentimento App Usage Overview");
+        desc.setTextColor(R.color.black); // Set the text color
+        desc.setTextSize(18f); // Set the text size in DP
+        desc.setPosition(pieChart.getWidth() - 170, pieChart.getHeight() - 200); // Set position
+        desc.setTextAlign(Paint.Align.RIGHT); // Set text alignment
+
+        pieChart.setDescription(desc); // Apply the custom description to the chart
+        pieChart.invalidate(); // Refresh the chart to update the changes
+    }
+
 
 }

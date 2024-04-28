@@ -11,6 +11,7 @@ class AnalyticsValueFormatter extends ValueFormatter {
 
     public AnalyticsValueFormatter(float total) {
         this.total = total;
+
         // Use one decimal
         mFormat = new DecimalFormat("###,###,##0.0");
     }
