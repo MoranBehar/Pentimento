@@ -372,8 +372,10 @@ public class PhotoActivity
                 //adding photo to fav album
                 addPhotoToAlbum(favAlbum, photo.getId());
                 setFavButtonIcon();
-                Toast.makeText(PhotoActivity.this,
-                        "Photo added to favorites album", Toast.LENGTH_LONG).show();
+
+                UIAlerts.InfoAlert("Favorite",
+                        "Photo was added to your favorites album",
+                        PhotoActivity.this);
             }
 
             @Override

@@ -48,7 +48,7 @@ public class TextUtils {
 
             //creating a string with 8 char - bit
             String Byte = binaryMsg.substring(i*8, (i*8+8));
-            Log.d("POC", "TheExtractedMessage: "+Byte);
+//            Log.d("POC", "TheExtractedMessage: "+Byte);
 
             massage += convertBinaryToChar(Byte);
         }
@@ -60,7 +60,7 @@ public class TextUtils {
 
         // Parse the binary string into an integer - 2 for binary (base)
         int intValue = Integer.parseInt(binaryString, 2);
-        Log.d("POC", "TheExtractedMessage: "+intValue);
+//        Log.d("POC", "TheExtractedMessage: "+intValue);
 
         // Cast the integer to a char
         char character = (char)intValue;
