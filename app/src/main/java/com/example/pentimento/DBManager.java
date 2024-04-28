@@ -224,7 +224,6 @@ public class DBManager {
                         //get the albums
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Album newAlbum = document.toObject(Album.class);
-                            ;
                             albumList.add(newAlbum);
                         }
 
