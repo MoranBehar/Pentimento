@@ -107,7 +107,12 @@ public class PhotoActivity
         // If the source is a shared photo - load it from the shared manager
         if (source != null && source.equals("shared")) {
             photo = SharedPhotosManager.getInstance().getPhotoById(selectedPhotoId);
-//            photo.load();
+            photo.load(new Photo.actionCallback() {
+                @Override
+                public void onSuccess() {
+                    tvPhotoTitle.setText(photo.getTitle());
+                }
+            });
             return;
         }
 

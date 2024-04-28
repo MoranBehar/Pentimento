@@ -425,20 +425,22 @@ public class DBManager {
             return;
         }
 
-        CollectionReference colRef = fbDB.collection("UsersPhotos");
-        colRef.document(photoId)
+        CollectionReference colRef = fbDB.collection("UserPhotos");
+        colRef.whereEqualTo("id", photoId)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-
-                            if (document.exists()) {
-                                Photo photo = document.toObject(Photo.class);
-                                callback.onSuccess(photo);
+                            if (task.getResult().isEmpty()) {
+                                //callback null - no photo with this id
+                                callback.onError(null);
                             } else {
-                                Log.d(TAG, "No such photo");
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    if (document.exists()) {
+                                        Photo photo = document.toObject(Photo.class);
+                                        callback.onSuccess(photo);
+                                    }
+                                }
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
