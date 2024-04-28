@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -39,13 +40,17 @@ public class AnalyticsFragment extends Fragment {
     private void initAnalytics(View view) {
         dbManager = DBManager.getInstance();
 
+        // setup latch to count 4 actions
         latchLoadData = new CountDownLatch(4);
+
+        // load the data for the pie chart
         loadPhotoViews();
         loadAlbumViews();
         loadSecretViews();
         loadSecretAdded();
 
-
+        // Wait till all the load actions finises before showing the chart
+        // we run this on a dedicated thread so the UI thread will not be blocked
         new Thread(() -> {
             try {
                 latchLoadData.await();
@@ -59,16 +64,18 @@ public class AnalyticsFragment extends Fragment {
 
     }
 
+    // Load the album views data
     private void loadAlbumViews() {
         dbManager.getLogCount(7, 2, new DBManager.DBActionResult<Long>() {
             @Override
             public void onSuccess(Long data) {
                 totalAlbumViews = data;
-                latchLoadData.countDown();  // Decrease count
+                latchLoadData.countDown();  // Decrease latch count
             }
 
             @Override
             public void onError(Exception e) {
+                // If error occurs we also need to decrease the latch
                 latchLoadData.countDown();
             }
         });
@@ -185,7 +192,7 @@ public class AnalyticsFragment extends Fragment {
         ArrayList<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(totalPhotoViews.floatValue(), "Photo Views"));
         entries.add(new PieEntry(totalAlbumViews.floatValue(), "Album Views"));
-        entries.add(new PieEntry(totalSecretAdded.floatValue(), "New Secrets"));
+        entries.add(new PieEntry(totalSecretAdded.floatValue(), "Secrets Added"));
         entries.add(new PieEntry(totalSecretViews.floatValue(), "Secret Views"));
 
         float total =
@@ -208,12 +215,26 @@ public class AnalyticsFragment extends Fragment {
         // Creating a PieData object with the DataSet
         PieData pieData = new PieData(dataSet);
 
+        customizeLegend(pieChart);
+
         // Setting the PieData UI
         pieChart.setData(pieData);
         pieChart.setEntryLabelTextSize(12f);
         pieChart.setCenterText("Category");
         pieChart.setCenterTextSize(14f);
         pieChart.invalidate(); // Refresh the chart
+
+
+    }
+
+    public void customizeLegend(PieChart pieChart) {
+        Legend legend = pieChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
+        legend.setDrawInside(false);
+        legend.setTextSize(16f);
+        legend.setEnabled(true);
     }
 
 }
