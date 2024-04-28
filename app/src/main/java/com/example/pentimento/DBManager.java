@@ -1,7 +1,6 @@
 package com.example.pentimento;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,10 +30,8 @@ import com.google.firebase.storage.StorageReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -101,6 +98,47 @@ public class DBManager {
                 });
     }
 
+    public void updatePhotoTitle(Photo photo) {
+        // Reference to the "UserPhotos" collection
+        CollectionReference userPhotosRef =
+                fbDB.collection("UserPhotos");
+
+        // Create a query to find the document where the photoId
+        Query query = userPhotosRef.whereEqualTo("id", photo.getId());
+
+        // Execute the query
+        query.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                // Get the Id of the document
+                                String documentId = document.getId();
+
+                                // Update the title field in the document
+                                DocumentReference docRef = userPhotosRef.document(documentId);
+
+                                docRef.update("title", photo.getTitle())
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    // Field updated successfully
+                                                    Log.i(TAG, "onComplete: title updated");
+                                                }
+                                            }
+                                        });
+                            }
+                        } else {
+                            // Failed to execute query
+                            Log.i(TAG, "onComplete: title hasn't changed");
+                        }
+                    }
+                });
+
+    }
+
     public void sharePhotoToUser(String photoId, String toUserId) {
 
         Map<String, Object> shareObject = new HashMap<>();
@@ -127,7 +165,7 @@ public class DBManager {
         return sdf.format(new Date());
     }
 
-    public void createAlbum(Album newAlbum) {
+    public void createAlbum(Album newAlbum, DBActionResult<String> callback) {
 
         DocumentReference newAlbumRef = fbDB.collection("Albums").document();
         newAlbum.setId(newAlbumRef.getId());
@@ -135,12 +173,12 @@ public class DBManager {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-
+                        callback.onSuccess(newAlbumRef.getId());
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        callback.onError(null);
                     }
                 });
     }
@@ -174,6 +212,7 @@ public class DBManager {
 
         CollectionReference colRef = fbDB.collection("Albums");
         colRef.whereEqualTo("ownerId", uid)
+                .orderBy("type", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -217,6 +256,38 @@ public class DBManager {
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    public void getAlbumByType(int albumType, String uid, DBActionResult<Album> callback) {
+        fbDB.collection("Albums")
+                .whereEqualTo("type", albumType)
+                .whereEqualTo("ownerId", uid)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            if (task.getResult().isEmpty()) {
+                                //callback null - no album with that type
+                                callback.onError(null);
+                            } else {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    if (document.exists()) {
+                                        // newAlbum contains the data from document
+                                        Album album = document.toObject(Album.class);
+
+                                        //callback the album info
+                                        callback.onSuccess(album);
+                                    }
+                                }
+                            }
+                        } else {
+                            //exception
+                            Log.d(TAG, "Error getting album: ", task.getException());
                         }
                     }
                 });
@@ -549,7 +620,6 @@ public class DBManager {
     // 2 - Album View
     // 3 - Secret Views
     // 4 - Secret Added
-
     public void addLogEntry(String itemId, int type) {
 
         String userId = fbAuth.getUid();

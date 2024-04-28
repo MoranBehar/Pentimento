@@ -1,14 +1,11 @@
 package com.example.pentimento;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,8 +42,17 @@ public class CreateAlbumFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Album newAlbum = new Album(fbAuth.getUid(), etAlbumName.getText().toString());
-                        dbManager.createAlbum (newAlbum);
-                        Toast.makeText(getContext(), "Create album", Toast.LENGTH_SHORT).show();
+                        dbManager.createAlbum(newAlbum, new DBManager.DBActionResult<String>() {
+                            @Override
+                            public void onSuccess(String data) {
+                                Toast.makeText(getContext(), "Create album", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+
+                            }
+                        });
                     }
                 });
 

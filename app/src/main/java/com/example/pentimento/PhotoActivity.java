@@ -25,11 +25,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -37,7 +36,7 @@ import java.util.Locale;
 
 public class PhotoActivity
         extends PhotoActivityMenusClass
-        implements View.OnClickListener {
+        implements View.OnClickListener, editPhotoNameDialogFragment.DialogListener {
 
     private static final String TAG = PhotoActivity.class.getSimpleName();
     private Photo photo;
@@ -55,6 +54,7 @@ public class PhotoActivity
     private DBManager dbManager;
     private StorageManager storageManager;
 
+    private FirebaseAuth auth;
 
     private BottomSheetDialog bottomSheetAlbum, bottomSheetEdit;
     private ListView lvAlbumsListView;
@@ -70,6 +70,8 @@ public class PhotoActivity
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(navListener);
+//        bottomNav.setItemIconTintList(null);
+
 
         ivPhoto = findViewById(R.id.ivPhoto);
         tvPhotoTitle = findViewById(R.id.tvPhotoTitle);
@@ -77,6 +79,7 @@ public class PhotoActivity
         galleryManager = GalleryManager.getInstance();
         dbManager = DBManager.getInstance();
         storageManager = StorageManager.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         // Init
         loadPhoto();
@@ -189,6 +192,11 @@ public class PhotoActivity
                 DBManager.getInstance().addLogEntry(photo.getId(), 4);
 
             }
+
+            @Override
+            public void onSecretDeleted() {
+                recreate();
+            }
         });
         extractSecretMessage();
     }
@@ -204,7 +212,6 @@ public class PhotoActivity
         btn_photoToolbar_edit.setOnClickListener(this);
     }
 
-    //TODO - fix
     private void extractSecretMessage() {
         secretMessageText = secretManger.getSecretMsgFromPhoto();
         checkSecretMessage();
@@ -350,7 +357,50 @@ public class PhotoActivity
     }
 
     private void favToggle() {
+        String uid = auth.getUid();
+
+
+        //get album fav(type 2) - if exist add to album, if not - create and add
+        dbManager.getAlbumByType(2, uid, new DBManager.DBActionResult<Album>() {
+            @Override
+            public void onSuccess(Album favAlbum) {
+                //adding photo to fav album
+                addPhotoToAlbum(favAlbum, photo.getId());
+                setFavButtonIcon();
+                Toast.makeText(PhotoActivity.this,
+                        "Photo added to favorites album", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                // favorite album doesn't exist - create (type 2 - fav)
+                Album favAlbum = new Album(uid, "Favorites", 2);
+                dbManager.createAlbum(favAlbum, new DBManager.DBActionResult<String>() {
+                    @Override
+                    public void onSuccess(String albumId) {
+                        //adding photo to fav album
+                        favAlbum.setId(albumId);
+                        favAlbum.setTitle("Favorites");
+                        addPhotoToAlbum(favAlbum, photo.getId());
+
+                        Toast.makeText(PhotoActivity.this,
+                                "Photo added to favorites album", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                });
+            }
+        });
+
         Toast.makeText(this, "favorite", Toast.LENGTH_SHORT).show();
+    }
+
+    private void setFavButtonIcon() {
+        BottomNavigationItemView btnFav = findViewById(R.id.nav_delete_fragment);
+        btnFav.setChecked(true);
     }
 
     private void openSecretMenu() {
@@ -420,6 +470,7 @@ public class PhotoActivity
         bottomSheetEdit = new BottomSheetDialog(this);
         bottomSheetEdit.setContentView(bottomSheetView);
 
+        // define the listener
         ViewGroup viewGroup = (ViewGroup) bottomSheetView;
         setupBottomSheetDialogButtonsListenerEdit(viewGroup, bottomSheetEdit);
     }
@@ -432,12 +483,10 @@ public class PhotoActivity
             if (child instanceof Button) {
                 child.setOnClickListener(v -> {
                     if (v.getId() == R.id.btn_edit_name) {
-//                        openEditPhotoNameDialogFragment();
-                        Toast.makeText(PhotoActivity.this, "edit", Toast.LENGTH_SHORT).show();
+                        openEditPhotoNameDialogFragment();
                     }
                     else if (v.getId() == R.id.btn_black_and_white_filter) {
                         setBlackAndWhiteFiler();
-                        Toast.makeText(PhotoActivity.this, "filter", Toast.LENGTH_SHORT).show();
                     }
 
                     //set the photo by the changes
@@ -493,15 +542,24 @@ public class PhotoActivity
         });
     }
 
-    //TODO - create edit name fragment
     private void openEditPhotoNameDialogFragment() {
-        editSecretMessageDialogFragment dialogFragment = new editSecretMessageDialogFragment();
+        editPhotoNameDialogFragment dialogFragment = new editPhotoNameDialogFragment();
 
         FragmentActivity fragmentActivity = (FragmentActivity) PhotoActivity.this;
 
         // Set the listener
-//        dialogFragment.setDialogListener(this);
+        dialogFragment.setDialogListener(this::onDialogDataReturn);
         dialogFragment.show(fragmentActivity.getSupportFragmentManager(), "YourDialogFragment");
+    }
+
+    @Override
+    public void onDialogDataReturn(String photoName) {
+        photo.setTitle(photoName);
+
+        dbManager.updatePhotoTitle(photo);
+
+        //set the ui text to the updated name
+        tvPhotoTitle.setText(photoName);
     }
 
     private void addPhotoToAlbum(Album album, String photoId) {

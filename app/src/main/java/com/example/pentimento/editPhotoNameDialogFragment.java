@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class editSecretMessageDialogFragment extends DialogFragment {
+public class editPhotoNameDialogFragment extends DialogFragment {
 
-    EditText etSecret;
+    EditText etPhotoName;
 
     public interface DialogListener {
         void onDialogDataReturn(String secretMsg);
@@ -27,24 +27,23 @@ public class editSecretMessageDialogFragment extends DialogFragment {
         this.listener = listener;
     }
 
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         // Inflate the dialog layout for this fragment
         View dialogView = getActivity().getLayoutInflater().
-                inflate(R.layout.fragment_edit_secret_message_dialog, null);
+                inflate(R.layout.fragment_edit_photo_name_dialog, null);
         builder.setView(dialogView);
 
-        etSecret = dialogView.findViewById(R.id.etSecret);
+        etPhotoName = dialogView.findViewById(R.id.etPhotoName);
 
         builder.setPositiveButton("Save", new
                 DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onDialogDataReturn(etSecret.getText().toString());
-                        Toast.makeText(getContext(), "Secret message saved", Toast.LENGTH_SHORT).show();
+                        listener.onDialogDataReturn(etPhotoName.getText().toString());
+                        Toast.makeText(getContext(), "Photo name has changed", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -55,7 +54,6 @@ public class editSecretMessageDialogFragment extends DialogFragment {
             }
         });
 
-
         return builder.create();
     }
 
@@ -63,7 +61,7 @@ public class editSecretMessageDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_edit_secret_message_dialog, container, false);
+        View view =  inflater.inflate(R.layout.fragment_edit_photo_name_dialog, container, false);
 
         return view;
     }

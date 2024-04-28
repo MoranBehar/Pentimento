@@ -2,7 +2,11 @@ package com.example.pentimento;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+
+import java.util.Random;
 
 public class ImageLsbManipulation {
 
@@ -31,7 +35,6 @@ public class ImageLsbManipulation {
     public ImageLsbManipulation(Bitmap bmpWithMassage){
         this.bmpWithMessage = bmpWithMassage;
     }
-
 
     public Bitmap EmbedMessageAction() {
         String binaryMessage = utils.convertStringToBinary(this.MessageToEmbed);
@@ -172,6 +175,45 @@ public class ImageLsbManipulation {
 
         //extract the sub string from the beginning of the message up to the last index
         return messageFromImage.substring(firstIndexOfRealMsg, lastIndexOfRealMsg);
+    }
+
+    public Bitmap deleteMessageFromLSB() {
+
+        //get the msg with the prefix length from the image
+        String msg = getMessage();
+        String fullMsgBlock = SOM + msg + EOM;
+
+        //set a random text by the length we need to run over
+        String randomText = generateRandomString(fullMsgBlock.length());
+
+        //convert the random text to binary
+        String binaryMsg = utils.convertStringToBinary(randomText);
+
+        //embed the random text in the image
+        return hideMessageInLSB(bmpWithMessage, binaryMsg);
+    }
+
+    private String generateRandomString(int length) {
+
+        // ASCII values for printable characters range from 32 to 126
+        int minAsciiValue = 32;
+        int maxAsciiValue = 126;
+
+        // Create a StringBuilder to store the random string
+        StringBuilder sb = new StringBuilder();
+
+        // Create a Random object
+        Random random = new Random();
+
+        // Generate random characters and append them to the StringBuilder until it reaches the specified length
+        for (int i = 0; i < length; i++) {
+            int randomAsciiValue = random.nextInt(maxAsciiValue - minAsciiValue + 1) + minAsciiValue;
+            char randomChar = (char) randomAsciiValue;
+            sb.append(randomChar);
+        }
+
+        // Convert the StringBuilder to a String and return
+        return sb.toString();
     }
 
 }

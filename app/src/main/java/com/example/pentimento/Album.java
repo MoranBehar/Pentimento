@@ -29,6 +29,13 @@ public class Album {
         this.createDate = new Date();
     }
 
+    public Album(String ownerId, String title, int type) {
+        this.ownerId = ownerId;
+        this.title = title;
+        this.type = type;
+        this.createDate = new Date();
+    }
+
     public String getTitle() {
         return title;
     }

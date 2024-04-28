@@ -102,6 +102,10 @@ public abstract class BasePhotoManager {
         return null;
     }
 
+    public int getCount() {
+        return gallery.size();
+    }
+
     private void refreshUI() {
         if (viewAdapter != null) {
             viewAdapter.notifyDataSetChanged();
