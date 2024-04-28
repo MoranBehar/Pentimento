@@ -169,4 +169,18 @@ public class Photo {
         }
 
     }
+
+//    public void load() {
+//        DBManager.getInstance().getPhotoById(this.getId(), new DBManager.DBActionResult<Photo>() {
+//            @Override
+//            public void onSuccess(Photo myPhoto) {
+//                setTitle(myPhoto.getTitle());
+//            }
+//
+//            @Override
+//            public void onError(Exception e) {
+//
+//            }
+//        });
+//    }
 }
