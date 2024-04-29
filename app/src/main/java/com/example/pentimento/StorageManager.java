@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.os.Environment;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -111,7 +110,7 @@ public class StorageManager {
         try (FileOutputStream out = new FileOutputStream(imageFile)) {
             // Compress the bitmap as PNG and save it to the file
             photoToDownload.getPhoto().compress(Bitmap.CompressFormat.PNG, 100, out);
-            Toast.makeText(context, "Photo saved to pictures directory", Toast.LENGTH_SHORT).show();
+            UIAlerts.InfoAlert("Save Photo", "Photo saved to pictures directory",context);
             Log.d(TAG, "Photo saved to pictures directory");
         } catch (IOException e) {
             Log.d(TAG, "Failed saving photo to pictures directory - file not found");
