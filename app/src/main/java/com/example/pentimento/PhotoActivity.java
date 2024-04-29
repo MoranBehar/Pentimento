@@ -403,6 +403,26 @@ public class PhotoActivity
     }
 
     private void openSecretMenu() {
+
+//        Button addSecret = findViewById(R.id.btn_add_secret);
+//        Button editSecret = findViewById(R.id.btn_edit_secret);
+//        Button deleteSecret = findViewById(R.id.btn_delete_secret);
+//
+//        if(secretManger.getSecretMsgFromPhoto() == null)
+//        {
+//            //no msg in the photo
+//            addSecret.setEnabled(true);
+//            editSecret.setEnabled(false);
+//            deleteSecret.setEnabled(false);
+//        }
+//        else
+//        {
+//            //there is a msg in the photo
+//            addSecret.setEnabled(false);
+//            editSecret.setEnabled(true);
+//            deleteSecret.setEnabled(true);
+//        }
+
         secretManger.showBottomSheetDialog();
     }
 
