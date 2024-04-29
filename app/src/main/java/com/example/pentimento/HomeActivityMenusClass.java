@@ -142,10 +142,12 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         } else if (id == R.id.itemUserInfo) {
             Intent intent = new Intent(this, UserInfoActivity.class);
             startActivity(intent);
-        } else if (id == R.id.itemSettings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
         }
+
+//        else if (id == R.id.itemSettings) {
+//            Intent intent = new Intent(this, SettingsActivity.class);
+//            startActivity(intent);
+//        }
 
         return super.onOptionsItemSelected(item);
     }

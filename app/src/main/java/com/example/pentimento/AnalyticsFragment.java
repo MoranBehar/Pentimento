@@ -1,6 +1,7 @@
 package com.example.pentimento;
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -10,21 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-
 
 public class AnalyticsFragment extends Fragment {
 
@@ -46,13 +42,17 @@ public class AnalyticsFragment extends Fragment {
     private void initAnalytics(View view) {
         dbManager = DBManager.getInstance();
 
+        // setup latch to count 4 actions
         latchLoadData = new CountDownLatch(4);
+
+        // load the data for the pie chart
         loadPhotoViews();
         loadAlbumViews();
         loadSecretViews();
         loadSecretAdded();
 
-
+        // Wait till all the load actions finises before showing the chart
+        // we run this on a dedicated thread so the UI thread will not be blocked
         new Thread(() -> {
             try {
                 latchLoadData.await();
@@ -66,16 +66,18 @@ public class AnalyticsFragment extends Fragment {
 
     }
 
+    // Load the album views data
     private void loadAlbumViews() {
         dbManager.getLogCount(7, 2, new DBManager.DBActionResult<Long>() {
             @Override
             public void onSuccess(Long data) {
                 totalAlbumViews = data;
-                latchLoadData.countDown();  // Decrease count
+                latchLoadData.countDown();  // Decrease latch count
             }
 
             @Override
             public void onError(Exception e) {
+                // If error occurs we also need to decrease the latch
                 latchLoadData.countDown();
             }
         });
@@ -192,7 +194,7 @@ public class AnalyticsFragment extends Fragment {
         ArrayList<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(totalPhotoViews.floatValue(), "Photo Views"));
         entries.add(new PieEntry(totalAlbumViews.floatValue(), "Album Views"));
-        entries.add(new PieEntry(totalSecretAdded.floatValue(), "New Secrets"));
+        entries.add(new PieEntry(totalSecretAdded.floatValue(), "Secrets Added"));
         entries.add(new PieEntry(totalSecretViews.floatValue(), "Secret Views"));
 
         float total =
@@ -215,12 +217,40 @@ public class AnalyticsFragment extends Fragment {
         // Creating a PieData object with the DataSet
         PieData pieData = new PieData(dataSet);
 
+        customizeLegend(pieChart);
+        customizeDescription(pieChart);
+
         // Setting the PieData UI
         pieChart.setData(pieData);
         pieChart.setEntryLabelTextSize(12f);
         pieChart.setCenterText("Category");
         pieChart.setCenterTextSize(14f);
         pieChart.invalidate(); // Refresh the chart
+
+
     }
+
+    public void customizeLegend(PieChart pieChart) {
+        Legend legend = pieChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
+        legend.setDrawInside(false);
+        legend.setTextSize(16f);
+        legend.setEnabled(true);
+    }
+
+    public void customizeDescription(PieChart pieChart) {
+        Description desc = new Description();
+        desc.setText("Pentimento App Usage Overview");
+        desc.setTextColor(R.color.black); // Set the text color
+        desc.setTextSize(18f); // Set the text size in DP
+        desc.setPosition(pieChart.getWidth() - 170, pieChart.getHeight() - 200); // Set position
+        desc.setTextAlign(Paint.Align.RIGHT); // Set text alignment
+
+        pieChart.setDescription(desc); // Apply the custom description to the chart
+        pieChart.invalidate(); // Refresh the chart to update the changes
+    }
+
 
 }

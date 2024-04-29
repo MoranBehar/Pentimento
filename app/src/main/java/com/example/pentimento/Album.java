@@ -14,6 +14,7 @@ public class Album {
     private Date createDate;
     private int numOfPhotos;
     private String albumCoverId;
+    private Bitmap albumCover;
 
     // 1 - user album
     // 2 - favorites
@@ -95,18 +96,27 @@ public class Album {
     }
 
     public void getCoverImage(getCoverImageResult callback) {
-        StorageManager.getInstance().getImageById(getAlbumCoverId(), new StorageActionResult<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                callback.onImageReady(bitmap);
-            }
 
-            @Override
-            public void onError(Exception e) {
+        // If cover was not loaded yet, load it
+        // otherwise return the cover immediately
+        if (albumCover == null) {
+            StorageManager.getInstance().getImageById(getAlbumCoverId(), new StorageActionResult<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    albumCover = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    callback.onImageReady(albumCover);
+                }
 
-            }
-        });
+                @Override
+                public void onError(Exception e) {
+
+                }
+            });
+        } else {
+            callback.onImageReady(albumCover);
+        }
+
+
     }
 
 }

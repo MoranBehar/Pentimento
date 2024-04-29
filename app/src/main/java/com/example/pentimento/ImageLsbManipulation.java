@@ -138,11 +138,11 @@ public class ImageLsbManipulation {
         }
 
         String extractedMessage = utils.convertBinaryToString(message);
-        Log.d("POC", "TheMessage: "+message);
-        Log.d("POC", "TheExtractedMessage: "+extractedMessage);
+//        Log.d("POC", "TheMessage: "+message);
+//        Log.d("POC", "TheExtractedMessage: "+extractedMessage);
 
         String extractedMessageWithoutMarkingCode = extractMessageBody(extractedMessage);
-        Log.d("POC", "TheExtractedMessageWithoutEnding: "+extractedMessageWithoutMarkingCode);
+//        Log.d("POC", "TheExtractedMessageWithoutEnding: "+extractedMessageWithoutMarkingCode);
 
         return extractedMessageWithoutMarkingCode;
     }

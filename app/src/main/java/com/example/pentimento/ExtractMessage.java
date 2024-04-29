@@ -45,11 +45,11 @@ public class ExtractMessage {
         }
 
         String extractedMessage = convertBinaryToString(message);
-        Log.d("POC", "TheMessage: "+message);
-        Log.d("POC", "TheExtractedMessage: "+extractedMessage);
+//        Log.d("POC", "TheMessage: "+message);
+//        Log.d("POC", "TheExtractedMessage: "+extractedMessage);
 
         String extractedMessageWithoutEndingCode = removeEndingCode(extractedMessage, endingCodeOfMsg);
-        Log.d("POC", "TheExtractedMessageWithoutEnding: "+extractedMessageWithoutEndingCode);
+//        Log.d("POC", "TheExtractedMessageWithoutEnding: "+extractedMessageWithoutEndingCode);
 
         return extractedMessageWithoutEndingCode;
     }
@@ -78,7 +78,7 @@ public class ExtractMessage {
 
             //creating a string with 8 char - bit
             String Byte = binaryMsg.substring(i*8, (i*8+8));
-            Log.d("POC", "TheExtractedMessage: "+Byte);
+//            Log.d("POC", "TheExtractedMessage: "+Byte);
 
             massage += convertBinaryToChar(Byte);
         }
@@ -90,7 +90,7 @@ public class ExtractMessage {
 
         // Parse the binary string into an integer - 2 for binary (base)
         int intValue = Integer.parseInt(binaryString, 2);
-        Log.d("POC", "TheExtractedMessage: "+intValue);
+//        Log.d("POC", "TheExtractedMessage: "+intValue);
 
         // Cast the integer to a char
         char character = (char)intValue;

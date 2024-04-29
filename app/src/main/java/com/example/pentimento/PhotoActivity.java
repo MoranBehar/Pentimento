@@ -107,6 +107,12 @@ public class PhotoActivity
         // If the source is a shared photo - load it from the shared manager
         if (source != null && source.equals("shared")) {
             photo = SharedPhotosManager.getInstance().getPhotoById(selectedPhotoId);
+            photo.load(new Photo.actionCallback() {
+                @Override
+                public void onSuccess() {
+                    tvPhotoTitle.setText(photo.getTitle());
+                }
+            });
             return;
         }
 
@@ -366,8 +372,10 @@ public class PhotoActivity
                 //adding photo to fav album
                 addPhotoToAlbum(favAlbum, photo.getId());
                 setFavButtonIcon();
-                Toast.makeText(PhotoActivity.this,
-                        "Photo added to favorites album", Toast.LENGTH_LONG).show();
+
+                UIAlerts.InfoAlert("Favorite",
+                        "Photo was added to your favorites album",
+                        PhotoActivity.this);
             }
 
             @Override

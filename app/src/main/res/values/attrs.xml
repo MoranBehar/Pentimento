@@ -3,6 +3,7 @@
     <declare-styleable name="FormTextEditComponent">
         <attr name="customHint" format="string"/>
         <attr name="topLabelText" format="string"/>
+        <attr name="password" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="CustomImageViewSrc">
