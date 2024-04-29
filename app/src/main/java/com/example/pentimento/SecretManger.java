@@ -7,26 +7,25 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class SecretManger implements editSecretMessageDialogFragment.DialogListener {
-    private Activity myActivity;
+    private PhotoActivity myActivity;
     private BottomSheetDialog bottomSheetSecret;
     private String myMessage;
     private Photo myPhoto;
     private secretResult callback;
     private StorageManager storageManager;
 
-    public SecretManger(Activity activity, Photo photo, secretResult callback) {
+    public SecretManger(PhotoActivity activity, Photo photo, secretResult callback) {
         this.myActivity = activity;
         this.myPhoto = photo;
         this.callback = callback;
         initBottomSheetDialog();
-
+        extractMessageFromPhoto();
         storageManager = StorageManager.getInstance();
     }
 
@@ -66,19 +65,7 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
                     }
                     else if (v.getId() == R.id.btn_delete_secret)
                     {
-                        ImageLsbManipulation lsbManipulation = new
-                                ImageLsbManipulation(myPhoto.getPhoto());
-
-                        // delete the msg and refresh memory
-                        myPhoto.setPhoto(lsbManipulation.deleteMessageFromLSB());
-
-                        //update image in storage
-                        updatePhotoInStorage();
-
-                        //update the activity the msg deleted
-                        callback.onSecretDeleted();
-
-                        Toast.makeText(myActivity, "message deleted", Toast.LENGTH_LONG).show();
+                        deleteSecretMessage();
                     }
 
                     // Dismiss the BottomSheetDialog
@@ -103,19 +90,44 @@ public class SecretManger implements editSecretMessageDialogFragment.DialogListe
     }
 
     public String getSecretMsgFromPhoto() {
+        return myMessage;
+    }
+
+    private void extractMessageFromPhoto() {
         ImageLsbManipulation extractMessage = new ImageLsbManipulation(myPhoto.getPhoto());
-        return extractMessage.getMessage();
+        myMessage = extractMessage.getMessage();
     }
 
 
     private void openEditSecretMessageDialogFragment() {
-        editSecretMessageDialogFragment dialogFragment = new editSecretMessageDialogFragment();
+
+        myActivity.closeSecretMessage();
+
+        editSecretMessageDialogFragment dialogFragment =
+                editSecretMessageDialogFragment.createDialog(myMessage);
 
         FragmentActivity fragmentActivity = (FragmentActivity) myActivity;
 
         // Set the listener
         dialogFragment.setDialogListener(this);
         dialogFragment.show(fragmentActivity.getSupportFragmentManager(), "YourDialogFragment");
+    }
+
+    private void deleteSecretMessage() {
+        ImageLsbManipulation lsbManipulation = new
+                ImageLsbManipulation(myPhoto.getPhoto());
+
+        // delete the msg and refresh memory
+        myPhoto.setPhoto(lsbManipulation.deleteMessageFromLSB());
+        myMessage = null;
+
+        //update image in storage
+        updatePhotoInStorage();
+
+        //update the activity the msg deleted
+        callback.onSecretDeleted();
+
+        UIAlerts.InfoAlert("Secret Message", "Message deleted", myActivity);
     }
 
     @Override

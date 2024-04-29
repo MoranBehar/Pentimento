@@ -70,8 +70,6 @@ public class PhotoActivity
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(navListener);
-//        bottomNav.setItemIconTintList(null);
-
 
         ivPhoto = findViewById(R.id.ivPhoto);
         tvPhotoTitle = findViewById(R.id.tvPhotoTitle);
@@ -275,6 +273,12 @@ public class PhotoActivity
         photoAnimator.start();
         secretAnimator.start();
         scrambleSecretText();
+    }
+
+    public void closeSecretMessage() {
+        if (!isSecretHidden) {
+            toggleSecretMessage();
+        }
     }
 
     private void scrambleSecretText() {
