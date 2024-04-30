@@ -27,10 +27,6 @@ public class PhoneGalleryActivity extends AppCompatActivity  {
     }
 
     private void openPhoneGallery() {
-//        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-//        galleryIntent.setType("image/*");
-//        startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST);
-
 
         // Registers a photo picker activity launcher in single-select mode.
         ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
@@ -49,13 +45,4 @@ public class PhoneGalleryActivity extends AppCompatActivity  {
                 .build());
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-//            Uri imageUri = data.getData();
-//            // Do something with the selected image URI, such as displaying it in an ImageView
-//            Toast.makeText(this, "Image selected from gallery: " + imageUri.toString(), Toast.LENGTH_LONG).show();
-//        }
-//    }
 }

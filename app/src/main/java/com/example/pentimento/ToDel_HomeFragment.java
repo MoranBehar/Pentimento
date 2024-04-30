@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class ToDel_HomeFragment extends Fragment implements View.OnClickListener {
 
     private Button btnTakePhoto, btnUploadToGallery;
 

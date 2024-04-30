@@ -6,25 +6,27 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class ViewSecretFragment extends Fragment {
+public class ToDel_AddSecretFragment extends Fragment
+        implements View.OnClickListener, ToDel_GalleryDialogFragment.DialogListener {
 
-    private ListView lvViewSecretGallery;
+    private Button btnChoosePhoto, btnAddSecret;
+
+    private ImageView ivAddSecretPhoto;
 
     private FirebaseAuth fbAuth;
 
@@ -35,62 +37,53 @@ public class ViewSecretFragment extends Fragment {
 
     private List<Photo> gallery;
 
-    private PhotoAdapter adapter;
-    public static String TAG = "GalleryList";
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_view_secret, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_secret, container, false);
 
         findViews(view);
-
-        initViewGalleryList();
-
-        return view;
-    }
-
-    private void initViewGalleryList() {
-        GalleryManager gm = GalleryManager.getInstance();
-        gm.setErrorCallBack(this::errorHandler);
-
-        adapter = new PhotoAdapter(getContext(), gm.getPhotosList(), R.layout.photo_item_list);
-        gm.setPhotoAdapter(adapter);
+        setListeners();
 
         fbAuth = FirebaseAuth.getInstance();
         fbDB = FirebaseFirestore.getInstance();
         fbStorage = FirebaseStorage.getInstance();
         storageRef = fbStorage.getReference();
 
-        lvViewSecretGallery.setAdapter(adapter);
-        lvViewSecretGallery.setOnItemClickListener(photoSelectedEvent());
-    }
+        gallery = new ArrayList<>();
 
-    public void errorHandler(String errorMessage) {
-        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
-        Log.e(TAG, errorMessage);
+        return view;
     }
-
-    private  AdapterView.OnItemClickListener photoSelectedEvent() {
-        return new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                comingSoonDialog();
-            }
-        };
-    }
-
 
     private void findViews(View view) {
-        lvViewSecretGallery = view.findViewById(R.id.lvViewSecretGallery);
+        btnChoosePhoto = view.findViewById(R.id.btnChoosePhoto);
+        btnAddSecret = view.findViewById(R.id.btnAddSecret);
+        ivAddSecretPhoto = view.findViewById(R.id.ivAddSecretPhoto);
+    }
+
+    private void setListeners() {
+        btnChoosePhoto.setOnClickListener(this);
+        btnAddSecret.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == btnChoosePhoto)
+        {
+            showGallery();
+        }
+        else if(v == btnAddSecret)
+        {
+            comingSoonDialog();
+        }
     }
 
     private void comingSoonDialog() {
         AlertDialog.Builder confirmLogOut =
                 new AlertDialog.Builder(getContext());
 
-        confirmLogOut.setIcon(R.drawable.baseline_eye_24_black);
+        confirmLogOut.setIcon(R.drawable.baseline_lock_24);
         confirmLogOut.setTitle("Coming Soon");
         confirmLogOut.setMessage("We are working on this option these days. " +
                 "You will receive a notification when it is ready");
@@ -105,4 +98,16 @@ public class ViewSecretFragment extends Fragment {
 
         confirmLogOut.create().show();
     }
+
+    private void showGallery() {
+        ToDel_GalleryDialogFragment myGallery = new ToDel_GalleryDialogFragment();
+        myGallery.setListener(this);
+        myGallery.show(getChildFragmentManager(), ToDel_GalleryDialogFragment.TAG);
+    }
+
+    public void onPhotoSelected(Photo imageSelected) {
+        ivAddSecretPhoto.setImageBitmap(imageSelected.getPhoto());
+        btnAddSecret.setEnabled(true); //be able to add secret to photo
+    }
+
 }

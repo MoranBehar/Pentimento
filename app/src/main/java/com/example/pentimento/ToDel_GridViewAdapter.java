@@ -5,13 +5,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-public class GridViewAdapter extends BaseAdapter {
+public class ToDel_GridViewAdapter extends BaseAdapter {
 
     private Context myContext;
     private String[] mItems;
 
 
-    public GridViewAdapter(Context context, String[] items) {
+    public ToDel_GridViewAdapter(Context context, String[] items) {
         this.myContext = context;
         this.mItems = items;
     }

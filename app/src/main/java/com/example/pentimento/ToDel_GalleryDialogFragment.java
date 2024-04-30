@@ -16,7 +16,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 
-public class GalleryDialogFragment extends DialogFragment {
+public class ToDel_GalleryDialogFragment extends DialogFragment {
 
     private GridView gvGallery;
     private PhotoAdapter adapter;

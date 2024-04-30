@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class TestActivity extends AppCompatActivity implements View.OnClickListener {
+public class ToDel_TestActivity extends AppCompatActivity implements View.OnClickListener {
 
     ImageView ivPhoto;
     TextView tvMsg;

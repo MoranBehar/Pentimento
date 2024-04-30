@@ -35,10 +35,10 @@
             android:name=".UserInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ToDel_SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".TestActivity"
+            android:name=".ToDel_TestActivity"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"

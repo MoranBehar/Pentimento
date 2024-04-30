@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
+public class ToDel_SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btnClose;
 
