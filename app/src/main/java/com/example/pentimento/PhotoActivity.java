@@ -23,7 +23,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -70,8 +69,6 @@ public class PhotoActivity
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(navListener);
-//        bottomNav.setItemIconTintList(null);
-
 
         ivPhoto = findViewById(R.id.ivPhoto);
         tvPhotoTitle = findViewById(R.id.tvPhotoTitle);
@@ -277,6 +274,12 @@ public class PhotoActivity
         scrambleSecretText();
     }
 
+    public void closeSecretMessage() {
+        if (!isSecretHidden) {
+            toggleSecretMessage();
+        }
+    }
+
     private void scrambleSecretText() {
 
         final Handler handler = new Handler();
@@ -390,8 +393,8 @@ public class PhotoActivity
                         favAlbum.setTitle("Favorites");
                         addPhotoToAlbum(favAlbum, photo.getId());
 
-                        Toast.makeText(PhotoActivity.this,
-                                "Photo added to favorites album", Toast.LENGTH_LONG).show();
+                        UIAlerts.InfoAlert("Favorites", "Photo added to favorites album", getBaseContext());
+
                     }
 
                     @Override
@@ -402,7 +405,6 @@ public class PhotoActivity
             }
         });
 
-        Toast.makeText(this, "favorite", Toast.LENGTH_SHORT).show();
     }
 
     private void setFavButtonIcon() {

@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class editSecretMessageDialogFragment extends DialogFragment {
 
@@ -28,8 +27,20 @@ public class editSecretMessageDialogFragment extends DialogFragment {
     }
 
 
+    public static editSecretMessageDialogFragment createDialog(String msgToEdit) {
+        editSecretMessageDialogFragment fragment = new editSecretMessageDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("msgToEdit", msgToEdit);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        // Retrieve the secret message passed to the fragment
+        String msgToEdit = getArguments().getString("msgToEdit");
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         // Inflate the dialog layout for this fragment
@@ -38,13 +49,14 @@ public class editSecretMessageDialogFragment extends DialogFragment {
         builder.setView(dialogView);
 
         etSecret = dialogView.findViewById(R.id.etSecret);
+        etSecret.setText(msgToEdit);
 
         builder.setPositiveButton("Save", new
                 DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         listener.onDialogDataReturn(etSecret.getText().toString());
-                        Toast.makeText(getContext(), "Secret message saved", Toast.LENGTH_SHORT).show();
+                        UIAlerts.InfoAlert("Secret Message", "Message was embedded in the photo", dialogView.getContext());
                     }
                 });
 

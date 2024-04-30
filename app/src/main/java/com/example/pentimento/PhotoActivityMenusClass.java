@@ -7,6 +7,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+
 public abstract class PhotoActivityMenusClass extends AppCompatActivity {
 
     private static final String TAG = "PhotoActivityMenusClass";
@@ -58,5 +60,6 @@ public abstract class PhotoActivityMenusClass extends AppCompatActivity {
     private void editBtnClicked() {
         Toast.makeText(this, "edit clicked", Toast.LENGTH_SHORT).show();
     }
+
 
 }
