@@ -1,11 +1,5 @@
 package com.example.pentimento;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -15,7 +9,6 @@ public class AlbumsManager {
 
     private ArrayList<Album> albums;
     private AlbumAdapter viewAdapter;
-    private Consumer<String> errorCallBack;
     private DBManager dbManager;
 
     private static AlbumsManager instance;
@@ -65,10 +58,5 @@ public class AlbumsManager {
         return albums.get(position);
     }
 
-    private void notifyError(String errorMessage) {
-        if (errorCallBack != null) {
-            errorCallBack.accept(errorMessage);
-        }
-    }
 
 }
