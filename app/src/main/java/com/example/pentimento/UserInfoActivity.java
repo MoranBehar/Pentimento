@@ -10,7 +10,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -77,12 +76,29 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
             String newPhone = etUserDetailsPhone.getText().toString();
             String newAge = etUserDetailsAge.getText().toString();
 
-            //check if new data is valid
-            Boolean validate = validateNewData(newEmail, newName, newPhone, newAge);
+            Boolean formValid = true;
 
-            if (!validate) {
-                Toast.makeText(this, "Your data does not valid", Toast.LENGTH_SHORT).show();
-            } else {
+            //check if new data is valid
+            ValidationUtils validate = new ValidationUtils();
+
+            if (!validate.isEmailOK(newEmail)) {
+                etUserDetailsEmail.setError("Invalid email address");
+                formValid = false;
+            }
+            if (!validate.isNameOK(newName)) {
+                etUserDetailsName.setError("Invalid or missing name");
+                formValid = false;
+            }
+            if (!validate.isPhoneOK(newPhone)) {
+                etUserDetailsPhone.setError("Invalid phone number");
+                formValid = false;
+            }
+            if (!validate.isAgeOK(newAge)) {
+                etUserDetailsAge.setError("You must be at least 15");
+                formValid = false;
+            }
+
+            if (formValid) {
                 //creating new user with the new date
                 User newUserInfo = new User(fbAuth.getUid(), newEmail, newName, newPhone, Integer.parseInt(newAge));
 
@@ -90,15 +106,6 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
                 updateUserInfo(newUserInfo);
             }
         }
-    }
-
-    private Boolean validateNewData(String newEmail, String newName, String newPhone, String newAge) {
-        ValidationUtils validate = new ValidationUtils();
-
-        return validate.isEmailOK(newEmail) &
-                validate.isNameOK(newName) &
-                validate.isPhoneOK(newPhone) &
-                validate.isAgeOK(newAge);
     }
 
     private void updateUserInfo(User user) {
@@ -111,7 +118,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(UserInfoActivity.this, "User updated Successfully ", Toast.LENGTH_SHORT).show();
+                        UIAlerts.InfoAlert("User Profile", "Your profile was updated Successfully", UserInfoActivity.this);
                         finish();
                     }
                 });
@@ -132,8 +139,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(UserInfoActivity.this,
-                                "Could not get your data", Toast.LENGTH_LONG).show();
+                        UIAlerts.ErrorAlert("Error","Could not load your data", UserInfoActivity.this);
                     }
                 });
     }
@@ -224,7 +230,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
-    private void formChanged () {
+    private void formChanged() {
 
         //there is new data
         btnUpdateInfo.setEnabled(true);

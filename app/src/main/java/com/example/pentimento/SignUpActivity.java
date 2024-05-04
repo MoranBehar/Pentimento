@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -86,17 +85,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             signUpUserToApp(name, email, phone, password, age);
         } else if (!validate.isEmailOK(email)) {
             cmpSignUpEmail.setError("Email is invalid");
-            Toast.makeText(SignUpActivity.this, "Email not valid", Toast.LENGTH_LONG).show();
         } else if (!validate.isAgeOK(age)) {
-            cmpSignUpAge.setError("Age is invalid");
-            Toast.makeText(SignUpActivity.this, "Age not valid", Toast.LENGTH_LONG).show();
+            cmpSignUpAge.setError("You must be at least 15 to register");
         } else if (!validate.isNameOK(name)) {
             cmpSignUpName.setError("Name is invalid, only allow a-z A-Z");
-            Toast.makeText(SignUpActivity.this, "Name not valid", Toast.LENGTH_LONG).show();
         } else if (!validate.isPasswordOK(password)) {
-            Toast.makeText(SignUpActivity.this, "Password not valid", Toast.LENGTH_LONG).show();
+            etSignUpPassword.setError("Password is invalid");
         } else if (!validate.isPhoneOK(phone)) {
-            Toast.makeText(SignUpActivity.this, "Phone not valid", Toast.LENGTH_LONG).show();
+            etSignUpPhoneNumber.setError("Invalid phone number");
         }
     }
 
@@ -118,13 +114,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(SignUpActivity.this, "Failed to register", Toast.LENGTH_LONG).show();
+                            UIAlerts.ErrorAlert("SignUp", "Failed registering a new user", SignUpActivity.this);
                         }
                     });
 
-                    Toast.makeText(SignUpActivity.this, "Wait...", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(SignUpActivity.this, "Failed to register", Toast.LENGTH_LONG).show();
+                    UIAlerts.ErrorAlert("SignUp", "Failed registering a new user", SignUpActivity.this);
                     Log.d("error", task.getException().toString());
                 }
             }

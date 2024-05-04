@@ -37,7 +37,15 @@ public class ValidationUtils {
         return true;
     }
     public boolean isAgeOK(String age) {
-        int ageNum=Integer.parseInt(age);
+
+        int ageNum;
+
+        try {
+            ageNum=Integer.parseInt(age);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
         if (android.text.TextUtils.isEmpty(age))
             return false;
         else if (ageNum < 15)

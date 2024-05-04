@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class editPhotoNameDialogFragment extends DialogFragment {
 
@@ -43,7 +42,6 @@ public class editPhotoNameDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         listener.onDialogDataReturn(etPhotoName.getText().toString());
-                        Toast.makeText(getContext(), "Photo name has changed", Toast.LENGTH_LONG).show();
                     }
                 });
 

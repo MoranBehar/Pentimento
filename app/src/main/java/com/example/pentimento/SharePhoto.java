@@ -106,7 +106,7 @@ public class SharePhoto {
 
     private void shareToPentimentoUser(String photoId, String toUserId) {
         dbManager.sharePhotoToUser(photoId,toUserId);
-        Toast.makeText(bottomSheetShare.getContext(), "Shared", Toast.LENGTH_SHORT).show();
+        UIAlerts.InfoAlert("Sharing", "Photo was shared", bottomSheetShare.getContext() );
     }
 
     private void loadFriendsList() {
