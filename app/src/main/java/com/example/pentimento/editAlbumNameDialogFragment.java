@@ -6,23 +6,24 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-public class editPhotoNameDialogFragment extends DialogFragment {
+public class editAlbumNameDialogFragment extends DialogFragment {
 
-    EditText etPhotoName;
+    EditText etAlbumName;
 
     public interface DialogListener {
-        void onDialogDataReturn(String photoName);
+        void onDialogDataReturn(String albumName);
     }
-    private DialogListener listener;
+    private editAlbumNameDialogFragment.DialogListener listener;
 
     // Method to attach the listener
-    public void setDialogListener(DialogListener listener) {
+    public void setDialogListener(editAlbumNameDialogFragment.DialogListener listener) {
         this.listener = listener;
     }
 
@@ -32,16 +33,16 @@ public class editPhotoNameDialogFragment extends DialogFragment {
 
         // Inflate the dialog layout for this fragment
         View dialogView = getActivity().getLayoutInflater().
-                inflate(R.layout.fragment_edit_photo_name_dialog, null);
+                inflate(R.layout.fragment_edit_album_name_dialog, null);
         builder.setView(dialogView);
 
-        etPhotoName = dialogView.findViewById(R.id.etPhotoName);
+        etAlbumName = dialogView.findViewById(R.id.etAlbumName);
 
         builder.setPositiveButton("Save", new
                 DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onDialogDataReturn(etPhotoName.getText().toString());
+                        listener.onDialogDataReturn(etAlbumName.getText().toString());
                     }
                 });
 
@@ -59,7 +60,7 @@ public class editPhotoNameDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_edit_photo_name_dialog, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_album_name_dialog, container, false);
 
         return view;
     }

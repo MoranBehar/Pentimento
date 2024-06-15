@@ -1,6 +1,5 @@
 package com.example.pentimento;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -8,14 +7,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.FragmentActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 
-public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass {
+public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass
+        implements View.OnClickListener, editAlbumNameDialogFragment.DialogListener {
 
     public static String TAG = "AlbumPhotosFragment";
 
@@ -26,6 +29,12 @@ public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass {
     private int albumPosition;
     private AlbumPhotosManager apManager;
 
+    private DBManager dbManager;
+
+    ImageButton btn_albumPhotosToolbar_edit;
+
+    TextView tvAlbumTitle;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +43,8 @@ public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass {
         albumPosition = getIntent().getIntExtra("albumPosition", -1);
 
         initGallery();
+        setEditAlbumNameBtn();
+        tvAlbumTitle = findViewById(R.id.tvAlbumTitle);
     }
 
     @Override
@@ -53,9 +64,7 @@ public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass {
 
         album = AlbumsManager.getInstance().getAlbumByPosition(albumPosition);
 
-        String formattedTitle = String.format("%s Album (%d)", album.getTitle(), album.getNumOfPhotos());
-        TextView title = findViewById(R.id.tvAlbumTitle);
-        title.setText(formattedTitle);
+        setPageTitle();
 
         TextView createDate = findViewById(R.id.tvAlbumCreateDate);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
@@ -63,9 +72,21 @@ public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass {
 
         gvGallery.setOnItemClickListener(photoSelectedEvent());
 
+        dbManager = DBManager.getInstance();
+
         // Log view
         DBManager.getInstance().addLogEntry(album.getId(), 2);
+    }
 
+    private void setPageTitle() {
+        String formattedTitle = String.format("%s Album (%d)", album.getTitle(), album.getNumOfPhotos());
+        TextView title = findViewById(R.id.tvAlbumTitle);
+        title.setText(formattedTitle);
+    }
+
+    private void setEditAlbumNameBtn() {
+        btn_albumPhotosToolbar_edit = findViewById(R.id.btn_albumPhotosToolbar_edit);
+        btn_albumPhotosToolbar_edit.setOnClickListener(this);
     }
 
     private  AdapterView.OnItemClickListener photoSelectedEvent() {
@@ -88,5 +109,32 @@ public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass {
     public void errorHandler(String errorMessage) {
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
         Log.e(TAG, errorMessage);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == btn_albumPhotosToolbar_edit){
+            openEditAlbumNameDialogFragment();
+        }
+    }
+
+    private void openEditAlbumNameDialogFragment() {
+        editAlbumNameDialogFragment dialogFragment = new editAlbumNameDialogFragment();
+
+        FragmentActivity fragmentActivity = (FragmentActivity) AlbumPhotosActivity.this;
+
+        // Set the listener
+        dialogFragment.setDialogListener(this::onDialogDataReturn);
+        dialogFragment.show(fragmentActivity.getSupportFragmentManager(), "YourDialogFragment");
+    }
+
+    @Override
+    public void onDialogDataReturn(String photoName) {
+        album.setTitle(photoName);
+
+        dbManager.updateAlbumTitle(album);
+
+        //set the ui text to the updated name
+        setPageTitle();
     }
 }
