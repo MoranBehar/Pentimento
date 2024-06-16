@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -119,7 +120,9 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onSuccess(Void unused) {
                         UIAlerts.InfoAlert("User Profile", "Your profile was updated Successfully", UserInfoActivity.this);
-                        finish();
+
+                        // Wait for 3 sec before killing the activity and returning to the previous one
+                        new Handler().postDelayed(() -> finish(), 3000);
                     }
                 });
 
