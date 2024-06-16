@@ -540,6 +540,14 @@ public class DBManager {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Log.d(TAG, "Document successfully deleted!");
+
+                                                // TODO - Update number of photos in album
+//                                                album.setNumOfPhotos(album.getNumOfPhotos() - 1);
+//                                                if (album.getNumOfPhotos() == 0) {
+//                                                    album.setAlbumCoverId(null);
+//                                                }
+
+//                                                updateAlbum(album);
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {

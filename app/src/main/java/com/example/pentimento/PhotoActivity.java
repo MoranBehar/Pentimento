@@ -229,14 +229,15 @@ public class PhotoActivity
         secretMessageText = secretManger.getSecretMsgFromPhoto();
         checkSecretMessage();
     }
+
     private void toggleSecretMessage() {
 
-        if (secretMessageText == null ) {
+        if (secretMessageText == null) {
             extractSecretMessage();
         }
 
         // If there is no message, nothing to do
-        if (secretMessageText == null ) return;
+        if (secretMessageText == null) return;
 
         float startFade = 1f;
         float endFade = 0.4f;
@@ -380,14 +381,13 @@ public class PhotoActivity
         if (isFavorite) {
             removePhotoFromFavAlbum();
             isFavorite = false;
-            btnFav.setChecked(isFavorite);
-        }
-        else
-        {
+        } else {
             addPhotoToFavAlbum();
             isFavorite = true;
-            btnFav.setChecked(isFavorite);
         }
+
+        btnFav.setCheckable(isFavorite);
+        bottomNav.invalidate();
 
     }
 
@@ -399,13 +399,13 @@ public class PhotoActivity
                 //photo was found in fav album
                 isFavorite = true;
                 btnFav.setChecked(isFavorite);
+                bottomNav.invalidate();
             }
 
             @Override
             public void onError(Exception e) {
                 //photo was not found in fav album
                 isFavorite = false;
-                btnFav.setChecked(isFavorite);
             }
         });
     }
@@ -527,8 +527,7 @@ public class PhotoActivity
                 child.setOnClickListener(v -> {
                     if (v.getId() == R.id.btn_edit_name) {
                         openEditPhotoNameDialogFragment();
-                    }
-                    else if (v.getId() == R.id.btn_black_and_white_filter) {
+                    } else if (v.getId() == R.id.btn_black_and_white_filter) {
                         setBlackAndWhiteFiler();
                     }
 
@@ -547,8 +546,7 @@ public class PhotoActivity
         Bitmap bitmapWithFilter;
 
         //check for secret msg
-        if(secretManger.getSecretMsgFromPhoto() != null)
-        {
+        if (secretManger.getSecretMsgFromPhoto() != null) {
             //msg exist - extract
             msg = secretManger.getSecretMsgFromPhoto();
 
@@ -561,10 +559,7 @@ public class PhotoActivity
 
             //msg exist - implement in photo
             secretManger.addSecretMsgToPhoto(bitmapWithFilter, photo, msg);
-        }
-
-        else
-        {
+        } else {
             //set filter on photo
             ImageProcessor imageProcessor = new ImageProcessor();
             bitmapWithFilter = imageProcessor.grayScale(photo.getPhoto(), 50);
