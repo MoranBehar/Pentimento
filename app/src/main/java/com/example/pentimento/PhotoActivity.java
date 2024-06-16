@@ -56,19 +56,24 @@ public class PhotoActivity
     private FirebaseAuth auth;
 
     private BottomSheetDialog bottomSheetAlbum, bottomSheetEdit;
+    private MenuItem btnFav;
+    private BottomNavigationView bottomNav;
     private ListView lvAlbumsListView;
     private ArrayList<Album> albums;
 
     private AlbumAdapter adapter;
     private SecretManger secretManger;
 
+    private Album favAlbum;
+    private Boolean isFavorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(navListener);
+        btnFav = bottomNav.getMenu().findItem(R.id.nav_favorite_fragment);
 
         ivPhoto = findViewById(R.id.ivPhoto);
         tvPhotoTitle = findViewById(R.id.tvPhotoTitle);
@@ -77,6 +82,8 @@ public class PhotoActivity
         dbManager = DBManager.getInstance();
         storageManager = StorageManager.getInstance();
         auth = FirebaseAuth.getInstance();
+        UserManager myManager = UserManager.getInstance();
+        favAlbum = myManager.getUserFavAlbum();
 
         // Init
         loadPhoto();
@@ -108,6 +115,7 @@ public class PhotoActivity
                 @Override
                 public void onSuccess() {
                     tvPhotoTitle.setText(photo.getTitle());
+                    setPhotoFavStatus();
                 }
             });
             return;
@@ -121,6 +129,9 @@ public class PhotoActivity
                 photo = galleryManager.getPhotoById(selectedPhotoId);
             }
         }
+
+        setPhotoFavStatus();
+
     }
 
     private void setPhoto() {
@@ -365,51 +376,54 @@ public class PhotoActivity
     }
 
     private void favToggle() {
-        String uid = auth.getUid();
 
+        if (isFavorite) {
+            removePhotoFromFavAlbum();
+            isFavorite = false;
+            btnFav.setChecked(isFavorite);
+        }
+        else
+        {
+            addPhotoToFavAlbum();
+            isFavorite = true;
+            btnFav.setChecked(isFavorite);
+        }
 
-        //get album fav(type 2) - if exist add to album, if not - create and add
-        dbManager.getAlbumByType(2, uid, new DBManager.DBActionResult<Album>() {
+    }
+
+    private void setPhotoFavStatus() {
+
+        dbManager.getPhotoByAlbumId(favAlbum.getId(), photo, new DBManager.DBActionResult<Boolean>() {
             @Override
-            public void onSuccess(Album favAlbum) {
-                //adding photo to fav album
-                addPhotoToAlbum(favAlbum, photo.getId());
-                setFavButtonIcon();
-
-                UIAlerts.InfoAlert("Favorite",
-                        "Photo was added to your favorites album",
-                        PhotoActivity.this);
+            public void onSuccess(Boolean foundPhoto) {
+                //photo was found in fav album
+                isFavorite = true;
+                btnFav.setChecked(isFavorite);
             }
 
             @Override
             public void onError(Exception e) {
-                // favorite album doesn't exist - create (type 2 - fav)
-                Album favAlbum = new Album(uid, "Favorites", 2);
-                dbManager.createAlbum(favAlbum, new DBManager.DBActionResult<String>() {
-                    @Override
-                    public void onSuccess(String albumId) {
-                        //adding photo to fav album
-                        favAlbum.setId(albumId);
-                        favAlbum.setTitle("Favorites");
-                        addPhotoToAlbum(favAlbum, photo.getId());
-
-                        UIAlerts.InfoAlert("Favorites", "Photo added to favorites album", getBaseContext());
-
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-
-                    }
-                });
+                //photo was not found in fav album
+                isFavorite = false;
+                btnFav.setChecked(isFavorite);
             }
         });
-
     }
 
-    private void setFavButtonIcon() {
-        BottomNavigationItemView btnFav = findViewById(R.id.nav_delete_fragment);
-        btnFav.setChecked(true);
+    private void addPhotoToFavAlbum() {
+        dbManager.addPhotoToAlbum(favAlbum, photo.getId());
+
+        UIAlerts.InfoAlert("Favorite",
+                "Photo was added to your favorites album",
+                PhotoActivity.this);
+    }
+
+    private void removePhotoFromFavAlbum() {
+        dbManager.deletePhotoFromAlbum(photo.getId(), favAlbum.getId());
+
+        UIAlerts.InfoAlert("Favorite",
+                "Photo was deleted from your favorites album",
+                PhotoActivity.this);
     }
 
     private void openSecretMenu() {

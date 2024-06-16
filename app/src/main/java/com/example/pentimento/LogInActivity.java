@@ -24,6 +24,8 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
     FirebaseAuth fbAuth;
 
+    UserManager myManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,9 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful())
                         {
+                            //saving user in memory
+                            myManager = UserManager.getInstance();
+
                             Intent intent = new Intent(LogInActivity.this,
                                     HomeActivity.class);
                             startActivity(intent);

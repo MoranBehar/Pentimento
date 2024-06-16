@@ -629,34 +629,6 @@ public class DBManager {
     }
 
 
-    public void getAlbumsByPhotoId(Photo photoInAlbum, DBActionResult<String> callBack) {
-
-        String albumId = "";
-
-        CollectionReference colRef = fbDB.collection("AlbumPhotos");
-        colRef.whereEqualTo("photoId", photoInAlbum.getId())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Map<String, Object> row = document.getData();
-
-                            String albumId = row.get("albumId").toString();
-                        }
-
-                        callBack.onSuccess(albumId);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
-    }
-
-
     // Log activities in the app
     // 1 - Photo View
     // 2 - Album View
@@ -764,4 +736,33 @@ public class DBManager {
                     }
                 });
     }
+
+    public void getPhotoByAlbumId(String albumId, Photo photo, DBActionResult<Boolean> callBack) {
+
+
+        CollectionReference colRef = fbDB.collection("AlbumPhotos");
+        colRef.whereEqualTo("albumId", albumId)
+                .whereEqualTo("photoId", photo.getId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if (task.getResult().isEmpty()) {
+                                //not found
+                                callBack.onError(null);
+                            }
+                            else {
+                                //Photo was found in this album
+                                callBack.onSuccess(true);
+                            }
+
+
+
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+    }
+
 }
