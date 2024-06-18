@@ -40,7 +40,7 @@ public class AlbumPhotosManager extends BasePhotoManager {
         instance = null;
     }
 
-    protected void loadPhotos() {
+    public void loadPhotos() {
         if (reloadNeeded()) {
             loadFromDB();
         }
@@ -88,7 +88,7 @@ public class AlbumPhotosManager extends BasePhotoManager {
 
 
         // If album's data has updated
-        if((currentAlbum != null) && (currentAlbum.getId() == albumsManager.getLastUpdatedAlbumId()))
+        if((currentAlbum != null) && (currentAlbum.getId().equals(albumsManager.getLastUpdatedAlbumId())))
         {
             albumsManager.setLastUpdatedAlbumId(null);
             return true;

@@ -541,12 +541,9 @@ public class DBManager {
                                             public void onSuccess(Void aVoid) {
                                                 Log.d(TAG, "Document successfully deleted!");
 
-                                                getAlbumById(albumId, new DBActionResult() {
+                                                getAlbumById(albumId, new DBActionResult<Album>() {
                                                     @Override
-                                                    public void onSuccess(Object data) {
-
-                                                        //get the album data to an Album object
-                                                        Album album = document.toObject(Album.class);
+                                                    public void onSuccess(Album album) {
 
                                                         //set the num of photos in this album
                                                         album.setNumOfPhotos(album.getNumOfPhotos() - 1);

@@ -137,4 +137,10 @@ public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass
         //set the ui text to the updated name
         setPageTitle();
     }
+
+    public void onResume() {
+        super.onResume();
+        apManager.loadPhotos();
+        adapter.notifyDataSetChanged();
+    }
 }
