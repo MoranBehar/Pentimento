@@ -64,6 +64,9 @@ public class PhotoActivity
     private AlbumAdapter adapter;
     private SecretManger secretManger;
 
+    private AlbumsManager albumsManager;
+
+
     private Album favAlbum;
     private Boolean isFavorite;
 
@@ -84,6 +87,7 @@ public class PhotoActivity
         auth = FirebaseAuth.getInstance();
         UserManager myManager = UserManager.getInstance();
         favAlbum = myManager.getUserFavAlbum();
+        albumsManager = AlbumsManager.getInstance();
 
         // Init
         loadPhoto();
@@ -413,6 +417,8 @@ public class PhotoActivity
     private void addPhotoToFavAlbum() {
         dbManager.addPhotoToAlbum(favAlbum, photo.getId());
 
+        albumsManager.setLastUpdatedAlbumId(favAlbum.getId());
+
         UIAlerts.InfoAlert("Favorite",
                 "Photo was added to your favorites album",
                 PhotoActivity.this);
@@ -420,6 +426,8 @@ public class PhotoActivity
 
     private void removePhotoFromFavAlbum() {
         dbManager.deletePhotoFromAlbum(photo.getId(), favAlbum.getId());
+
+        albumsManager.setLastUpdatedAlbumId(favAlbum.getId());
 
         UIAlerts.InfoAlert("Favorite",
                 "Photo was deleted from your favorites album",

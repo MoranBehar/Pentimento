@@ -18,6 +18,8 @@ public class AlbumPhotosManager extends BasePhotoManager {
     private static AlbumPhotosManager instance;
     private Album currentAlbum, newAlbum;
 
+    private AlbumsManager albumsManager = AlbumsManager.getInstance();
+
     // Implement Singleton
     private AlbumPhotosManager() {
         super();
@@ -82,6 +84,14 @@ public class AlbumPhotosManager extends BasePhotoManager {
                 currentAlbum = newAlbum;
                 return true;
             }
+        }
+
+
+        // If album's data has updated
+        if((currentAlbum != null) && (currentAlbum.getId() == albumsManager.getLastUpdatedAlbumId()))
+        {
+            albumsManager.setLastUpdatedAlbumId(null);
+            return true;
         }
 
         // Its the same album - no need to reload

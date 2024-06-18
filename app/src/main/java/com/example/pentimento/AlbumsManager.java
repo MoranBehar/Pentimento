@@ -11,6 +11,8 @@ public class AlbumsManager {
     private AlbumAdapter viewAdapter;
     private DBManager dbManager;
 
+    private String lastUpdatedAlbumId;
+
     private static AlbumsManager instance;
 
     // Implement as Singleton
@@ -58,5 +60,11 @@ public class AlbumsManager {
         return albums.get(position);
     }
 
+    public void setLastUpdatedAlbumId(String lastUpdatedAlbumId) {
+        this.lastUpdatedAlbumId = lastUpdatedAlbumId;
+    }
 
+    public String getLastUpdatedAlbumId() {
+        return lastUpdatedAlbumId;
+    }
 }

@@ -17,6 +17,9 @@ public class Photo {
     private double locationLongitude;
 
 
+    private AlbumsManager albumsManager = AlbumsManager.getInstance();
+
+
     // Constructors
     public Photo() {}
 
@@ -125,7 +128,8 @@ public class Photo {
             public void onSuccess(ArrayList data) {
                 for (Object albumId : data) {
                     DBManager.getInstance().deletePhotoFromAlbum(getId(), albumId.toString());
-                    DBManager.getInstance().updateAlbumNumOfPhotos(albumId.toString(), -1);
+//                    DBManager.getInstance().updateAlbumNumOfPhotos(albumId.toString(), -1);
+                    albumsManager.setLastUpdatedAlbumId(albumId.toString());
                 }
             }
 

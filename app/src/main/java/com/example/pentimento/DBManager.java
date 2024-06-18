@@ -541,13 +541,30 @@ public class DBManager {
                                             public void onSuccess(Void aVoid) {
                                                 Log.d(TAG, "Document successfully deleted!");
 
-                                                // TODO - Update number of photos in album
-//                                                album.setNumOfPhotos(album.getNumOfPhotos() - 1);
-//                                                if (album.getNumOfPhotos() == 0) {
-//                                                    album.setAlbumCoverId(null);
-//                                                }
+                                                getAlbumById(albumId, new DBActionResult() {
+                                                    @Override
+                                                    public void onSuccess(Object data) {
 
-//                                                updateAlbum(album);
+                                                        //get the album data to an Album object
+                                                        Album album = document.toObject(Album.class);
+
+                                                        //set the num of photos in this album
+                                                        album.setNumOfPhotos(album.getNumOfPhotos() - 1);
+                                                        if (album.getNumOfPhotos() == 0) {
+                                                            album.setAlbumCoverId(null);
+                                                        }
+
+                                                        updateAlbum(album);
+                                                    }
+
+                                                    @Override
+                                                    public void onError(Exception e) {
+                                                        Log.e(TAG,
+                                                                "onError: didn't get album by his id",
+                                                                e);
+                                                    }
+                                                });
+
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
