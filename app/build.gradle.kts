@@ -32,12 +32,19 @@ android {
 
 dependencies {
 
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+
+    // Declare the dependencies for the desired Firebase products without specifying versions
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-storage")
+
+    // Other libraries
+    implementation("org.checkerframework:checker-qual:3.22.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.google.firebase:firebase-auth:22.3.1")
-    implementation("com.google.firebase:firebase-firestore:24.10.2")
-    implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("androidx.navigation:navigation-ui:2.7.7")
     implementation("androidx.navigation:navigation-fragment:2.7.7")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
