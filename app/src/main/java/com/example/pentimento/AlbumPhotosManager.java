@@ -98,8 +98,8 @@ public class AlbumPhotosManager extends BasePhotoManager {
         return false;
     }
 
-    public void setAlbum(int albumPosition) {
-        newAlbum = AlbumsManager.getInstance().getAlbumByPosition(albumPosition);
+    public void setAlbum(String albumId) {
+        newAlbum = AlbumsManager.getInstance().getAlbumById(albumId);
         loadPhotos();
     }
 

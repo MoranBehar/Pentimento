@@ -1,5 +1,7 @@
 package com.example.pentimento;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -31,13 +33,17 @@ public class AlbumsManager {
         return instance;
     }
 
+    public void destroy() {
+        instance = null;
+    }
+
     private void initAlbumsManager() {
         albums = new ArrayList<Album>();
         dbManager = DBManager.getInstance();
 
-        dbManager.getUserAlbums(new DBManager.DBActionResult<ArrayList>() {
+        dbManager.getUserAlbums(new DBManager.DBActionResult<ArrayList<Album>>() {
             @Override
-            public void onSuccess(ArrayList data) {
+            public void onSuccess(ArrayList<Album> data) {
                 albums.addAll(data);
             }
 
@@ -56,8 +62,14 @@ public class AlbumsManager {
         return albums;
     }
 
-    public Album getAlbumByPosition(int position) {
-        return albums.get(position);
+    public Album getAlbumById(String albumId) {
+        for (Album album : albums) {
+            if (album.getId().equals(albumId)) {
+                return album;
+            }
+        }
+
+        return null;
     }
 
     public void setLastUpdatedAlbumId(String lastUpdatedAlbumId) {
@@ -67,4 +79,19 @@ public class AlbumsManager {
     public String getLastUpdatedAlbumId() {
         return lastUpdatedAlbumId;
     }
+
+    public void addNewAlbum(Album newAlbum)
+    {
+        albums.add(newAlbum);
+    }
+
+    public void changeAlbumNumOfPics(Album albumToUpdate, int delta) {
+        for (Album currentAlbum : albums) {
+            if (currentAlbum.getId().equals(albumToUpdate.getId())) {
+                currentAlbum.setNumOfPhotos(currentAlbum.getNumOfPhotos() + delta);
+                break;
+            }
+        }
+    }
+
 }

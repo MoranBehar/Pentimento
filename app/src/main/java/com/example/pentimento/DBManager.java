@@ -237,6 +237,7 @@ public class DBManager {
                         }
                         album.setNumOfPhotos(album.getNumOfPhotos() + 1);
                         updateAlbum(album);
+                        AlbumsManager.getInstance().changeAlbumNumOfPics(album, 1);
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -552,6 +553,7 @@ public class DBManager {
                                                         }
 
                                                         updateAlbum(album);
+                                                        AlbumsManager.getInstance().changeAlbumNumOfPics(album, -1);
                                                     }
 
                                                     @Override

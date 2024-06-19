@@ -3,6 +3,7 @@ package com.example.pentimento;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.List;
 
 public class AlbumAdapter extends ArrayAdapter<Album> {
+
+    private static final String TAG = "Album Adapter";
+
     private List<Album> albumList;
 
     public AlbumAdapter(Context context, List<Album> albums) {

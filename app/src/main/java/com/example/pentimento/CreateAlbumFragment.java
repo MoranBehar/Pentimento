@@ -45,9 +45,13 @@ public class CreateAlbumFragment extends DialogFragment {
                         dbManager.createAlbum(newAlbum, new DBManager.DBActionResult<String>() {
                             @Override
                             public void onSuccess(String data) {
+                                AlbumsManager.getInstance().addNewAlbum(newAlbum);
+
                                 UIAlerts.InfoAlert("Create Album",
                                         "New Album created",
                                         dialogView.getContext());
+
+
                             }
 
                             @Override

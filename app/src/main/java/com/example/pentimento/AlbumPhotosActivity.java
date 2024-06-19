@@ -26,7 +26,7 @@ public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass
     private PhotoAdapter adapter;
 
     private Album album;
-    private int albumPosition;
+    private String albumId;
     private AlbumPhotosManager apManager;
 
     private DBManager dbManager;
@@ -40,7 +40,7 @@ public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass
         super.onCreate(savedInstanceState);
 
         // Get the image resource position from the intent
-        albumPosition = getIntent().getIntExtra("albumPosition", -1);
+        albumId =  getIntent().getStringExtra("albumId");
 
         initGallery();
         setEditAlbumNameBtn();
@@ -60,9 +60,9 @@ public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass
         apManager.setPhotoAdapter(adapter);
         gvGallery = findViewById(R.id.gvAlbumPhotosGallery);
         gvGallery.setAdapter(adapter);
-        apManager.setAlbum(albumPosition);
+        apManager.setAlbum(albumId);
 
-        album = AlbumsManager.getInstance().getAlbumByPosition(albumPosition);
+        album = AlbumsManager.getInstance().getAlbumById(albumId);
 
         setPageTitle();
 
@@ -140,6 +140,7 @@ public class AlbumPhotosActivity extends AlbumPhotosActivityMenusClass
 
     public void onResume() {
         super.onResume();
+        setPageTitle();
         apManager.loadPhotos();
         adapter.notifyDataSetChanged();
     }

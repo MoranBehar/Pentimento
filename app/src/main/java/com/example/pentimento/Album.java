@@ -2,12 +2,14 @@ package com.example.pentimento;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Date;
 
 public class Album {
 
+    private static final String TAG = "Album Object";
     private String id;
     private String ownerId;
     private String title;
@@ -97,9 +99,16 @@ public class Album {
 
     public void getCoverImage(getCoverImageResult callback) {
 
+        if (getAlbumCoverId() == null) {
+            Log.d(TAG, "get cover no cover to load");
+
+            return;
+        }
+
         // If cover was not loaded yet, load it
         // otherwise return the cover immediately
         if (albumCover == null) {
+
             StorageManager.getInstance().getImageById(getAlbumCoverId(), new StorageActionResult<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
@@ -109,7 +118,7 @@ public class Album {
 
                 @Override
                 public void onError(Exception e) {
-
+                    Log.e(TAG, "Failed loading cover id: "+getAlbumCoverId());
                 }
             });
         } else {
