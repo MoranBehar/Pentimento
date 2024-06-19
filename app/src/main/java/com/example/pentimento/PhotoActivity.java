@@ -640,6 +640,12 @@ public class PhotoActivity
                     @Override
                     public void onSuccess(Object data) {
                         addPhotoToAlbum(selectedAlbum, photo.getId());
+
+                        UIAlerts.InfoAlert("Add photo to album",
+                                "Photo was added to " +
+                                        selectedAlbum.getTitle() +
+                                        " album",
+                                PhotoActivity.this);
                     }
 
                     @Override

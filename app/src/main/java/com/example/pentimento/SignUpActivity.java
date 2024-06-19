@@ -80,7 +80,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         ValidationUtils validate = new ValidationUtils();
 
-        if (validate.isEmailOK(email) && validate.isPasswordOK(password) && validate.isNameOK(name) && validate.isAgeOK(age) && validate.isPhoneOK(phone)) {
+        if (validate.isEmailOK(email) && validate.isPasswordOK(password)
+                && validate.isNameOK(name) && validate.isAgeOK(age)
+                && validate.isPhoneOK(phone)) {
 
             signUpUserToApp(name, email, phone, password, age);
         } else if (!validate.isEmailOK(email)) {
@@ -90,7 +92,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         } else if (!validate.isNameOK(name)) {
             cmpSignUpName.setError("Name is invalid, only allow a-z A-Z");
         } else if (!validate.isPasswordOK(password)) {
-            etSignUpPassword.setError("Password is invalid");
+            etSignUpPassword.setError("Password is invalid, need at lest 6 chars");
         } else if (!validate.isPhoneOK(phone)) {
             etSignUpPhoneNumber.setError("Invalid phone number");
         }

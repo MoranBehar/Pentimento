@@ -26,6 +26,10 @@ public class UserManager {
         return instance;
     }
 
+    public void destroy() {
+        instance = null;
+    }
+
     public UserManager() {
         dbManager = DBManager.getInstance();
         auth = FirebaseAuth.getInstance();

@@ -183,6 +183,7 @@ public abstract class HomeActivityMenusClass extends AppCompatActivity {
         GalleryManager.getInstance().destroy();
         SharedPhotosManager.getInstance().destroy();
         AlbumPhotosManager.getInstance().destroy();
+        UserManager.getInstance().destroy();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
