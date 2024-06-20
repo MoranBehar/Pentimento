@@ -243,12 +243,13 @@ public class PhotoActivity
         // If there is no message, nothing to do
         if (secretMessageText == null) return;
 
+        // Show secret animation
         float startFade = 1f;
         float endFade = 0.4f;
         float startTextSize = 0f;
         float endTextSize = 24f;
 
-
+        // If secret is shown - change to hide secret animation (opposite)
         if (!isSecretHidden) {
             startFade = 0.4f;
             endFade = 1f;

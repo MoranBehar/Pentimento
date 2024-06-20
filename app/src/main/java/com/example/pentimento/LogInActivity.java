@@ -45,8 +45,8 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         etLogInPassword = cmpPassword.getEditText();
 
         // TODO - Remove before release
-        etLogInEmail.setText("moran.behar@gmail.com");
-        etLogInPassword.setText("123456");
+//        etLogInEmail.setText("moran.behar@gmail.com");
+//        etLogInPassword.setText("123456");
 
         btnLogIn = findViewById(R.id.btnLogIn);
         btnNeedSignup = findViewById(R.id.btnNeedSignup);
