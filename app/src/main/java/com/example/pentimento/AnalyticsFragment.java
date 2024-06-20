@@ -42,7 +42,7 @@ public class AnalyticsFragment extends Fragment {
     private void initAnalytics(View view) {
         dbManager = DBManager.getInstance();
 
-        // setup latch to count 4 actions
+        // setup latch (lock) to count 4 actions
         latchLoadData = new CountDownLatch(4);
 
         // load the data for the pie chart
@@ -128,24 +128,6 @@ public class AnalyticsFragment extends Fragment {
         });
     }
 
-//    private void loadTopViews() {
-//
-//        List<Map.Entry<String, Integer>> topViews = new ArrayList<>();
-//
-//        dbManager.getTopPhotoViewed(5, 7, new DBManager.DBActionResult<List<Map.Entry<String, Integer>>>() {
-//            @Override
-//            public void onSuccess(List data) {
-//                topViews.addAll(data);
-//                setupBarChart(view, topViews);
-//            }
-//
-//            @Override
-//            public void onError(Exception e) {
-//
-//            }
-//        });
-//
-//    }
 
 //    public void setupBarChart(View view, List<Map.Entry<String, Integer>> photoViews) {
 //        BarChart chart = view.findViewById(R.id.barChart);

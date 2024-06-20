@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    tools:context=".ToDel_HomeFragment">
+    android:gravity="center">
 
     <TextView
         android:layout_width="match_parent"
@@ -23,13 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"/>
-
-<!--    <com.github.mikephil.charting.charts.BarChart-->
-<!--        android:id="@+id/barChart"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_margin="10dp"/>-->
-
 
 
 </LinearLayout>
